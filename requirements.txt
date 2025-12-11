@@ -1,0 +1,42 @@
+# MINERVA Galaxy Viewer - Python Dependencies
+#
+# Installation:
+#   pip install -r requirements.txt
+#
+# For development:
+#   pip install -r requirements.txt
+#   pip install -e .
+
+# Core scientific computing
+numpy>=1.20.0
+pandas>=1.3.0
+scipy>=1.7.0
+
+# Plotting and visualization
+matplotlib>=3.4.0
+
+# Astronomy packages
+astropy>=5.0.0
+eazy-py>=0.6.0
+grizli>=1.9.0
+
+# Web application framework
+panel>=1.0.0
+param>=1.12.0
+
+# Image processing
+pillow>=9.0.0
+
+# HTTP requests
+requests>=2.26.0
+
+# Optional: Jupyter support (uncomment if needed)
+# ipython>=8.0
+# jupyter>=1.0
+# notebook>=6.4
+
+# Optional: Development tools (uncomment if needed)
+# pytest>=7.0
+# pytest-cov>=3.0
+# black>=22.0
+# flake8>=4.0
