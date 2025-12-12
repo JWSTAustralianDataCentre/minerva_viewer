@@ -437,7 +437,8 @@ class MinervaGalaxyBrowser(pn.viewable.Viewer):
         
         try:
             rd = f"{info['ra']:.6f},{info['dec']:.6f}"
-            url = f"https://grizli-cutout.herokuapp.com/thumb?coord={rd}&all_filters=True&size={size}&scl={scale}&asinh=True&filters={FILTERS}&rgb_scl=1.0,0.95,1.2&pl=2"
+            # Use rows=2 to display filters in 2 rows for larger individual images
+            url = f"https://grizli-cutout.herokuapp.com/thumb?coord={rd}&all_filters=True&size={size}&scl={scale}&asinh=True&filters={FILTERS}&rgb_scl=1.0,0.95,1.2&pl=2&rows=2"
             
             logger.info("Fetching cutout for id=%s from %s", info['id'], url)
             response = requests.get(url, timeout=30)
