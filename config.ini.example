@@ -1,0 +1,59 @@
+# MINERVA Viewer Configuration File
+# 
+# This file configures data paths for the MINERVA viewer applications.
+# Copy this file to one of these locations:
+#   - ~/.minerva/config.ini (user-specific, recommended)
+#   - minerva_viewer/config.ini (package-level)
+#
+# Or run: python setup_paths.py (interactive configuration)
+#
+# All paths can be absolute or relative (relative to this file's location).
+# You can also use environment variables to override these settings.
+
+[paths]
+# Base data directory (required)
+# All other paths are constructed relative to this unless specified as absolute
+data_dir = ../data
+
+# Main photometric catalog (required)
+# If not specified, defaults to: {data_dir}/catalogs/MINERVA-UDS_*.fits
+# catalog_path = /absolute/path/to/catalog.fits
+
+# SPS (Stellar Population Synthesis) catalog (required)
+# If not specified, defaults to: {data_dir}/catalogs/*_SPScatalog_*.fits
+# sps_catalog_path = /absolute/path/to/sps_catalog.fits
+
+# EAzY photo-z HDF5 file (required)
+# If not specified, defaults to: {data_dir}/EAzY/SFHZ/SUPER/ZPiter/*.h5
+# eazy_h5_path = /absolute/path/to/eazy.h5
+
+# EAzY zout FITS file (required)
+# If not specified, defaults to: {data_dir}/EAzY/SFHZ/SUPER/ZPiter/*.zout.fits
+# eazy_zout_path = /absolute/path/to/eazy_zout.fits
+
+# Spectroscopic table (optional)
+# If not specified, will attempt to download from spec_table_url
+# spec_table_path = /absolute/path/to/spec_table.csv.gz
+
+# Local spectra directory (optional)
+# If not specified, defaults to: {data_dir}/spectra
+# spectra_dir = /absolute/path/to/spectra
+
+# Subdirectory paths (relative to data_dir)
+catalogs_subdir = catalogs
+eazy_subdir = EAzY/SFHZ/SUPER/ZPiter
+spectra_subdir = spectra
+
+# Default filenames
+catalog_filename = MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG.fits
+sps_catalog_filename = MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG_SPScatalog_0.0.fits
+eazy_h5_filename = MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG.sfhz.eazypy.h5
+eazy_zout_filename = MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_sfhz.zout.fits
+spec_table_filename = dja_msaexp_emission_lines_v4.4.csv.gz
+
+# Remote URLs
+spec_table_url = https://s3.amazonaws.com/msaexp-nirspec/extractions/dja_msaexp_emission_lines_v4.4.csv.gz
+spec_table_timeout = 120
+
+# NIRCam filters for cutouts
+filters = f090w-clear,f115w-clear,f140m-clear,f150w-clear,f182m-clear,f200w-clear,f210m-clear,f250w-clear,f277w-clear,f300m-clear,f356w-clear,f360m-clear,f410m-clear,f444w-clear,f460m-clear

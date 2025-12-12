@@ -27,10 +27,17 @@ from IPython.display import display, Markdown, Latex
 from PIL import Image
 import requests
 
+# Configuration
+from config import get_config
 
-df = Table.read('../data/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG.fits').to_pandas()
+# Load configuration
+config = get_config()
+print(f"Loading data from: {config.data_dir}")
+
+# Load catalogs using configured paths
+df = Table.read(str(config.catalog_path)).to_pandas()
 df.set_index('id', inplace=True)
-sps_catalogues = Table.read('../data/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG_SPScatalog_0.0.fits').to_pandas()
+sps_catalogues = Table.read(str(config.sps_catalog_path)).to_pandas()
 sps_catalogues.set_index('id', inplace=True)
 for f_col in df.filter(like='f_').columns:
     e_col = f_col.replace('f_', 'e_')
@@ -137,14 +144,14 @@ zout_dfs = []
 for template_name in template_names:
 
     if template_name=='LARSON_MIRI':
-        eazy_file_path = f'../data/EAzY/{template_name}/SUPER/noZPiter'
-        zout_fits_table = Table.read(f'{eazy_file_path}/MINERVA-UDS_n2.2_m2.0_v1.0.1_ext_LW_Kf444w_SUPER_CATALOG_wMIRI.eazypy.zout.fits')
+        eazy_file_path = config.data_dir / f'EAzY/{template_name}/SUPER/noZPiter'
+        zout_fits_table = Table.read(str(eazy_file_path / 'MINERVA-UDS_n2.2_m2.0_v1.0.1_ext_LW_Kf444w_SUPER_CATALOG_wMIRI.eazypy.zout.fits'))
 
     else: 
-        eazy_file_path = f'../data/EAzY/{template_name}/SUPER/ZPiter'
-        zout_fits_table = Table.read(f'{eazy_file_path}/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_{template_name.lower()}.zout.fits')
+        eazy_file_path = config.data_dir / f'EAzY/{template_name}/SUPER/ZPiter'
+        zout_fits_table = Table.read(str(eazy_file_path / f'MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_{template_name.lower()}.zout.fits'))
 
-        print('opening' , f'{eazy_file_path}/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_{template_name.lower()}.zout.fits')
+        print('opening' , str(eazy_file_path / f'MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_{template_name.lower()}.zout.fits'))
 
     names_1d = [name for name in zout_fits_table.colnames if len(zout_fits_table[name].shape) <= 1]
 

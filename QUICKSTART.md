@@ -46,13 +46,17 @@ Then open: http://localhost:5006
 
 ## Configuration Required
 
-Before first run, edit data paths in `zgui_panel.py` (lines 101-107):
+Before first run, configure your data paths:
 
-```python
-DATA_DIR = "../data"  # <- UPDATE THIS
-CATALOG_PATH = f"{DATA_DIR}/catalogs/MINERVA-UDS_*.fits"
-# ... etc
+```bash
+# Interactive setup (recommended)
+python setup_paths.py
+
+# Or check current configuration
+python setup_paths.py --check
 ```
+
+The script will guide you through configuring all required paths.
 
 ## File Structure
 
@@ -60,8 +64,12 @@ CATALOG_PATH = f"{DATA_DIR}/catalogs/MINERVA-UDS_*.fits"
 minerva_viewer/
 ├── .gitignore              # Git ignore rules
 ├── README.md               # Full documentation
+├── QUICKSTART.md           # This file
 ├── setup.py                # Package installer
+├── setup_paths.py          # Path configuration wizard
 ├── requirements.txt        # Dependencies list
+├── config.py               # Configuration module
+├── config.ini.example      # Example config file
 ├── minerva_viewer.py       # Analysis scripts
 ├── zgui_panel.py          # Interactive browser app
 └── templates/             # EAzY templates

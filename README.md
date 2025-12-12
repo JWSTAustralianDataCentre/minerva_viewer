@@ -68,28 +68,76 @@ pip install numpy pandas matplotlib astropy eazy-py panel param pillow requests 
 
 ## Configuration
 
-Before running the applications, you need to configure the data paths in the code:
+The viewer uses a flexible configuration system that reads paths from multiple sources (in priority order):
 
-### For `zgui_panel.py`
+1. **Environment variables** (highest priority)
+2. **Configuration file** (`~/.minerva/config.ini` or `minerva_viewer/config.ini`)
+3. **Default values** (lowest priority)
 
-Edit the configuration section to point to your data:
+### Quick Setup (Recommended)
 
-```python
-DATA_DIR = "../data"  # Update this path
-CATALOG_PATH = f"{DATA_DIR}/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG.fits"
-SPS_CATALOG_PATH = f"{DATA_DIR}/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG_SPScatalog_0.0.fits"
-EAZY_H5_PATH = f"{DATA_DIR}/EAzY/SFHZ/SUPER/ZPiter/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG.sfhz.eazypy.h5"
-EAZY_ZOUT_PATH = f"{DATA_DIR}/EAzY/SFHZ/SUPER/ZPiter/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_sfhz.zout.fits"
+Run the interactive configuration wizard:
+
+```bash
+python setup_paths.py
 ```
 
-### For `minerva_viewer.py`
+This will guide you through configuring all data paths and save them to a configuration file.
 
-Update the data paths near the top of the script (lines 31-33):
+### Configuration Methods
 
-```python
-df = Table.read('../data/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG.fits').to_pandas()
-sps_catalogues = Table.read('../data/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG_SPScatalog_0.0.fits').to_pandas()
+#### Method 1: Interactive Setup Script
+
+```bash
+# Run the wizard
+python setup_paths.py
+
+# Check current configuration
+python setup_paths.py --check
 ```
+
+#### Method 2: Environment Variables
+
+```bash
+# Set environment variables (add to ~/.bashrc or ~/.zshrc for persistence)
+export MINERVA_DATA_DIR="/path/to/your/data"
+export MINERVA_CATALOG_PATH="/path/to/catalog.fits"
+export MINERVA_EAZY_H5_PATH="/path/to/eazy.h5"
+# ... etc
+
+# Then run the viewer
+python minerva_viewer.py
+```
+
+#### Method 3: Configuration File
+
+Create `~/.minerva/config.ini` or `minerva_viewer/config.ini`:
+
+```ini
+[paths]
+data_dir = /path/to/your/data
+catalog_path = /path/to/catalog.fits
+sps_catalog_path = /path/to/sps_catalog.fits
+eazy_h5_path = /path/to/eazy.h5
+eazy_zout_path = /path/to/eazy_zout.fits
+spec_table_path = /path/to/spec_table.csv.gz
+spectra_dir = /path/to/spectra
+```
+
+#### Method 4: Non-Interactive Setup
+
+```bash
+python setup_paths.py \
+  --data-dir /path/to/data \
+  --catalog /path/to/catalog.fits \
+  --eazy-h5 /path/to/eazy.h5
+```
+
+### Configuration Priority
+
+If you set the same path in multiple places:
+- Environment variable > Config file > Default value
+- This allows you to temporarily override settings without editing files
 
 ## Usage
 
@@ -194,6 +242,8 @@ minerva_viewer/
 4. **Spectroscopic catalog** (optional, can download from URL)
 5. **EAzY templates** in `templates/` directory
 
+**Note:** After obtaining the data, run `python setup_paths.py` to configure the paths.
+
 ## Browser Interface Guide
 
 ### Navigation
@@ -236,9 +286,15 @@ minerva_viewer/
 - Try a different port: `panel serve zgui_panel.py --port 5007`
 
 ### Data files not found
-- Verify `DATA_DIR` path in configuration
-- Check that all required FITS files exist
+- Run `python setup_paths.py --check` to verify your configuration
+- Run `python setup_paths.py` to reconfigure paths
+- Check that all required FITS files exist in the configured locations
 - Ensure EAzY .h5 file is present (can take ~90s to load)
+
+### Configuration issues
+- Check configuration: `python setup_paths.py --check`
+- View current paths: `python -c "from config import Config; print(Config())"`
+- Reset configuration: Delete `~/.minerva/config.ini` and run setup again
 
 ### Slow performance
 - Enable local spectrum caching

@@ -39,6 +39,9 @@ from astropy import units as u
 # EAzY imports
 from eazy import hdf5
 
+# Configuration
+from config import get_config
+
 # Enable Panel extension
 pn.extension('tabulator')
 
@@ -100,20 +103,23 @@ SPECTRUM_CACHE = LRUCache(maxsize=300) # ~300 spectrum images
 PREFETCH_EXECUTOR = ThreadPoolExecutor(max_workers=4)
 
 # =============================================================================
-# CONFIGURATION - Update these paths for your setup
+# CONFIGURATION - Loads from config module
 # =============================================================================
-DATA_DIR = "../data"
-CATALOG_PATH = f"{DATA_DIR}/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG.fits"
-SPS_CATALOG_PATH = f"{DATA_DIR}/catalogs/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_CATALOG_SPScatalog_0.0.fits"
-EAZY_H5_PATH = f"{DATA_DIR}/EAzY/SFHZ/SUPER/ZPiter/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG.sfhz.eazypy.h5"
-EAZY_ZOUT_PATH = f"{DATA_DIR}/EAzY/SFHZ/SUPER/ZPiter/MINERVA-UDS_n2.2_m2.0_v1.0_LW_Kf444w_SUPER_zpiter_CATALOG_sfhz.zout.fits"
+# Get configuration (reads from env vars, config files, or defaults)
+CONFIG = get_config()
 
-SPECTRUM_LOCAL_DIR = Path(os.environ.get("MINERVA_SPECTRA_DIR", f"{DATA_DIR}/spectra"))
-SPEC_TABLE_LOCAL_PATH = Path(os.environ.get("MINERVA_SPEC_TABLE", f"{DATA_DIR}/catalogs/dja_msaexp_emission_lines_v4.4.csv.gz"))
-SPEC_TABLE_TIMEOUT = int(os.environ.get("MINERVA_SPEC_TIMEOUT", "120"))
+# Extract paths from configuration
+CATALOG_PATH = str(CONFIG.catalog_path)
+SPS_CATALOG_PATH = str(CONFIG.sps_catalog_path)
+EAZY_H5_PATH = str(CONFIG.eazy_h5_path)
+EAZY_ZOUT_PATH = str(CONFIG.eazy_zout_path)
+SPECTRUM_LOCAL_DIR = CONFIG.spectra_dir
+SPEC_TABLE_LOCAL_PATH = CONFIG.spec_table_path
+SPEC_TABLE_URL = CONFIG.spec_table_url
+SPEC_TABLE_TIMEOUT = CONFIG.spec_table_timeout
+FILTERS = CONFIG.filters
 
-FILTERS = "f090w-clear,f115w-clear,f140m-clear,f150w-clear,f182m-clear,f200w-clear,f210m-clear,f250w-clear,f277w-clear,f300m-clear,f356w-clear,f360m-clear,f410m-clear,f444w-clear,f460m-clear"
-SPEC_TABLE_URL = "https://s3.amazonaws.com/msaexp-nirspec/extractions/dja_msaexp_emission_lines_v4.4.csv.gz"
+logger.info("Configuration loaded: %s", CONFIG)
 
 
 # =============================================================================
