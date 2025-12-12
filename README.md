@@ -4,14 +4,9 @@ An interactive web application for exploring galaxies from the JWST MINERVA surv
 
 ## About MINERVA Survey
 
-**MINERVA (Medium-band Imaging of NIRCam for Extragalactic Research and Vision Advantage)** is a JWST NIRCam imaging survey conducting ultra-deep observations over the Hubble legacy fields (including UDS - Ultra Deep Survey). The survey uses medium-band filters to achieve high-precision photometric redshifts and detailed characterization of galaxy properties at cosmic noon and beyond.
+**MINERVA (Medium-band Imaging of NIRCam for Extragalactic Research and Vision Advantage)** is a JWST NIRCam imaging survey conducting ultra-deep observations over the Hubble legacy fields. The survey uses medium-band filters to achieve high-precision photometric redshifts and detailed characterization of galaxy properties.
 
-### Key Features:
-- **Medium-band imaging** with JWST/NIRCam (F090W, F115W, F140M, F150W, F182M, F200W, F210M, F250W, F277W, F300M, F356W, F360M, F410M, F444W, F460M)
-- **Ultra-deep coverage** over Hubble legacy fields
-- **High-precision photo-z** using EAzY photometric redshift fitting
-- **Cross-matched with NIRSpec spectroscopy** from the MSA (Multi-Shutter Assembly) programs
-- **SED fitting** with multiple template sets including SFHZ, LARSON, and Prospector
+See https://ui.adsabs.harvard.edu/abs/2025arXiv250719706M for details. 
 
 ## Repository Overview
 
@@ -77,7 +72,7 @@ Before running the applications, you need to configure the data paths in the cod
 
 ### For `zgui_panel.py`
 
-Edit the configuration section (lines 101-107) to point to your data:
+Edit the configuration section to point to your data:
 
 ```python
 DATA_DIR = "../data"  # Update this path
