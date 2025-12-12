@@ -427,7 +427,7 @@ class MinervaGalaxyBrowser(pn.viewable.Viewer):
         PREFETCH_EXECUTOR.submit(task)
     
     def _fetch_cutout_data(self, info, size=1.5, scale=4.0):
-        """Fetch cutout and return as PIL Image (cacheable)"""
+        """Fetch cutout and return as PIL Image (cacheable) - split into 2 rows"""
         cache_key = self._get_cache_key(info['id'], 'cutout', size=size, scale=scale)
         
         # Check cache first
@@ -437,23 +437,48 @@ class MinervaGalaxyBrowser(pn.viewable.Viewer):
         
         try:
             rd = f"{info['ra']:.6f},{info['dec']:.6f}"
-            # Use rows=2 to display filters in 2 rows for larger individual images
-            url = f"https://grizli-cutout.herokuapp.com/thumb?coord={rd}&all_filters=True&size={size}&scl={scale}&asinh=True&filters={FILTERS}&rgb_scl=1.0,0.95,1.2&pl=2&rows=2"
             
-            logger.info("Fetching cutout for id=%s from %s", info['id'], url)
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
-            img = Image.open(BytesIO(response.content)).convert("RGB")
+            # Split filters into two groups for 2-row display
+            all_filters = FILTERS.split(',')
+            mid_point = (len(all_filters) + 1) // 2  # Split roughly in half
             
-            # Fix black pixels
-            data = np.array(img)
-            black = data.max(axis=2) == 0
-            for ioff in range(-2, 3):
-                black &= np.roll(black, ioff, axis=0)
-            for i in range(3):
-                data[:, :, i][black] = 255
+            # First row: RGB + first half of filters
+            filters_row1 = ','.join(all_filters[:mid_point])
+            url1 = f"https://grizli-cutout.herokuapp.com/thumb?coord={rd}&all_filters=True&size={size}&scl={scale}&asinh=True&filters={filters_row1}&rgb_scl=1.0,0.95,1.2&pl=2"
             
-            result = Image.fromarray(data)
+            # Second row: remaining filters
+            filters_row2 = ','.join(all_filters[mid_point:])
+            url2 = f"https://grizli-cutout.herokuapp.com/thumb?coord={rd}&all_filters=True&size={size}&scl={scale}&asinh=True&filters={filters_row2}&rgb_scl=1.0,0.95,1.2&pl=2"
+            
+            logger.info("Fetching cutout row 1 for id=%s", info['id'])
+            response1 = requests.get(url1, timeout=30)
+            response1.raise_for_status()
+            img1 = Image.open(BytesIO(response1.content)).convert("RGB")
+            
+            logger.info("Fetching cutout row 2 for id=%s", info['id'])
+            response2 = requests.get(url2, timeout=30)
+            response2.raise_for_status()
+            img2 = Image.open(BytesIO(response2.content)).convert("RGB")
+            
+            # Fix black pixels in both images
+            for img in [img1, img2]:
+                data = np.array(img)
+                black = data.max(axis=2) == 0
+                for ioff in range(-2, 3):
+                    black &= np.roll(black, ioff, axis=0)
+                for i in range(3):
+                    data[:, :, i][black] = 255
+                # Update the image data
+                img.paste(Image.fromarray(data))
+            
+            # Stack images vertically
+            total_height = img1.height + img2.height
+            max_width = max(img1.width, img2.width)
+            
+            result = Image.new('RGB', (max_width, total_height), (255, 255, 255))
+            result.paste(img1, (0, 0))
+            result.paste(img2, (0, img1.height))
+            
             CUTOUT_CACHE.put(cache_key, result)
             return result
         except Exception as e:
