@@ -166,7 +166,7 @@
           </div>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:{{ skyCol }}" sc-camel-on-click="{{ onToggleSky }}" title="overlay sky spectrum (residual reference)">{{ skyLbl }}</button>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" sc-camel-on-click="{{ onResetZoom }}">reset zoom</button>
-          <span class="text-muted" style="font-size:11px;font-style:italic">scroll = zoom · drag = pan · dbl-click = reset</span>
+          <span class="text-muted" style="font-size:11px;font-style:italic">scroll = zoom · drag = pan · shift+drag = box zoom · dbl-click = reset</span>
         </div>
         <canvas role="img" aria-label="{{ aria2D }}" ref="{{ c2Ref }}" width="1000" height="86" style="width:100%;display:block;background:{{ pc.bg }};border-bottom:1px solid var(--color-divider)"></canvas>
         <svg role="img" aria-label="{{ ariaSpec }}" ref="{{ svgRef }}" sc-camel-view-box="0 0 1000 380" sc-camel-on-mouse-down="{{ onSpecDown }}" sc-camel-on-double-click="{{ onResetSpec }}" style="width:100%;display:block;background:{{ pc.bg }};cursor:grab;touch-action:none">
@@ -187,6 +187,7 @@
               <text x="{{ m.x }}" y="{{ m.ty }}" font-size="11.5" fill="{{ m.color }}" text-anchor="middle" font-style="italic">{{ m.label }}</text></g>
             </sc-for>
           </g>
+          <rect x="{{ bandX }}" y="{{ bandY }}" width="{{ bandW }}" height="{{ bandH }}" fill="var(--color-accent-200)" fill-opacity="0.25" stroke="var(--color-accent-400)" stroke-width="1" opacity="{{ bandOn }}" pointer-events="none"></rect>
           <text x="520" y="377" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">observed wavelength (μm)</text>
           <text x="14" y="180" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 14 180)">{{ yAxisLab }}</text>
           <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="0">
@@ -263,7 +264,8 @@
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">1</kbd></span><span>mark z spec bad</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">f</kbd></span><span>toggle flag</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">0</kbd></span><span>clear decision for this object</span>
-          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">r</kbd></span><span>reset spectrum + p(z) zoom</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">r</kbd></span><span>reset spectrum + p(z) zoom (also clears flux-range lock)</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">shift</kbd> + drag</span><span>box-zoom the 1D spectrum — x sets the wavelength window, y locks the flux range (dbl-click, reset zoom, or a unit switch clears it)</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">m</kbd></span><span>cycle redshift markers (z spec / z phot / both / explore)</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">?</kbd></span><span>toggle this help · <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">Esc</kbd> closes</span>
         </div>
@@ -320,7 +322,8 @@ class Component extends DCLogic {
     this._pendingDec={}; this._decTimer=null;
     let dec=this.readDecisions();
     this.objs=[];
-    this.state={selId:null,wmin:null,wmax:null,pzWmin:null,pzWmax:null,mm:'both',zSlide:null,smooth:1,thresh:0.15,
+    this._band=null;// rubber-band (shift+drag) box-zoom overlay in spectrum viewBox coords, or null
+    this.state={selId:null,wmin:null,wmax:null,yLock:null,pzWmin:null,pzWmax:null,mm:'both',zSlide:null,smooth:1,thresh:0.15,
       fG3:true,fG2:true,fG1:true,fG0:true,onlyOut:true,sortBy:'dz',q:'',field,template,slit:true,showSky:false,
       specUnit:'flam',cutSize:1.5,cutBias:0.5,cutContrast:1,
       initials:localStorage.getItem('djaqc-by')||'',decisions:dec,noteOpen:true,helpOpen:false,
@@ -363,7 +366,7 @@ class Component extends DCLogic {
   loadList(field,template,wantSel){
     const tok=++this._listToken;
     this.objs=[];this._byMid=new Map();
-    this.setState({booting:true,listError:null,selId:null,wmin:null,wmax:null,zSlide:null});
+    this.setState({booting:true,listError:null,selId:null,wmin:null,wmax:null,yLock:null,zSlide:null});
     fetch(`/api/inspect/list?field=${encodeURIComponent(field)}&template=${encodeURIComponent(template)}`)
       .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
       .then(d=>{if(tok!==this._listToken)return;
@@ -373,7 +376,7 @@ class Component extends DCLogic {
         let sel=null;
         if(wantSel&&objs.some(o=>o.dja===wantSel))sel=wantSel;
         if(!sel){const f=this.filteredFrom(objs)[0]||objs[0];sel=f?f.dja:null}
-        this.setState({booting:false,listError:null,selId:sel,wmin:null,wmax:null,zSlide:null});
+        this.setState({booting:false,listError:null,selId:sel,wmin:null,wmax:null,yLock:null,zSlide:null});
         if(sel)this.schedulePrefetch(sel);
       })
       .catch(e=>{if(tok!==this._listToken)return;this.objs=[];this._byMid=new Map();
@@ -522,7 +525,7 @@ class Component extends DCLogic {
   }
 
   // ---------------------------------------------------------------- navigation / prefetch
-  select(dja){this.setState({selId:dja,wmin:null,wmax:null,pzWmin:null,pzWmax:null,zSlide:null,cutBias:0.5,cutContrast:1});this.schedulePrefetch(dja)}
+  select(dja){this.setState({selId:dja,wmin:null,wmax:null,yLock:null,pzWmin:null,pzWmax:null,zSlide:null,cutBias:0.5,cutContrast:1});this.schedulePrefetch(dja)}
   step(d){const L=this.filtered();if(!L.length)return;const i=L.findIndex(o=>o.dja===this.state.selId);
     this.select(L[Math.min(L.length-1,Math.max(0,(i<0?0:i+d)))].dja)}
   schedulePrefetch(selId){
@@ -547,7 +550,7 @@ class Component extends DCLogic {
     else if(k==='1')this.setDec({v:'bad'},true);
     else if(k==='f'){const o=this.cur();if(o)this.setDec({flag:!(this.state.decisions[o.dja]||{}).flag},false)}
     else if(k==='0'){const o=this.cur();if(o){const dec={...this.state.decisions};delete dec[o.dja];this.saveDec(dec)}}
-    else if(k==='r')this.setState({wmin:null,wmax:null,pzWmin:null,pzWmax:null});
+    else if(k==='r')this.setState({wmin:null,wmax:null,yLock:null,pzWmin:null,pzWmax:null});
     else if(k==='m'){const seq=['zspec','zphot','both','slide'];this.setState({mm:seq[(seq.indexOf(this.state.mm)+1)%4]})}
   }
 
@@ -723,6 +726,7 @@ class Component extends DCLogic {
     const specLoading=!!o&&!sp&&specStat!=='error';
     const specErr=!!o&&!sp&&specStat==='error';
     const win=this.effWindow(sp);
+    this._specScale=null;// re-set inside the sp block; null when no spectrum (rubber-band no-op)
     if(o)this.spec(o);// kick fetch on miss
     const{wmin,wmax}=win,span=(wmax-wmin)||1;
     const px=x=>48+(x-wmin)/span*944;
@@ -747,6 +751,13 @@ class Component extends DCLogic {
       if(vals.length){lo=vals[Math.floor(vals.length*0.01)];hi=vals[Math.min(vals.length-1,Math.floor(vals.length*0.999))]}
       if(!(hi>lo)){lo=(vals.length?vals[0]:0)-0.5;hi=(vals.length?vals[vals.length-1]:1)+0.5}
       const pad=(hi-lo)*0.08;lo-=pad;hi+=pad*1.6;
+      // Manual flux-range lock (shift+drag box zoom): when set, it REPLACES the
+      // percentile auto-range entirely. yLock is stored in DATA units of the current
+      // specUnit and cleared on unit toggle / object change, so it always matches here.
+      if(S.yLock&&isFinite(S.yLock.lo)&&isFinite(S.yLock.hi)&&S.yLock.hi>S.yLock.lo){lo=S.yLock.lo;hi=S.yLock.hi}
+      // Expose the exact wavelength + flux mapping used for drawing so the rubber-band
+      // handler can invert pixel→data using the same lo/hi it sees on screen.
+      this._specScale={wmin,wmax,lo,hi};
       // Clamp drawing to the plot box: off-scale error bands / clipped peaks pin
       // to the edge instead of spilling over the axes.
       const py0=v=>346-(v-lo)/(hi-lo)*336;
@@ -901,7 +912,9 @@ class Component extends DCLogic {
     const templateOpts=(curField&&curField.templates&&curField.templates.length)
       ? curField.templates.map(tname=>({name:tname}))
       : [{name:S.template}];
-    const explorerHref='/?field='+encodeURIComponent(S.field)+'&template='+encodeURIComponent(S.template)+(o?'&sel='+o.mid:'');
+    // near= asks the Explorer to center on this object and list its nearest
+    // neighbours with distances (falls back to plain selection if absent).
+    const explorerHref='/?field='+encodeURIComponent(S.field)+'&template='+encodeURIComponent(S.template)+(o?'&near='+o.mid:'');
     // ---- accessible names for each chart/canvas (populated with the current object)
     const mid=o?o.mid:'', djaN=o?o.dja:'—';
     const ariaScatter='z spec versus z phot scatter · '+list.length+' object'+(list.length===1?'':'s')+(o?', selected '+djaN:'');
@@ -976,19 +989,45 @@ class Component extends DCLogic {
       setMmSpec:()=>set({mm:'zspec'}),setMmPhot:()=>set({mm:'zphot'}),setMmBoth:()=>set({mm:'both'}),setMmSlide:()=>set({mm:'slide',zSlide:S.zSlide??(o?o.zs:0)}),
       zSlideV,onZSlide:e2=>set({zSlide:+e2.target.value}),
       sm1:S.smooth===1,sm3:S.smooth===3,sm5:S.smooth===5,setSm1:()=>set({smooth:1}),setSm3:()=>set({smooth:3}),setSm5:()=>set({smooth:5}),
-      suF:S.specUnit!=='fnu',suN:S.specUnit==='fnu',setSuF:()=>set({specUnit:'flam'}),setSuN:()=>set({specUnit:'fnu'}),
+      // Unit toggle changes what the flux axis MEANS, so a locked flux range (in the old
+      // unit) is meaningless afterwards — clear it with the switch.
+      suF:S.specUnit!=='fnu',suN:S.specUnit==='fnu',setSuF:()=>set({specUnit:'flam',yLock:null}),setSuN:()=>set({specUnit:'fnu',yLock:null}),
       yAxisLab:S.specUnit==='fnu'?'fν (μJy)':'fλ (10⁻¹⁹ erg s⁻¹ cm⁻² Å⁻¹)',
       // reset semantics (F5): the "reset zoom" button and 'r' key clear BOTH panels;
       // each panel's own dbl-click resets only that panel — consistent between them.
-      onResetZoom:()=>set({wmin:null,wmax:null,pzWmin:null,pzWmax:null}),
-      onResetSpec:()=>set({wmin:null,wmax:null}),
+      onResetZoom:()=>set({wmin:null,wmax:null,yLock:null,pzWmin:null,pzWmax:null}),
+      onResetSpec:()=>set({wmin:null,wmax:null,yLock:null}),
       onResetPz:()=>set({pzWmin:null,pzWmax:null}),
       onResetStretch:()=>set({cutBias:0.5,cutContrast:1}),
       svgRef:el=>{if(el&&el!==this._svg){if(this._svg)this._svg.removeEventListener('wheel',this._wheel);this._svg=el;el.addEventListener('wheel',this._wheel,{passive:false})}},
       pzRef:el=>{if(el&&el!==this._pz){if(this._pz)this._pz.removeEventListener('wheel',this._pzwheel);this._pz=el;el.addEventListener('wheel',this._pzwheel,{passive:false})}},
       c2Ref:el=>{this._c2=el},
       cutRef:el=>{if(el&&el!==this._cut){if(this._cut)this._cut.removeEventListener('wheel',this._cutwheel);this._cut=el;el.addEventListener('wheel',this._cutwheel,{passive:false})}},
-      onSpecDown:e2=>{const el=this._svg;if(!el||!sp)return;const rc=el.getBoundingClientRect();const x0=e2.clientX,w0=win.wmin,spn=win.wmax-win.wmin,lo=(sp.wlo!=null?sp.wlo:sp.wmin),hi=(sp.whi!=null?sp.whi:sp.wmax);
+      onSpecDown:e2=>{const el=this._svg;if(!el||!sp)return;const rc=el.getBoundingClientRect();
+        // Shift+drag = rubber-band box zoom. Plain drag falls through to pan below.
+        if(e2.shiftKey){e2.preventDefault();const sc=this._specScale;if(!sc)return;
+          // client px -> spectrum viewBox coords, clamped to the plot area (48..992 × 10..346).
+          const toVB=ev=>({X:Math.min(992,Math.max(48,(ev.clientX-rc.left)/rc.width*1000)),
+                           Y:Math.min(346,Math.max(10,(ev.clientY-rc.top)/rc.height*380))});
+          const p0=toVB(e2);this._band={on:1,x:p0.X,y:p0.Y,w:0,h:0};this.bump();
+          const mv=ev=>{const p=toVB(ev);this._band={on:1,x:Math.min(p0.X,p.X),y:Math.min(p0.Y,p.Y),w:Math.abs(p.X-p0.X),h:Math.abs(p.Y-p0.Y)};this.bump()};
+          const up2=ev=>{window.removeEventListener('mousemove',mv);window.removeEventListener('mouseup',up2);
+            const p=toVB(ev);const dx=Math.abs(p.X-p0.X),dy=Math.abs(p.Y-p0.Y);this._band=null;
+            // Sub-threshold box (either axis ≤ ~8px) is a no-op — no accidental zoom/lock.
+            if(dx>8&&dy>8){
+              // x-extent -> wavelength window, same clamps as wheel zoom (full extent, min span full/200).
+              const loW=(sp.wlo!=null?sp.wlo:sp.wmin),hiW=(sp.whi!=null?sp.whi:sp.wmax),full=(hiW-loW)||1;
+              const invX=X=>sc.wmin+(X-48)/944*(sc.wmax-sc.wmin);
+              let nwmin=invX(Math.min(p0.X,p.X)),nwmax=invX(Math.max(p0.X,p.X));
+              let ns=Math.min(full,Math.max(full/200,nwmax-nwmin));
+              nwmin=Math.max(loW,Math.min(nwmin,hiW-ns));
+              // y-extent -> manual flux-range lock in the CURRENT specUnit's data units.
+              const invY=Y=>sc.lo+(346-Y)/336*(sc.hi-sc.lo);
+              const yHi=invY(Math.min(p0.Y,p.Y)),yLo=invY(Math.max(p0.Y,p.Y));
+              this.setState({wmin:nwmin,wmax:nwmin+ns,yLock:(yHi>yLo?{lo:yLo,hi:yHi}:null)});
+            } else this.bump();};
+          window.addEventListener('mousemove',mv);window.addEventListener('mouseup',up2);return;}
+        const x0=e2.clientX,w0=win.wmin,spn=win.wmax-win.wmin,lo=(sp.wlo!=null?sp.wlo:sp.wmin),hi=(sp.whi!=null?sp.whi:sp.wmax);
         const mv=ev=>{const dw=-(ev.clientX-x0)/rc.width*1000/944*spn;let nm=Math.max(lo,Math.min(w0+dw,hi-spn));this.setState({wmin:nm,wmax:nm+spn})};
         const up2=()=>{window.removeEventListener('mousemove',mv);window.removeEventListener('mouseup',up2)};
         window.addEventListener('mousemove',mv);window.addEventListener('mouseup',up2)},
@@ -1003,6 +1042,9 @@ class Component extends DCLogic {
         const up2=()=>{window.removeEventListener('mousemove',mv);window.removeEventListener('mouseup',up2)};
         window.addEventListener('mousemove',mv);window.addEventListener('mouseup',up2)},
       specPath,errPath,xTicks,yTicks,markers,legend,
+      // rubber-band (shift+drag) box-zoom overlay; opacity 0 hides it when idle
+      bandOn:this._band?1:0,bandX:this._band?+this._band.x.toFixed(1):0,bandY:this._band?+this._band.y.toFixed(1):0,
+      bandW:this._band?+this._band.w.toFixed(1):0,bandH:this._band?+this._band.h.toFixed(1):0,
       sedTemplPath,sedPts,
       pzPath,chi2Path,pzZs,pzZp,pzZsT,pzZpT,pzTicks,
       onPrev:()=>this.step(-1),onNext:()=>this.step(1),

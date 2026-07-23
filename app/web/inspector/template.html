@@ -151,7 +151,7 @@
           </div>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:{{ skyCol }}" sc-camel-on-click="{{ onToggleSky }}" title="overlay sky spectrum (residual reference)">{{ skyLbl }}</button>
           <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" sc-camel-on-click="{{ onResetZoom }}">reset zoom</button>
-          <span class="text-muted" style="font-size:11px;font-style:italic">scroll = zoom · drag = pan · dbl-click = reset</span>
+          <span class="text-muted" style="font-size:11px;font-style:italic">scroll = zoom · drag = pan · shift+drag = box zoom · dbl-click = reset</span>
         </div>
         <canvas role="img" aria-label="{{ aria2D }}" ref="{{ c2Ref }}" width="1000" height="86" style="width:100%;display:block;background:{{ pc.bg }};border-bottom:1px solid var(--color-divider)"></canvas>
         <svg role="img" aria-label="{{ ariaSpec }}" ref="{{ svgRef }}" sc-camel-view-box="0 0 1000 380" sc-camel-on-mouse-down="{{ onSpecDown }}" sc-camel-on-double-click="{{ onResetSpec }}" style="width:100%;display:block;background:{{ pc.bg }};cursor:grab;touch-action:none">
@@ -172,6 +172,7 @@
               <text x="{{ m.x }}" y="{{ m.ty }}" font-size="11.5" fill="{{ m.color }}" text-anchor="middle" font-style="italic">{{ m.label }}</text></g>
             </sc-for>
           </g>
+          <rect x="{{ bandX }}" y="{{ bandY }}" width="{{ bandW }}" height="{{ bandH }}" fill="var(--color-accent-200)" fill-opacity="0.25" stroke="var(--color-accent-400)" stroke-width="1" opacity="{{ bandOn }}" pointer-events="none"></rect>
           <text x="520" y="377" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">observed wavelength (μm)</text>
           <text x="14" y="180" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 14 180)">{{ yAxisLab }}</text>
           <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="0">
@@ -248,7 +249,8 @@
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">1</kbd></span><span>mark z spec bad</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">f</kbd></span><span>toggle flag</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">0</kbd></span><span>clear decision for this object</span>
-          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">r</kbd></span><span>reset spectrum + p(z) zoom</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">r</kbd></span><span>reset spectrum + p(z) zoom (also clears flux-range lock)</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">shift</kbd> + drag</span><span>box-zoom the 1D spectrum — x sets the wavelength window, y locks the flux range (dbl-click, reset zoom, or a unit switch clears it)</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">m</kbd></span><span>cycle redshift markers (z spec / z phot / both / explore)</span>
           <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">?</kbd></span><span>toggle this help · <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">Esc</kbd> closes</span>
         </div>
