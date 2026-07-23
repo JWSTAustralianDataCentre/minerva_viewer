@@ -10,9 +10,17 @@ Floats rounded to sensible precision (coords 6dp, z 4dp, fluxes 4 sig figs).
 ```
 { "fields": [ { "name":"cosmos", "title":"COSMOS", "n_objects":294126,
     "templates":["sfhz_blue_agn","larson"], "default_template":"sfhz_blue_agn",
+    "template_info":{ "sfhz_blue_agn":{"has_sps":true}, "larson":{"has_sps":false} },
     "n_spec_matched": <int>, "bands":[...32 band names...],
     "ra_range":[min,max], "dec_range":[min,max] } ] }
 ```
+`templates` stays a list-of-strings (consumed by both the Explorer and the
+Inspector). `template_info` is an ADDITIVE per-template capability map, computed
+once at CatalogStore init: `has_sps` is true iff that template set produced
+stellar-population parameters (i.e. its `lmass_{template}` column exists and has
+any finite value). The LARSON eazy run stored none, so `larson.has_sps` is false
+for every field, while `sfhz_blue_agn.has_sps` is true — the UI uses this to show
+"n/a"/disabled affordances for logM/logSFR instead of a bare "—" that reads as a bug.
 
 ### GET /api/catalog/query
 Params (all optional): `field`, `template`, `ids` (comma-sep MINERVA ids),
@@ -30,7 +38,11 @@ Params (all optional): `field`, `template`, `ids` (comma-sep MINERVA ids),
   "spec": null | {"dja":str, "zs":float, "grade":int, "sep":float, "grating":str}
 } ] }
 ```
-`lmass`/`lsfr` are log10; `mag` is AB in `mag_band`; `uvj` = uvj_class as int.
+`lmass`/`lsfr` are log10; `mag` is AB in `mag_band`; `uvj` = uvj_class as int:
+**1 = quiescent, 0 = star-forming, -1 = no classification** (eazy could not place
+the object in the rest-frame UVJ diagram — ~35% of objects; also serialised as -1
+in `/api/object` zout and as `null` when the value is non-finite). Values are
+template-dependent (they come from the active template's rest-frame colors).
 `dist_arcsec` is present on a row **only when the query supplied `ra`+`dec`+`radius_arcsec`**
 (the cos-dec-scaled angular distance from the cone center, ascending default); non-cone
 queries omit the field. `sort=dist` orders by it (ascending; falls back to `id` with no cone).

@@ -3,6 +3,11 @@
    come from /shared/tokens.css emitted by B1. This file is layout + a few
    explorer-only widgets, all built from the same tokens. */
 
+/* Warm oxblood "danger" role — the one alert hue in the parchment/gold system,
+   used for Δz outliers and the star flag. Defining it here also gives the
+   already-referenced .toast.err border a real colour. */
+:root { --color-danger: #9a3b2e; }
+
 html, body { height: 100%; }
 body { margin: 0; overflow: hidden; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); font-size: 15px; }
 *, *::before, *::after { box-sizing: border-box; }
@@ -50,6 +55,9 @@ textarea.input { resize: vertical; line-height: 1.4; }
 .chk { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
 .chk input { accent-color: var(--color-accent); width: 15px; height: 15px; }
 .result-summary { font-size: 12px; text-align: center; min-height: 1.4em; }
+/* Hint line under the log M★ inputs, shown when the template has no stellar masses. */
+.field-hint { font-size: 11px; font-style: italic; margin-top: 2px;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent); }
 
 /* ── Buttons ────────────────────────────────────────────────────── */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
@@ -63,6 +71,9 @@ textarea.input { resize: vertical; line-height: 1.4; }
 .btn-secondary:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
 .btn-block { width: 100%; }
 .btn-mini { font-size: 12px; padding: 3px 9px; min-height: 0; }
+/* Search + Clear on one row; Search grows, Clear hugs its label (B2). */
+.form-actions { display: flex; gap: var(--space-2); }
+.form-actions #btn-search { flex: 1; }
 
 /* ── Results table ──────────────────────────────────────────────── */
 .table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
@@ -71,7 +82,15 @@ textarea.input { resize: vertical; line-height: 1.4; }
   color: color-mix(in srgb, var(--color-text) 60%, transparent);
   padding: var(--space-2); border-bottom: 1px solid var(--color-divider); cursor: pointer; user-select: none; white-space: nowrap; }
 .table th[data-sort]:hover { color: var(--color-accent); }
+/* Non-sortable headers (uvj, spec) are not clickable — no pointer affordance. */
+.table th:not([data-sort]) { cursor: default; }
 .table th .arrow { font-size: 9px; margin-left: 3px; }
+/* lmass header when the active template computed no stellar masses: muted, with
+   a help cursor for its explanatory title; still shown, just visibly inert. */
+.table th.col-nosps { color: color-mix(in srgb, var(--color-text) 38%, transparent); cursor: help; }
+.table th.col-nosps:hover { color: color-mix(in srgb, var(--color-text) 38%, transparent); }
+/* Compact UVJ class column (Q / SF / —). */
+.table th.col-uvj, .table td.col-uvj { text-align: center; }
 /* DIST″ (cone-center distance) column: shown only when the current result set
    carries dist_arcsec (nearest-neighbour / cone queries). */
 #results-table:not(.has-dist) .col-dist { display: none; }
@@ -86,6 +105,15 @@ textarea.input { resize: vertical; line-height: 1.4; }
 .g1 { background: var(--color-neutral-300); }
 /* grade-0 (ungraded): hollow ring so it reads as present-but-empty, not a faint smudge. */
 .g0 { background: transparent; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-text) 55%, transparent); }
+/* Spec cell (A1): grade dot + grade number + z=<zs>. The number restores
+   legibility that colour-only dots lacked. */
+.spec-cell { display: inline-flex; align-items: baseline; gap: 2px; white-space: nowrap; }
+.spec-cell .spec-grade { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+.spec-cell .spec-zs { color: color-mix(in srgb, var(--color-text) 78%, transparent); }
+/* RA/Dec de-emphasis (A3): muted, so the science columns lead the eye. */
+.table td.col-coord { color: color-mix(in srgb, var(--color-text) 52%, transparent); }
+/* Δz/(1+z) outlier value (A2/C3): danger-coloured past the outlier threshold. */
+.dz-out { color: var(--color-danger); font-weight: 600; }
 
 #pager { flex: none; display: flex; align-items: center; justify-content: center; gap: var(--space-3);
   padding: var(--space-2); border-top: 1px solid var(--color-divider); }
@@ -102,9 +130,19 @@ textarea.input { resize: vertical; line-height: 1.4; }
 /* ── Detail pane ────────────────────────────────────────────────── */
 .detail-empty { padding: var(--space-6) var(--space-3); text-align: center; }
 .d-header { display: flex; flex-direction: column; gap: 4px; margin-bottom: var(--space-3); }
-.d-id { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px; }
+.d-id { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2);
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px; }
+/* Likely-star flag tag near the id (C2). */
+.star-flag { font-family: var(--font-body); font-size: 11px; font-weight: 400; letter-spacing: 0.02em;
+  padding: 1px 8px; border-radius: 3px; white-space: nowrap;
+  color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 40%, transparent); }
 .d-coord { display: flex; align-items: center; gap: 8px; font-size: 13px; font-variant-numeric: tabular-nums;
   color: color-mix(in srgb, var(--color-text) 75%, transparent); }
+/* External-viewer + field-map link row under the coordinates (C4). */
+.d-links { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; margin-top: 2px; }
+.d-links a { text-decoration: none; }
+.d-links a:hover { text-decoration: underline; }
 .copy-btn { border: 1px solid var(--color-divider); background: transparent; cursor: pointer;
   border-radius: var(--radius-sm); font-size: 11px; padding: 1px 6px; color: inherit; font-family: var(--font-body); }
 .copy-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
@@ -114,7 +152,9 @@ textarea.input { resize: vertical; line-height: 1.4; }
 .d-sec h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 var(--space-2);
   color: color-mix(in srgb, var(--color-text) 62%, transparent); font-family: var(--font-heading); }
 .cut-row { display: flex; gap: var(--space-3); align-items: flex-start; }
-.plate { filter: sepia(0.22) saturate(0.82) contrast(1.05); box-sizing: border-box;
+/* No sepia/saturate/contrast filter here (C5a): it tinted the real RGB science
+   pixels. Keep only the parchment frame. Click enlarges (C5c). */
+.plate { box-sizing: border-box; cursor: zoom-in;
   border: 5px solid var(--color-surface); outline: 1px solid var(--color-divider);
   width: 180px; height: 180px; object-fit: cover; background: var(--color-neutral-200); }
 .cut-ctrl { display: flex; flex-direction: column; gap: 8px; flex: 1; }
@@ -122,8 +162,11 @@ textarea.input { resize: vertical; line-height: 1.4; }
 input[type=range] { width: 100%; accent-color: var(--color-accent); }
 #grid-strip { margin-top: var(--space-2); display: none; }
 #grid-strip img { width: 100%; border: 1px solid var(--color-divider); border-radius: var(--radius-sm); background: var(--color-neutral-200); min-height: 60px; }
-#sed-canvas { width: 100%; height: 220px; border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-neutral-100); display: block; }
-.sed-loading { height: 220px; }
+/* SED slightly shorter (was 220) to make room for the dedicated p(z) strip (D). */
+#sed-canvas { width: 100%; height: 184px; border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-neutral-100); display: block; }
+/* Full-width p(z) strip beneath the SED — its own labelled-axis canvas. */
+#pz-canvas { width: 100%; height: 84px; margin-top: var(--space-2); border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-neutral-100); display: block; }
+.sed-loading { height: 184px; }
 
 .spec-item { border: 1px solid var(--color-divider); border-radius: var(--radius-md);
   padding: var(--space-2); margin-bottom: var(--space-2); display: flex; gap: var(--space-2); }
@@ -136,6 +179,16 @@ input[type=range] { width: 100%; accent-color: var(--color-accent); }
 .tag { display: inline-flex; align-items: center; font-size: 10.5px; padding: 2px 8px; border-radius: 3px; }
 .tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
 .tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
+
+/* ── Lightbox (click-to-enlarge RGB plate, C5c) ─────────────────── */
+.lightbox { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+  padding: var(--space-4); cursor: zoom-out;
+  background: color-mix(in srgb, var(--color-neutral-900) 62%, transparent); }
+.lightbox.hidden { display: none !important; }
+.lightbox-img { width: min(70vh, 560px); height: min(70vh, 560px); max-width: 92vw; max-height: 92vh;
+  object-fit: contain; image-rendering: auto;
+  border: 6px solid var(--color-surface); outline: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-lg); background: var(--color-neutral-200); }
 
 /* ── Toasts ─────────────────────────────────────────────────────── */
 #toast-stack { position: fixed; right: var(--space-4); bottom: var(--space-4); display: flex;

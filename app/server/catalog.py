@@ -165,6 +165,14 @@ class CatalogStore:
         # arrays for the has_spec / grade_min / sort-by-sep joins).
         self._build_spec_aggregates()
 
+        # Per-template capability flags for the /api/fields payload. Computed
+        # once here (not per-request): has_sps is True when the template's
+        # lmass_{T} column exists AND carries at least one finite value. The
+        # LARSON eazy run stored no stellar-population parameters, so lmass_larson
+        # / lsfr_larson are all-NaN -> has_sps False, letting the UI explain the
+        # bare "—" instead of reading as a bug.
+        self.template_info: dict[str, dict] = self._compute_template_info()
+
     def _merge_supplement(self, path):
         """Fold scripts/dja_supplement.py output (spectra newer than the DJA CSV
         release, found via the live nirspec_extractions API) into the served
@@ -254,6 +262,24 @@ class CatalogStore:
         self._min_sep_arr = np.array(
             [self._min_sep.get(int(i), math.inf) for i in self._id_arr],
             dtype=np.float64)
+
+    # -- per-template capability flags --------------------------------------
+    def _compute_template_info(self):
+        """{template: {"has_sps": bool}} — cached once at init.
+
+        has_sps flags whether this template set produced stellar-population
+        parameters. True iff lmass_{T} exists in the catalog AND has any finite
+        value (LARSON's all-NaN mass/sfr columns -> False for every field).
+        """
+        out: dict[str, dict] = {}
+        for t in self.templates:
+            col = f"lmass_{t}"
+            has_sps = False
+            if col in self.catalog.columns:
+                arr = pd.to_numeric(self.catalog[col], errors="coerce").to_numpy()
+                has_sps = bool(np.isfinite(arr).any())
+            out[t] = {"has_sps": has_sps}
+        return out
 
     # -- numeric column cache -----------------------------------------------
     def _numcol(self, col):
@@ -619,16 +645,24 @@ class CatalogStore:
         if dr is None and "dec" in self.catalog.columns:
             de = pd.to_numeric(self.catalog["dec"], errors="coerce")
             dr = [_rnd(de.min(), 6), _rnd(de.max(), 6)]
+        # map_link: pass the field manifest's link template through to the
+        # client so the Explorer's per-spectrum "map ↗" code path (and the
+        # detail-pane "Field map ↗" link) light up. {ra}/{dec} (and {root}/{dja}
+        # for the spectra path) placeholders are substituted client-side. Absent
+        # when the manifest carries no map_link.
+        map_link = getattr(self.field, "map_link", None) or None
         return {
             "name": self.name,
             "title": getattr(self.field, "title", self.meta.get("title", self.name)),
             "n_objects": int(self.meta.get("n_objects", len(self.catalog))),
             "templates": self.templates,
             "default_template": self.default_template,
+            "template_info": self.template_info,
             "n_spec_matched": int(self.meta.get("n_spec_matched", len(self.spectra))),
             "bands": self.bands,
             "ra_range": rr,
             "dec_range": dr,
+            "map_link": map_link,
         }
 
 

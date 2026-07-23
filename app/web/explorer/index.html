@@ -60,6 +60,7 @@
               <div class="field"><label for="q-lmassmin">min</label><input id="q-lmassmin" class="input" inputmode="decimal"></div>
               <div class="field"><label for="q-lmassmax">max</label><input id="q-lmassmax" class="input" inputmode="decimal"></div>
             </div>
+            <div id="lmass-hint" class="field-hint hidden">n/a for this template</div>
           </fieldset>
 
           <fieldset class="qgroup">
@@ -93,7 +94,10 @@
             <label class="chk"><input type="checkbox" id="q-nostar" checked> exclude stars</label>
           </fieldset>
 
-          <button type="submit" id="btn-search" class="btn btn-primary btn-block">Search</button>
+          <div class="form-actions">
+            <button type="submit" id="btn-search" class="btn btn-primary">Search</button>
+            <button type="button" id="btn-clear" class="btn btn-secondary" title="Reset all query fields to defaults">Clear</button>
+          </div>
           <div id="result-summary" class="result-summary text-muted">—</div>
           <button type="button" id="btn-csv" class="btn btn-secondary btn-block" disabled>Download CSV</button>
         </form>
@@ -110,9 +114,11 @@
                 <th data-sort="dec">dec</th>
                 <th data-sort="z_phot">z_phot</th>
                 <th data-sort="lmass">lmass</th>
+                <th class="col-uvj" title="UVJ rest-frame color class (template-dependent)">uvj</th>
                 <th data-sort="mag">mag</th>
                 <th data-sort="sep">sep</th>
                 <th data-sort="dist" class="col-dist">dist″</th>
+                <th class="col-dz" title="Δz/(1+z) = (z_spec − z_phot)/(1+z_spec)">Δz</th>
                 <th>spec</th>
               </tr>
             </thead>
@@ -146,9 +152,10 @@
         <dl class="help-keys">
           <dt><kbd>j</kbd> <kbd>↓</kbd></dt><dd>Next object</dd>
           <dt><kbd>k</kbd> <kbd>↑</kbd></dt><dd>Previous object</dd>
+          <dt><kbd>i</kbd></dt><dd>Open the Inspector on the selected object's primary spectrum</dd>
           <dt><kbd>Enter</kbd></dt><dd>Open focused row · sort focused column</dd>
           <dt><kbd>?</kbd></dt><dd>Show / hide this help</dd>
-          <dt><kbd>Esc</kbd></dt><dd>Close this help</dd>
+          <dt><kbd>Esc</kbd></dt><dd>Close this help · close enlarged cutout</dd>
           <dt>Nearest&nbsp;10</dt><dd>Detail-pane button: list the selected object + its 10 nearest neighbours (30″ cone, sorted by distance). Also reachable via <code>?near=&lt;id&gt;</code> — e.g. the Inspector back-link.</dd>
         </dl>
       </div>

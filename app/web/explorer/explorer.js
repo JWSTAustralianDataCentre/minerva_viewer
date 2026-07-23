@@ -7,6 +7,8 @@
 const PAGE = 100;                 // default rows per page (simple pagination = virtualization)
 const NEAR_PAGE = 11;             // nearest-neighbour flow: target + 10 neighbours
 const NEAR_RADIUS = 30;           // default cone radius (″) for the nearest flow
+const CONE_DEFAULT_R = 3;         // default cone radius (″) when ra+dec given but r blank
+const DZ_THRESH = 0.15;           // outlier wedge half-width; mirrors Inspector app.js state.thresh
 const SORT_COLS = ['id', 'ra', 'dec', 'z_phot', 'lmass', 'mag', 'sep', 'dist'];
 
 // ── Query-string field wiring ─────────────────────────────────────
@@ -30,9 +32,11 @@ const state = {
   total: 0,
   rows: [],            // current page rows
   selId: null,
-  gridLoaded: false,
+  gridSize: null,      // size (″) the all-bands grid is currently rendered at, or null
+  csvConfirm: false,   // two-step CSV-cap confirmation latch (B3)
   pageSize: PAGE,      // rows per page (NEAR_PAGE while in the nearest flow)
   nearId: null,        // target id of an active nearest-neighbour query (URL near=)
+  magBand: 'f444w',    // mag band of the LAST EXECUTED query (drives the "mag <band>" header)
 };
 
 const $ = (id) => document.getElementById(id);
@@ -58,10 +62,78 @@ function toast(msg, isErr) {
 
 const num = (v, dp) => (v == null || Number.isNaN(v)) ? '—' : Number(v).toFixed(dp);
 
+// Attribute-safe escaping for values interpolated into title="…" tooltips.
+function escAttr(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Signed Δz/(1+z) = (z_spec − z_phot)/(1+z_spec). null when either input is
+// missing (so it renders muted and never counts as an outlier). Matches the
+// Inspector's dzN (app.js), except signed rather than absolute.
+function dzNorm(zs, zp) {
+  if (zs == null || zp == null || Number.isNaN(zs) || Number.isNaN(zp)) return null;
+  if (zs <= -0.99) return null;   // guard the (1+zs) denominator / DJA −1 sentinel
+  return (zs - zp) / (1 + zs);
+}
+// "<class> Δz" cell/tag markup: signed 3dp, danger-coloured past the threshold,
+// muted em-dash when null. `label` prefixes the value (e.g. "Δz/(1+z) ").
+function dzMarkup(dz, label) {
+  if (dz == null) return `<span class="text-muted">${label || ''}—</span>`;
+  const cls = Math.abs(dz) > DZ_THRESH ? 'dz-out' : '';
+  const sign = dz >= 0 ? '+' : '';
+  return `<span class="${cls}">${label || ''}${sign}${dz.toFixed(3)}</span>`;
+}
+
 // ── Help overlay ('?' cheat-sheet) ────────────────────────────────
 function openHelp() { $('help-backdrop').classList.remove('hidden'); $('help-close').focus(); }
-function closeHelp() { $('help-backdrop').classList.add('hidden'); }
+// On close, return focus to the '?' toggle so keyboard users aren't dropped at
+// the document root (E2).
+function closeHelp() {
+  const bd = $('help-backdrop');
+  if (bd.classList.contains('hidden')) return;
+  bd.classList.add('hidden');
+  const btn = $('btn-help');
+  if (btn) btn.focus();
+}
 function toggleHelp() { $('help-backdrop').classList.contains('hidden') ? openHelp() : closeHelp(); }
+
+// Keep Tab focus inside the open help dialog (E2). Esc still closes.
+function trapHelpKeydown(e) {
+  if (e.key === 'Escape') { e.preventDefault(); closeHelp(); return; }
+  if (e.key !== 'Tab') return;
+  const f = $('help-backdrop').querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+// ── Lightbox (click-to-enlarge RGB plate, C5c) ────────────────────
+function openLightbox(src, alt) {
+  let box = $('lightbox');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'lightbox';
+    box.className = 'lightbox';
+    box.innerHTML = '<img class="lightbox-img" alt="">';
+    box.addEventListener('click', closeLightbox);
+    document.body.appendChild(box);
+  }
+  const img = box.querySelector('.lightbox-img');
+  img.src = src; img.alt = alt || '';
+  box.classList.remove('hidden');
+}
+function closeLightbox() {
+  const box = $('lightbox');
+  if (box) box.classList.add('hidden');
+}
+function lightboxOpen() {
+  const box = $('lightbox');
+  return box && !box.classList.contains('hidden');
+}
 
 // First-load cue before any query has run.
 function showFirstRunPrompt() {
@@ -131,6 +203,10 @@ function onFieldChange(url) {
   const bs = document.querySelector('.brand-sub');
   if (bs) bs.textContent = `· ${f.title || f.name} Catalog Explorer`;
 
+  // Reflect the active template's SPS capability in the filter form + headers.
+  updateLmassAvailability();
+  updateColumnHeaders();
+
   // Restore form + run query if the URL carried one.
   if (url) restoreFromURL(url);
 }
@@ -184,22 +260,57 @@ function syncURL() {
 // ══════════════════════════════════════════════════════════════════
 //  QUERY
 // ══════════════════════════════════════════════════════════════════
-// Read the form into a params object (only non-empty values).
+// Read the form into a params object (only non-empty values). Returns null when
+// the cone inputs are half-filled (B1) — the caller aborts and a toast explains.
 function readForm() {
   const p = {};
   for (const [id, param] of Object.entries(FORM_MAP)) {
-    let v = $(id).value.trim();
+    const el = $(id);
+    if (el.disabled) continue;   // e.g. log M★ inputs when the template has no SPS
+    let v = el.value.trim();
     if (v === '') continue;
     if (param === 'ids') v = v.split(/[\s,]+/).filter(Boolean).join(',');
     if (v !== '') p[param] = v;
   }
-  // radius only meaningful with ra & dec
-  if ((p.ra == null || p.dec == null) && p.radius_arcsec != null) delete p.radius_arcsec;
+  // Cone-search foot-guns (B1): a cone needs BOTH ra and dec. If exactly one is
+  // present, abort with an explanatory toast. If both are present but the radius
+  // is blank, default it to the placeholder (3″) instead of silently dropping
+  // the cone. A stray radius with no center stays meaningless -> discarded.
+  const hasRa = 'ra' in p, hasDec = 'dec' in p;
+  if (hasRa !== hasDec) {
+    toast('Cone search needs both RA and Dec', true);
+    return null;
+  }
+  if (hasRa && hasDec) {
+    if (!('radius_arcsec' in p)) p.radius_arcsec = String(CONE_DEFAULT_R);
+  } else if ('radius_arcsec' in p) {
+    delete p.radius_arcsec;
+  }
   if ($('q-hasspec').checked) p.has_spec = '1';
   // use_phot / no_star default to 1 on the server; only send the "off" case.
   if (!$('q-usephot').checked) p.use_phot = '0';
   if (!$('q-nostar').checked) p.no_star = '0';
   return p;
+}
+
+// "Clear" button (B2): reset every query control to its default, drop the
+// nearest-neighbour context, and shrink the URL back to bare field+template.
+// The current table + detail are intentionally left in place until the next
+// Search, so a mis-click doesn't wipe results the user is still reading.
+function clearForm() {
+  for (const id of Object.keys(FORM_MAP)) {
+    if (id === 'q-magband') continue;   // band selector has no empty state; keep it
+    $(id).value = '';
+  }
+  $('q-hasspec').checked = false;
+  $('q-usephot').checked = true;
+  $('q-nostar').checked = true;
+  state.nearId = null;
+  state.csvConfirm = false;
+  const p = new URLSearchParams();
+  p.set('field', state.field);
+  p.set('template', state.template);
+  history.replaceState(null, '', location.pathname + '?' + p.toString());
 }
 
 function buildQueryURL() {
@@ -216,7 +327,9 @@ function buildQueryURL() {
 // leaves the nearest-neighbour mode (restores full page size, clears near=).
 async function runSearch(fromForm) {
   if (fromForm) {
-    state.params = readForm(); state.offset = 0;
+    const p = readForm();
+    if (p === null) return;   // half-filled cone: toast already shown, abort (B1)
+    state.params = p; state.offset = 0;
     state.pageSize = PAGE; state.nearId = null;
   }
   showSkeleton(true);
@@ -232,6 +345,10 @@ async function runSearch(fromForm) {
   }
   state.total = data.total || 0;
   state.rows = data.rows || [];
+  // Freeze the mag-column header to the band this query actually used (the
+  // server defaults to f444w when none is sent), so it never live-follows the
+  // selector before a re-query.
+  state.magBand = state.params.mag_band || 'f444w';
   showSkeleton(false);
   $('btn-search').disabled = false;
   renderTable();
@@ -280,7 +397,9 @@ async function runNearest(id) {
   }
   if (obj.ra == null || obj.dec == null) { toast(`Object ${id} has no coordinates`, true); return; }
   setConeForm(obj.ra, obj.dec, NEAR_RADIUS);
-  state.params = readForm();
+  const p = readForm();
+  if (p === null) return;   // setConeForm always sets both ra+dec, so this is defensive
+  state.params = p;
   state.sort = 'dist';
   state.offset = 0;
   state.pageSize = NEAR_PAGE;
@@ -322,6 +441,7 @@ function renderTable() {
   const hasDist = state.rows.some(r => r.dist_arcsec != null);
   $('results-table').classList.toggle('has-dist', hasDist);
   updateSortArrows();
+  updateColumnHeaders();
   const frag = document.createDocumentFragment();
   for (const r of state.rows) {
     const tr = document.createElement('tr');
@@ -330,17 +450,31 @@ function renderTable() {
     tr.setAttribute('role', 'button');
     tr.setAttribute('aria-label', `Object ${r.id} — open detail`);
     if (r.id === state.selId) tr.classList.add('selected');
+    // spec cell (A1): grade dot + grade number + z=<zs 4dp>. The visible grade
+    // number solves the colour-only legibility of the dot; grating, DJA id and
+    // sep move into the cell's title tooltip.
     let specCell = '<span class="text-muted">—</span>';
     if (r.spec) {
-      specCell = `${gradeDot(r.spec.grade)}<span title="${r.spec.grating || ''} · zs=${num(r.spec.zs, 3)}">${r.spec.grating || 'spec'}</span>`;
+      const sp = r.spec, g = sp.grade ?? 0;
+      const title = `${sp.dja || 'spectrum'} · ${sp.grating || 'grating ?'} · sep ${num(sp.sep, 2)}″`;
+      specCell = `<span class="spec-cell" title="${escAttr(title)}">${gradeDot(g)}` +
+        `<span class="spec-grade">${g}</span> ` +
+        `<span class="spec-zs">z=${num(sp.zs, 4)}</span></span>`;
     }
+    // Δz/(1+z) cell (A2): signed 3dp against z_phot, danger-coloured past the
+    // outlier threshold, muted when no spectrum or a null redshift.
+    const dzCell = dzMarkup(r.spec ? dzNorm(r.spec.zs, r.z_phot) : null, '');
     // sep column: cone-search separation if present on spec, else the matched-spec sep.
     const sep = r.spec ? r.spec.sep : null;
+    // RA/Dec de-emphasised to 5dp + muted (A3); full 6dp stays in the detail copy button.
     tr.innerHTML =
-      `<td>${r.id}</td><td>${num(r.ra, 6)}</td><td>${num(r.dec, 6)}</td>` +
-      `<td>${num(r.z_phot, 3)}</td><td>${num(r.lmass, 2)}</td><td>${num(r.mag, 2)}</td>` +
+      `<td>${r.id}</td><td class="col-coord">${num(r.ra, 5)}</td><td class="col-coord">${num(r.dec, 5)}</td>` +
+      `<td>${num(r.z_phot, 3)}</td><td>${num(r.lmass, 2)}</td>` +
+      `<td class="col-uvj">${uvjShort(r.uvj)}</td>` +
+      `<td>${num(r.mag, 2)}</td>` +
       `<td>${sep == null ? '—' : num(sep, 2)}</td>` +
       `<td class="col-dist">${r.dist_arcsec == null ? '—' : num(r.dist_arcsec, 2)}</td>` +
+      `<td class="col-dz">${dzCell}</td>` +
       `<td>${specCell}</td>`;
     tr.addEventListener('click', () => selectRow(r.id));
     tr.addEventListener('keydown', (e) => {
@@ -368,8 +502,36 @@ function updateSortArrows() {
   }
 }
 
+// Column-header text/flags that follow query + template state:
+//  - the "mag" header shows the band of the LAST EXECUTED query (state.magBand),
+//    not the live selector, so it always matches the numbers in the column.
+//  - the "lmass" header is flagged (class + title) when the active template set
+//    computed no stellar masses (all cells are "—").
+function updateColumnHeaders() {
+  const magTh = document.querySelector('#results-head th[data-sort="mag"]');
+  if (magTh && magTh.firstChild) magTh.firstChild.nodeValue = `mag ${state.magBand}`;
+  const lmassTh = document.querySelector('#results-head th[data-sort="lmass"]');
+  if (lmassTh) {
+    const hasSps = activeHasSPS();
+    lmassTh.classList.toggle('col-nosps', !hasSps);
+    if (!hasSps) lmassTh.title = 'Stellar mass not computed for this template set';
+    else lmassTh.removeAttribute('title');
+  }
+}
+
+// Disable the log M★ filter inputs (keeping any typed values) and show a hint
+// when the active template set has no stellar masses; re-enable otherwise.
+function updateLmassAvailability() {
+  const hasSps = activeHasSPS();
+  $('q-lmassmin').disabled = !hasSps;
+  $('q-lmassmax').disabled = !hasSps;
+  $('lmass-hint').classList.toggle('hidden', hasSps);
+}
+
 function onSortClick(col) {
   if (!SORT_COLS.includes(col)) return;
+  // lmass sort is meaningless when the active template computed no masses.
+  if (col === 'lmass' && !activeHasSPS()) return;
   // toggle asc/desc; default new column ascending (id/ra/…) but desc for magnitude-like? keep asc.
   state.sort = (state.sort === col) ? ('-' + col) : col;
   state.offset = 0;
@@ -392,6 +554,19 @@ function gotoPage(delta) {
   runSearch(false).then(() => { $('results-scroll').scrollTop = 0; });
 }
 
+// 'i' shortcut (E1): open the Inspector on the selected object's PRIMARY
+// spectrum — the same URL (and same tab) as the detail-pane "inspect ↗" link.
+// No-op when nothing is selected or the selection has no matched spectrum.
+function openInspectorForSelected() {
+  if (state.selId == null) return;
+  const r = state.rows.find((x) => x.id === state.selId);
+  if (!r || !r.spec || !r.spec.dja) return;
+  window.location.href =
+    `/inspector/?field=${encodeURIComponent(state.field)}` +
+    `&template=${encodeURIComponent(state.template)}` +
+    `&sel=${encodeURIComponent(r.spec.dja)}`;
+}
+
 // j/k keyboard navigation within the current page.
 function navRow(delta) {
   if (!state.rows.length) return;
@@ -409,6 +584,17 @@ function navRow(delta) {
 // ══════════════════════════════════════════════════════════════════
 async function exportCSV() {
   if (state.total === 0) return;
+  // CSV is capped at 5000 rows (matches the server's per-query max). When the
+  // result set is larger, require a second click so the truncation is a
+  // conscious choice, and suffix the filename to record it (B3).
+  const capped = state.total > 5000;
+  if (capped && !state.csvConfirm) {
+    state.csvConfirm = true;
+    toast(`Result has ${state.total.toLocaleString()} rows; export downloads the first 5000. Click again to proceed.`);
+    setTimeout(() => { state.csvConfirm = false; }, 5000);
+    return;
+  }
+  state.csvConfirm = false;
   $('btn-csv').disabled = true;
   // Include dist_arcsec only when the active result set carries it (cone / nearest).
   const hasDist = state.rows.some(r => r.dist_arcsec != null);
@@ -441,7 +627,7 @@ async function exportCSV() {
   const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `minerva_${state.field}_${state.template}_query.csv`;
+  a.download = `minerva_${state.field}_${state.template}_query${capped ? '_first5000' : ''}.csv`;
   a.click();
   URL.revokeObjectURL(a.href);
   $('btn-csv').disabled = false;
@@ -459,7 +645,7 @@ function csvCell(v) {
 async function selectRow(id) {
   if (id == null || Number.isNaN(id)) return;
   state.selId = id;
-  state.gridLoaded = false;
+  state.gridSize = null;
   for (const tr of document.querySelectorAll('#results-body tr'))
     tr.classList.toggle('selected', Number(tr.dataset.id) === id);
   $('detail-empty').classList.add('hidden');
@@ -480,9 +666,28 @@ async function selectRow(id) {
   renderDetail(obj);
 }
 
+// UVJ rest-frame colour class: 1=quiescent, 0=star-forming, -1/null=no class.
+const UVJ_NOCLASS_TITLE = 'No UVJ classification (eazy rest-frame colors unavailable)';
+function uvjNoClass(v) { return v == null || Number.isNaN(v) || v === -1; }
 function uvjLabel(v) {
-  if (v == null || Number.isNaN(v)) return '—';
-  return v === 1 ? 'quiescent' : v === 0 ? 'star-forming' : String(v);
+  if (uvjNoClass(v)) return '—';
+  return v === 1 ? 'quiescent' : v === 0 ? 'star-forming' : '—';
+}
+// Compact table-cell markup: Q / SF / — (muted), full word in the title.
+function uvjShort(v) {
+  if (v === 1) return '<span title="quiescent">Q</span>';
+  if (v === 0) return '<span title="star-forming">SF</span>';
+  return `<span class="text-muted" title="${UVJ_NOCLASS_TITLE}">—</span>`;
+}
+
+// Does the active template carry stellar-population parameters (lmass/lsfr)?
+// Reads the /api/fields template_info.{tpl}.has_sps flag; defaults true when the
+// flag is absent (older payloads) so nothing is disabled without cause.
+function activeHasSPS() {
+  const f = currentField();
+  const ti = f && f.template_info;
+  if (!ti || !(state.template in ti)) return true;
+  return ti[state.template].has_sps !== false;
 }
 
 function renderDetail(obj) {
@@ -492,19 +697,55 @@ function renderDetail(obj) {
   const coordStr = `${ra} ${dec}`;
   c.innerHTML = '';
 
+  // logM / logSFR: render "n/a" (not "—") when the template set has no masses,
+  // so an all-NaN LARSON run reads as "not computed" rather than a data bug.
+  const hasSps = activeHasSPS();
+  const naTitle = `Not computed for the ${state.template.toUpperCase()} template set`;
+  const naSpan = `<b class="text-muted" title="${naTitle}">n/a</b>`;
+  const logM = hasSps ? `<b>${num(z.lmass, 2)}</b>` : naSpan;
+  const logSFR = hasSps ? `<b>${num(z.lsfr, 2)}</b>` : naSpan;
+  const uvjTitle = uvjNoClass(z.uvj) ? ` title="${UVJ_NOCLASS_TITLE}"` : '';
+
+  // χ² and band-coverage stats (C1). bands = measured / total-for-field.
+  const totalBands = (currentField().bands || []).length;
+  const chi2Span = z.chi2 == null
+    ? `<b class="text-muted">—</b>` : `<b>${num(z.chi2, 2)}</b>`;
+  const bandsSpan = obj.n_bands == null
+    ? `<b class="text-muted">—</b>` : `<b>${obj.n_bands}</b>`;
+
+  // Likely-star flag tag (C2), rendered near the id in the header.
+  const starTag = (obj.flags && obj.flags.flag_star)
+    ? `<span class="star-flag" title="Flagged as a likely star in the MINERVA catalog">★ star flag</span>`
+    : '';
+
+  // External-viewer + field-map link row (C4). All open in a new tab.
+  const links = [
+    `<a href="https://www.legacysurvey.org/viewer?ra=${obj.ra}&dec=${obj.dec}&layer=ls-dr10&zoom=16" target="_blank" rel="noopener">Legacy Survey ↗</a>`,
+    `<a href="https://sky.esa.int/esasky/?target=${obj.ra}%20${obj.dec}&fov=0.05" target="_blank" rel="noopener">ESASky ↗</a>`,
+    `<a href="https://simbad.cds.unistra.fr/simbad/sim-coo?Coord=${obj.ra}+${obj.dec}&Radius=10&Radius.unit=arcsec" target="_blank" rel="noopener">SIMBAD ↗</a>`,
+  ];
+  const mapBase = currentField().map_link;
+  if (mapBase) {
+    const href = mapBase.replace('{ra}', obj.ra).replace('{dec}', obj.dec);
+    links.push(`<a href="${escAttr(href)}" target="_blank" rel="noopener">Field map ↗</a>`);
+  }
+
   // Header
   const head = document.createElement('div');
   head.className = 'd-header';
   head.innerHTML =
-    `<div class="d-id">#${obj.id}` +
+    `<div class="d-id">#${obj.id}${starTag}` +
       `<button type="button" id="btn-nearest" class="btn btn-secondary btn-mini" ` +
         `title="List this object + its 10 nearest neighbours">Nearest 10</button></div>` +
     `<div class="d-coord">${ra}, ${dec} <button class="copy-btn" data-copy="${coordStr}">copy</button></div>` +
+    `<div class="d-links">${links.join('')}</div>` +
     `<div class="d-stats">` +
       `<span>z<sub>phot</sub> <b>${num(z.z_phot, 3)}</b> <span class="text-muted">[${num(z.z160, 2)}–${num(z.z840, 2)}]</span></span>` +
-      `<span>logM <b>${num(z.lmass, 2)}</b></span>` +
-      `<span>logSFR <b>${num(z.lsfr, 2)}</b></span>` +
-      `<span>UVJ <b>${uvjLabel(z.uvj)}</b></span>` +
+      `<span>logM ${logM}</span>` +
+      `<span>logSFR ${logSFR}</span>` +
+      `<span${uvjTitle}>UVJ <b>${uvjLabel(z.uvj)}</b></span>` +
+      `<span title="EAzY best-fit chi-squared">χ² ${chi2Span}</span>` +
+      `<span title="Bands with measured photometry">bands ${bandsSpan}<span class="text-muted">/${totalBands}</span></span>` +
     `</div>`;
   c.appendChild(head);
   const nearBtn = $('btn-nearest');
@@ -526,11 +767,15 @@ function renderDetail(obj) {
     `<div id="grid-strip"><img id="grid-img" alt="Multiband grid"></div>`;
   c.appendChild(cut);
 
-  // SED quicklook
+  // SED quicklook + dedicated p(z) strip (D). The p(z) is its own full-width
+  // canvas beneath the SED (was a cramped 108×58 corner inset), with a labelled
+  // z axis and the z_phot marker; the SED shrinks slightly to keep the pane
+  // height reasonable.
   const sed = document.createElement('div');
   sed.className = 'd-sec';
   sed.innerHTML = `<h4>SED · p(z)</h4>` +
-    `<canvas id="sed-canvas" role="img" aria-label="Spectral energy distribution and p(z) for object #${obj.id}, z_phot ${num(z.z_phot, 3)}"></canvas>`;
+    `<canvas id="sed-canvas" role="img" aria-label="Spectral energy distribution for object #${obj.id}, z_phot ${num(z.z_phot, 3)}"></canvas>` +
+    `<canvas id="pz-canvas" role="img" aria-label="Redshift probability p(z) for object #${obj.id}, z_phot ${num(z.z_phot, 3)}"></canvas>`;
   c.appendChild(sed);
 
   // Spectra list
@@ -548,18 +793,35 @@ function renderDetail(obj) {
   };
   loadRGB();
   slider.addEventListener('input', () => { $('size-val').textContent = Number(slider.value).toFixed(1); });
-  slider.addEventListener('change', loadRGB);
+  // On commit, refresh the RGB plate AND — if the all-bands grid is currently
+  // shown — re-render it at the new size too (C5b: the old gridLoaded latch
+  // froze the grid at its first size).
+  slider.addEventListener('change', () => {
+    loadRGB();
+    const strip = $('grid-strip');
+    if (strip && strip.style.display === 'block') loadGrid(obj, slider.value);
+  });
   $('rgb-cut').addEventListener('error', () => $('rgb-cut').setAttribute('alt', 'cutout unavailable'));
+  // Click-to-enlarge (C5c): the /api/cutout size param is an angular field of
+  // view, not a render resolution, so a bigger request would reframe rather than
+  // magnify — the lightbox scales the existing plate instead.
+  $('rgb-cut').addEventListener('click', () => {
+    const src = $('rgb-cut').getAttribute('src');
+    if (src) openLightbox(src, `RGB cutout for object #${obj.id}, enlarged`);
+  });
   $('btn-allbands').addEventListener('click', () => loadGrid(obj, slider.value));
 
   loadSED(obj.id);
 }
 
+// Show the all-bands grid, (re)loading its image whenever the requested size
+// differs from what's on screen (keyed by size rather than a one-shot latch).
 function loadGrid(obj, size) {
   const strip = $('grid-strip');
   strip.style.display = 'block';
-  if (state.gridLoaded) return;
-  state.gridLoaded = true;
+  const key = String(size);
+  if (state.gridSize === key) return;
+  state.gridSize = key;
   const img = $('grid-img');
   img.src = `/api/cutout?mode=grid&ra=${obj.ra}&dec=${obj.dec}&size=${size}`;
   img.addEventListener('error', () => img.setAttribute('alt', 'grid unavailable'), { once: true });
@@ -575,6 +837,9 @@ function renderSpectra(obj) {
   }
   sec.innerHTML = `<h4>Spectra (${specs.length})</h4>`;
   const mapBase = currentField().map_link || null;   // forward-compatible if /api/fields adds it
+  // Active-template z_phot for the per-spectrum Δz/(1+z) tag (C3).
+  const zTpl = (obj.zout && obj.zout[state.template]) || {};
+  const zp = zTpl.z_phot;
   for (const s of specs) {
     const el = document.createElement('div');
     el.className = 'spec-item';
@@ -595,6 +860,7 @@ function renderSpectra(obj) {
           `<span>grade ${s.grade ?? 0}</span>` +
           `<span>sep ${num(s.sep, 2)}″</span>` +
           (s.sn != null ? `<span>S/N ${num(s.sn, 1)}</span>` : '') +
+          (dzNorm(s.zs, zp) != null ? `<span>${dzMarkup(dzNorm(s.zs, zp), 'Δz/(1+z) ')}</span>` : '') +
         `</div>` +
         `<div class="spec-links"><a href="${inspHref}">inspect ↗</a>${extLink}</div>` +
       `</div>`;
@@ -608,17 +874,21 @@ function renderSpectra(obj) {
 // ══════════════════════════════════════════════════════════════════
 async function loadSED(id) {
   const cv = $('sed-canvas');
+  const pzcv = $('pz-canvas');
   if (!cv) return;
   drawSEDMessage(cv, 'loading SED…');
+  if (pzcv) drawSEDMessage(pzcv, '');
   let d;
   try {
     d = await fetchJSON(`/api/eazy/${encodeURIComponent(state.field)}/${encodeURIComponent(state.template)}/${id}`);
   } catch (e) {
     drawSEDMessage(cv, 'SED unavailable: ' + e.message);
+    if (pzcv) drawSEDMessage(pzcv, 'p(z) unavailable');
     return;
   }
   if (state.selId !== id) return;
   drawSED(cv, d);
+  if (pzcv) drawPZStrip(pzcv, d);
 }
 
 function themeInk() {
@@ -738,43 +1008,85 @@ function drawSED(cv, d) {
     ctx.globalAlpha = 1;
     ctx.beginPath(); ctx.arc(x, y, 2.6, 0, 2 * Math.PI); ctx.fill();
   }
-
-  drawPZInset(ctx, d, x0, y0, x1, ink);
 }
 
-// small p(z) inset in the upper region of the SED panel
-function drawPZInset(ctx, d, x0, y0, x1, ink) {
+// Full-width p(z) strip drawn on its own canvas beneath the SED (D). Same data
+// (d.zgrid / d.pz — what the old corner inset used), same tokens; now with a
+// labelled z axis + ticks and the z_phot marker.
+function drawPZStrip(cv, d) {
+  const ctx = setupCanvas(cv);
+  const { w, h } = cvSize(cv);
+  const ink = themeInk();
   const zg = d.zgrid || [], pz = d.pz || [];
-  if (!zg.length || !pz.length) return;
-  const iw = 108, ih = 58, ix = x1 - iw - 6, iy = y0 + 4;
-  // frame
-  ctx.globalAlpha = 0.85; ctx.fillStyle = 'rgba(255,255,255,0.06)';
-  ctx.strokeStyle = ink.ink; ctx.globalAlpha = 0.25; ctx.lineWidth = 1;
-  ctx.strokeRect(ix, iy, iw, ih); ctx.globalAlpha = 1;
-  // determine z window around the peak for readability
+  const padL = 40, padR = 12, padT = 8, padB = 18;
+  const x0 = padL, x1 = w - padR, y0 = padT, y1 = h - padB;
+  if (!zg.length || !pz.length) { drawSEDMessage(cv, 'p(z) unavailable'); return; }
+
   let pmax = 0, izpk = 0;
   for (let i = 0; i < pz.length; i++) if (pz[i] > pmax) { pmax = pz[i]; izpk = i; }
-  if (pmax <= 0) return;
+  if (pmax <= 0) { drawSEDMessage(cv, 'p(z) unavailable'); return; }
+
   const zmin = zg[0], zmax = zg[zg.length - 1];
-  const zx = (z) => ix + (z - zmin) / (zmax - zmin) * iw;
-  const py = (p) => iy + ih - (p / pmax) * (ih - 6) - 3;
-  ctx.fillStyle = ink.accent; ctx.globalAlpha = 0.35;
-  ctx.beginPath(); ctx.moveTo(zx(zmin), iy + ih);
+  const zx = (z) => x0 + (z - zmin) / (zmax - zmin) * (x1 - x0);
+  const py = (p) => y1 - (p / pmax) * (y1 - y0);
+
+  // baseline axis
+  ctx.strokeStyle = ink.ink; ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  // filled curve + outline
+  ctx.fillStyle = ink.accent; ctx.globalAlpha = 0.30;
+  ctx.beginPath(); ctx.moveTo(zx(zmin), y1);
   for (let i = 0; i < pz.length; i++) ctx.lineTo(zx(zg[i]), py(pz[i]));
-  ctx.lineTo(zx(zmax), iy + ih); ctx.closePath(); ctx.fill();
-  ctx.globalAlpha = 0.9; ctx.strokeStyle = ink.accent; ctx.lineWidth = 1;
+  ctx.lineTo(zx(zmax), y1); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 0.9; ctx.strokeStyle = ink.accent; ctx.lineWidth = 1.2;
   ctx.beginPath();
   for (let i = 0; i < pz.length; i++) { const x = zx(zg[i]), y = py(pz[i]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-  ctx.stroke();
-  // z_phot marker
-  if (d.z_phot != null) {
-    ctx.strokeStyle = ink.ink; ctx.globalAlpha = 0.5; ctx.setLineDash([2, 2]);
-    ctx.beginPath(); ctx.moveTo(zx(d.z_phot), iy); ctx.lineTo(zx(d.z_phot), iy + ih); ctx.stroke();
-    ctx.setLineDash([]);
+  ctx.stroke(); ctx.globalAlpha = 1;
+
+  // z-axis ticks + labels
+  ctx.fillStyle = ink.ink; ctx.font = '10px serif'; ctx.textAlign = 'center';
+  for (const zt of zTicks(zmin, zmax, 6)) {
+    if (zt < zmin || zt > zmax) continue;
+    const x = zx(zt);
+    ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y1 + 3); ctx.stroke();
+    ctx.globalAlpha = 0.75; ctx.fillText(String(zt), x, y1 + 13);
   }
-  ctx.globalAlpha = 0.7; ctx.fillStyle = ink.ink; ctx.font = '9px serif'; ctx.textAlign = 'left';
-  ctx.fillText(`p(z)  z=${(d.z_phot ?? zg[izpk]).toFixed(2)}`, ix + 3, iy + 10);
+  ctx.globalAlpha = 0.6; ctx.textAlign = 'right'; ctx.fillText('z', x1, y1 + 13);
+  // rotated p(z) axis label
+  ctx.save(); ctx.translate(11, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2);
+  ctx.globalAlpha = 0.6; ctx.textAlign = 'center'; ctx.fillText('p(z)', 0, 0); ctx.restore();
   ctx.globalAlpha = 1;
+
+  // z_phot marker (dashed) + label
+  const zmark = d.z_phot ?? zg[izpk];
+  if (zmark != null) {
+    const mx = zx(zmark);
+    ctx.strokeStyle = ink.ink; ctx.globalAlpha = 0.55; ctx.setLineDash([3, 2]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(mx, y0); ctx.lineTo(mx, y1); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 0.9; ctx.fillStyle = ink.accent; ctx.font = '9px serif'; ctx.textAlign = 'left';
+    const tx = Math.min(mx + 3, x1 - 34);
+    ctx.fillText(`z=${zmark.toFixed(2)}`, tx, y0 + 8);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// 1/2/5×10^k "nice" ticks across [lo,hi] — cleaner than niceTicks over the wide
+// log-z range (e.g. 0–20 -> 0,5,10,15,20 rather than 3.7,7.4,…).
+function zTicks(lo, hi, n) {
+  const span = hi - lo;
+  if (span <= 0) return [lo];
+  const raw = span / n;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const norm = raw / mag;
+  const step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+  const out = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) {
+    out.push(Math.round(v * 100) / 100);
+  }
+  return out;
 }
 
 function niceTicks(lo, hi, n) {
@@ -801,6 +1113,8 @@ function wireEvents() {
   $('sel-template').addEventListener('change', (e) => {
     state.template = e.target.value;
     $('nav-inspector').href = `/inspector/?field=${encodeURIComponent(state.field)}&template=${encodeURIComponent(state.template)}`;
+    updateLmassAvailability();   // enable/disable log M★ inputs for the new template
+    updateColumnHeaders();       // flag the lmass header if the new template has no SPS
     if (state.total) runSearch(false);       // re-query so per-template columns refresh
     else syncURL();
   });
@@ -824,17 +1138,23 @@ function wireEvents() {
     }
   });
 
+  $('btn-clear').addEventListener('click', clearForm);
+
   $('btn-help').addEventListener('click', openHelp);
   $('help-close').addEventListener('click', closeHelp);
   $('help-backdrop').addEventListener('click', (e) => { if (e.target === $('help-backdrop')) closeHelp(); });
+  $('help-backdrop').addEventListener('keydown', trapHelpKeydown);   // Tab trap + Esc (E2)
 
   document.addEventListener('keydown', (e) => {
+    // Esc closes the lightbox first, then the help dialog (C5c / E2).
+    if (e.key === 'Escape' && lightboxOpen()) { closeLightbox(); return; }
     if (e.key === 'Escape' && !$('help-backdrop').classList.contains('hidden')) { closeHelp(); return; }
     const tag = (e.target.tagName || '').toUpperCase();
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.metaKey || e.ctrlKey) return;
     if (e.key === '?') { e.preventDefault(); toggleHelp(); }
     else if (e.key === 'j' || e.key === 'ArrowDown') { e.preventDefault(); navRow(1); }
     else if (e.key === 'k' || e.key === 'ArrowUp') { e.preventDefault(); navRow(-1); }
+    else if (e.key === 'i') { e.preventDefault(); openInspectorForSelected(); }
   });
 
   window.addEventListener('resize', debounce(() => {

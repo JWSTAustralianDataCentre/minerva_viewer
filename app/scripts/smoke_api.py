@@ -83,6 +83,14 @@ def main():
     args = ap.parse_args()
     B = args.base.rstrip("/")
     S = requests.Session()
+    # When the server is started with the shared-credential gate (run_public.sh
+    # exports MINERVA_AUTH_USER / MINERVA_AUTH_PASS), send HTTP Basic auth so the
+    # smoke test works against an auth-gated server. Unset -> no auth header, i.e.
+    # unchanged localhost behaviour.
+    import os
+    _au, _ap = os.environ.get("MINERVA_AUTH_USER"), os.environ.get("MINERVA_AUTH_PASS")
+    if _au and _ap:
+        S.auth = (_au, _ap)
 
     ids = pick_ids()
     print("== sample ids ==")
