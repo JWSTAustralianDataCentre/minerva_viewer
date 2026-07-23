@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="e985c1ce-d6ab-4801-a08e-87b2da80fe35"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>/* Classical — design-system tokens and component classes. This file is the source of truth for the system's look; retune it here and see readme.md. */
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("64dc614a-e816-49f7-917a-1a2ce9481a7c") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("e1ba6f4d-d9c0-4f23-975d-2a3d31a29e59") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("2b9dd0db-46a0-48f8-877c-e2a5bdf04008") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("5c7b5e25-b82b-4ec4-9fcb-7f0c633ff30c") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("edcd2f79-5e95-41c7-94e1-3cc5a7505431") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("64dc614a-e816-49f7-917a-1a2ce9481a7c") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("e1ba6f4d-d9c0-4f23-975d-2a3d31a29e59") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("2b9dd0db-46a0-48f8-877c-e2a5bdf04008") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("5c7b5e25-b82b-4ec4-9fcb-7f0c633ff30c") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("edcd2f79-5e95-41c7-94e1-3cc5a7505431") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("900d8903-7de7-46bb-b3e6-8a64df43844c") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("51293565-8521-4f8a-833d-eed4ab21c61b") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* math */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("1f09f066-5f14-4218-87a0-7edfbb6c28d0") format('woff2');
+  unicode-range: U+0302-0303, U+0305, U+0307-0308, U+0310, U+0312, U+0315, U+031A, U+0326-0327, U+032C, U+032F-0330, U+0332-0333, U+0338, U+033A, U+0346, U+034D, U+0391-03A1, U+03A3-03A9, U+03B1-03C9, U+03D1, U+03D5-03D6, U+03F0-03F1, U+03F4-03F5, U+2016-2017, U+2034-2038, U+203C, U+2040, U+2043, U+2047, U+2050, U+2057, U+205F, U+2070-2071, U+2074-208E, U+2090-209C, U+20D0-20DC, U+20E1, U+20E5-20EF, U+2100-2112, U+2114-2115, U+2117-2121, U+2123-214F, U+2190, U+2192, U+2194-21AE, U+21B0-21E5, U+21F1-21F2, U+21F4-2211, U+2213-2214, U+2216-22FF, U+2308-230B, U+2310, U+2319, U+231C-2321, U+2336-237A, U+237C, U+2395, U+239B-23B7, U+23D0, U+23DC-23E1, U+2474-2475, U+25AF, U+25B3, U+25B7, U+25BD, U+25C1, U+25CA, U+25CC, U+25FB, U+266D-266F, U+27C0-27FF, U+2900-2AFF, U+2B0E-2B11, U+2B30-2B4C, U+2BFE, U+3030, U+FF5B, U+FF5D, U+1D400-1D7FF, U+1EE00-1EEFF;
+}
+/* symbols */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("f9f5669a-69cf-402a-803b-74790b26154e") format('woff2');
+  unicode-range: U+0001-000C, U+000E-001F, U+007F-009F, U+20DD-20E0, U+20E2-20E4, U+2150-218F, U+2190, U+2192, U+2194-2199, U+21AF, U+21E6-21F0, U+21F3, U+2218-2219, U+2299, U+22C4-22C6, U+2300-243F, U+2440-244A, U+2460-24FF, U+25A0-27BF, U+2800-28FF, U+2921-2922, U+2981, U+29BF, U+29EB, U+2B00-2BFF, U+4DC0-4DFF, U+FFF9-FFFB, U+10140-1018E, U+10190-1019C, U+101A0, U+101D0-101FD, U+102E0-102FB, U+10E60-10E7E, U+1D2C0-1D2D3, U+1D2E0-1D37F, U+1F000-1F0FF, U+1F100-1F1AD, U+1F1E6-1F1FF, U+1F30D-1F30F, U+1F315, U+1F31C, U+1F31E, U+1F320-1F32C, U+1F336, U+1F378, U+1F37D, U+1F382, U+1F393-1F39F, U+1F3A7-1F3A8, U+1F3AC-1F3AF, U+1F3C2, U+1F3C4-1F3C6, U+1F3CA-1F3CE, U+1F3D4-1F3E0, U+1F3ED, U+1F3F1-1F3F3, U+1F3F5-1F3F7, U+1F408, U+1F415, U+1F41F, U+1F426, U+1F43F, U+1F441-1F442, U+1F444, U+1F446-1F449, U+1F44C-1F44E, U+1F453, U+1F46A, U+1F47D, U+1F4A3, U+1F4B0, U+1F4B3, U+1F4B9, U+1F4BB, U+1F4BF, U+1F4C8-1F4CB, U+1F4D6, U+1F4DA, U+1F4DF, U+1F4E3-1F4E6, U+1F4EA-1F4ED, U+1F4F7, U+1F4F9-1F4FB, U+1F4FD-1F4FE, U+1F503, U+1F507-1F50B, U+1F50D, U+1F512-1F513, U+1F53E-1F54A, U+1F54F-1F5FA, U+1F610, U+1F650-1F67F, U+1F687, U+1F68D, U+1F691, U+1F694, U+1F698, U+1F6AD, U+1F6B2, U+1F6B9-1F6BA, U+1F6BC, U+1F6C6-1F6CF, U+1F6D3-1F6D7, U+1F6E0-1F6EA, U+1F6F0-1F6F3, U+1F6F7-1F6FC, U+1F700-1F7FF, U+1F800-1F80B, U+1F810-1F847, U+1F850-1F859, U+1F860-1F887, U+1F890-1F8AD, U+1F8B0-1F8BB, U+1F8C0-1F8C1, U+1F900-1F90B, U+1F93B, U+1F946, U+1F984, U+1F996, U+1F9E9, U+1FA00-1FA6F, U+1FA70-1FA7C, U+1FA80-1FA89, U+1FA8F-1FAC6, U+1FACE-1FADC, U+1FADF-1FAE9, U+1FAF0-1FAF8, U+1FB00-1FBFF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("30f91b00-8466-4a20-9089-50c3fe73a2c3") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("4b6d8597-0c71-4c9b-807b-068c1492eee2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("e7ea0d51-a978-4b9f-8d7a-b55782743cad") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("900d8903-7de7-46bb-b3e6-8a64df43844c") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("51293565-8521-4f8a-833d-eed4ab21c61b") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* math */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("1f09f066-5f14-4218-87a0-7edfbb6c28d0") format('woff2');
+  unicode-range: U+0302-0303, U+0305, U+0307-0308, U+0310, U+0312, U+0315, U+031A, U+0326-0327, U+032C, U+032F-0330, U+0332-0333, U+0338, U+033A, U+0346, U+034D, U+0391-03A1, U+03A3-03A9, U+03B1-03C9, U+03D1, U+03D5-03D6, U+03F0-03F1, U+03F4-03F5, U+2016-2017, U+2034-2038, U+203C, U+2040, U+2043, U+2047, U+2050, U+2057, U+205F, U+2070-2071, U+2074-208E, U+2090-209C, U+20D0-20DC, U+20E1, U+20E5-20EF, U+2100-2112, U+2114-2115, U+2117-2121, U+2123-214F, U+2190, U+2192, U+2194-21AE, U+21B0-21E5, U+21F1-21F2, U+21F4-2211, U+2213-2214, U+2216-22FF, U+2308-230B, U+2310, U+2319, U+231C-2321, U+2336-237A, U+237C, U+2395, U+239B-23B7, U+23D0, U+23DC-23E1, U+2474-2475, U+25AF, U+25B3, U+25B7, U+25BD, U+25C1, U+25CA, U+25CC, U+25FB, U+266D-266F, U+27C0-27FF, U+2900-2AFF, U+2B0E-2B11, U+2B30-2B4C, U+2BFE, U+3030, U+FF5B, U+FF5D, U+1D400-1D7FF, U+1EE00-1EEFF;
+}
+/* symbols */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("f9f5669a-69cf-402a-803b-74790b26154e") format('woff2');
+  unicode-range: U+0001-000C, U+000E-001F, U+007F-009F, U+20DD-20E0, U+20E2-20E4, U+2150-218F, U+2190, U+2192, U+2194-2199, U+21AF, U+21E6-21F0, U+21F3, U+2218-2219, U+2299, U+22C4-22C6, U+2300-243F, U+2440-244A, U+2460-24FF, U+25A0-27BF, U+2800-28FF, U+2921-2922, U+2981, U+29BF, U+29EB, U+2B00-2BFF, U+4DC0-4DFF, U+FFF9-FFFB, U+10140-1018E, U+10190-1019C, U+101A0, U+101D0-101FD, U+102E0-102FB, U+10E60-10E7E, U+1D2C0-1D2D3, U+1D2E0-1D37F, U+1F000-1F0FF, U+1F100-1F1AD, U+1F1E6-1F1FF, U+1F30D-1F30F, U+1F315, U+1F31C, U+1F31E, U+1F320-1F32C, U+1F336, U+1F378, U+1F37D, U+1F382, U+1F393-1F39F, U+1F3A7-1F3A8, U+1F3AC-1F3AF, U+1F3C2, U+1F3C4-1F3C6, U+1F3CA-1F3CE, U+1F3D4-1F3E0, U+1F3ED, U+1F3F1-1F3F3, U+1F3F5-1F3F7, U+1F408, U+1F415, U+1F41F, U+1F426, U+1F43F, U+1F441-1F442, U+1F444, U+1F446-1F449, U+1F44C-1F44E, U+1F453, U+1F46A, U+1F47D, U+1F4A3, U+1F4B0, U+1F4B3, U+1F4B9, U+1F4BB, U+1F4BF, U+1F4C8-1F4CB, U+1F4D6, U+1F4DA, U+1F4DF, U+1F4E3-1F4E6, U+1F4EA-1F4ED, U+1F4F7, U+1F4F9-1F4FB, U+1F4FD-1F4FE, U+1F503, U+1F507-1F50B, U+1F50D, U+1F512-1F513, U+1F53E-1F54A, U+1F54F-1F5FA, U+1F610, U+1F650-1F67F, U+1F687, U+1F68D, U+1F691, U+1F694, U+1F698, U+1F6AD, U+1F6B2, U+1F6B9-1F6BA, U+1F6BC, U+1F6C6-1F6CF, U+1F6D3-1F6D7, U+1F6E0-1F6EA, U+1F6F0-1F6F3, U+1F6F7-1F6FC, U+1F700-1F7FF, U+1F800-1F80B, U+1F810-1F847, U+1F850-1F859, U+1F860-1F887, U+1F890-1F8AD, U+1F8B0-1F8BB, U+1F8C0-1F8C1, U+1F900-1F90B, U+1F93B, U+1F946, U+1F984, U+1F996, U+1F9E9, U+1FA00-1FA6F, U+1FA70-1FA7C, U+1FA80-1FA89, U+1FA8F-1FAC6, U+1FACE-1FADC, U+1FADF-1FAE9, U+1FAF0-1FAF8, U+1FB00-1FBFF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("30f91b00-8466-4a20-9089-50c3fe73a2c3") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("4b6d8597-0c71-4c9b-807b-068c1492eee2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("e7ea0d51-a978-4b9f-8d7a-b55782743cad") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root {
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-text: #201f1d;
+  --color-accent: #b68235;
+  --color-accent-2: #ac803e;
+  --color-divider: color-mix(in srgb, #201f1d 16%, transparent);
+
+  /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
+     same step of any role matches the others in visual value. */
+  --color-neutral-100: #f8f4f4;
+  --color-neutral-200: #eae7e7;
+  --color-neutral-300: #d7d3d3;
+  --color-neutral-400: #bab6b6;
+  --color-neutral-500: #9b9797;
+  --color-neutral-600: #7d7979;
+  --color-neutral-700: #605d5d;
+  --color-neutral-800: #444141;
+  --color-neutral-900: #2d2b2b;
+
+  --color-accent-100: #fff3e4;
+  --color-accent-200: #ffe3bf;
+  --color-accent-300: #facb8d;
+  --color-accent-400: #e1ad66;
+  --color-accent-500: #c28d41;
+  --color-accent-600: #a06f24;
+  --color-accent-700: #7d5411;
+  --color-accent-800: #5a3b0a;
+  --color-accent-900: #3a270d;
+
+  --color-accent-2-100: #fff3e4;
+  --color-accent-2-200: #ffe3be;
+  --color-accent-2-300: #f5cd96;
+  --color-accent-2-400: #dbaf70;
+  --color-accent-2-500: #bc8f4e;
+  --color-accent-2-600: #9b7232;
+  --color-accent-2-700: #79561f;
+  --color-accent-2-800: #573d14;
+  --color-accent-2-900: #382810;
+
+  --font-heading: "Cormorant Garamond", system-ui, sans-serif;
+  --font-heading-weight: 600; /* review round 3: bold retired — semibold is the
+     interface headings' ceiling (they need the weight at small sizes); display
+     text goes lighter still, to the normal cut (see the deck) */
+  --font-body: "Lora", system-ui, sans-serif;
+
+  --space-1: 4.6px;
+  --space-2: 9.2px;
+  --space-3: 13.8px;
+  --space-4: 18.4px;
+  --space-6: 27.6px;
+  --space-8: 36.8px;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 7px;
+
+  /* Elevation — derived from the ground: soft ink-tinted shadows on a
+     light theme, a hairline edge + ambient darkness on a dark one. */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+
+.plate{filter:sepia(0.22) saturate(0.82) contrast(1.05);box-sizing:border-box;
+  border:6px solid var(--color-surface);outline:1px solid var(--color-divider)}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Components — built with the tokens above. Plain CSS
+   on plain HTML: no JavaScript, no build step. Each class is documented in
+   readme.md and demonstrated in foundations/ and components/.
+   ══════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; }
+h6 { letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+figcaption {
+  font-size: 11px; margin-top: var(--space-1);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* — rules — */
+.hr {
+  height: 1px; border: 0; margin: var(--space-4) 0;
+  background: var(--color-divider);
+}
+
+/* — buttons — */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 14px; line-height: 1.2; color: var(--color-text); /* matches the .input's 14px —
+     the pair sits side by side in sign-up rows */
+  background: transparent; border: 1px solid transparent;
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  border-radius: var(--radius-md);
+}
+.btn svg { display: block; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { color: var(--color-accent); border-color: var(--color-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
+.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
+.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* — forms — */
+.field > label {
+  display: block; font-size: 12px; margin-bottom: 5px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.input {
+  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
+  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
+  background: transparent;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 90px; resize: vertical; }
+.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.radio input, .seg-opt input {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.radio .dot {
+  width: 16px; height: 16px; flex: none; border-radius: 50%;
+  border: 1.5px solid var(--color-divider);
+}
+.radio:hover .dot { border-color: var(--color-accent); }
+.radio input:checked + .dot {
+  border-color: var(--color-accent); background: var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-bg);
+}
+.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.seg {
+  display: inline-flex; overflow: hidden;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.seg-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; font-size: 13px; cursor: pointer;
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
+.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* — cards — */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3); border-radius: var(--radius-md); background: transparent; border: 1px solid var(--color-divider);
+}
+.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
+.card-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 17px; line-height: 1.2;
+}
+.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
+.card-meta {
+  display: flex; align-items: center; gap: 6px; font-size: 11px;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* — tags — */
+.tag {
+  display: inline-flex; align-items: center; font-size: 11px;
+  letter-spacing: 0.02em; padding: 3px 10px;
+  border-radius: calc(var(--radius-md) * 0.75);
+}
+.tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-accent-2 { background: var(--color-accent-2-100); color: var(--color-accent-2-800); }
+.tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+
+/* — navigation — */
+.nav {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-divider);
+}
+.nav-brand {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 18px; margin-right: auto;
+}
+.nav a { color: inherit; text-decoration: none; font-size: 14px; }
+.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
+
+/* — tables — */
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding: var(--space-2); border-bottom: 1px solid var(--color-divider);
+}
+.table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-divider);
+}
+.table tbody tr:hover { background: color-mix(in srgb, var(--color-text) 4%, transparent); }
+
+/* — dialog — */
+.dialog-backdrop {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
+}
+.dialog {
+  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); border-radius: var(--radius-lg);
+  background: var(--color-surface); box-shadow: var(--shadow-lg); border: 1px solid var(--color-divider);
+}
+.dialog-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 20px;
+}
+.dialog-body { font-size: 14px; opacity: 0.85; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
+
+</style>
+<script src="a62cf94e-ae98-4c03-83de-7a4a19a10797"></script>
+<style>
+html,body{height:100%}body{margin:0;overflow:hidden}
+a{color:var(--color-accent)}a:hover{color:var(--color-accent-600)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--color-neutral-300);border-radius:5px}::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+
+<div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+  <header class="nav" style="gap:var(--space-3);padding:var(--space-2) var(--space-4);flex:none">
+    <div class="nav-brand" style="display:flex;align-items:baseline;gap:10px">DJA Redshift Inspector<span class="text-muted" style="font-family:var(--font-body);font-size:11.5px;font-style:italic">spec-z × photo-z verification · MINERVA</span></div>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Field
+      <sc-raw-select class="input" style="width:118px;min-height:30px;padding:3px 8px" value="{{ field }}" sc-camel-on-change="{{ onField }}">
+        <option value="cosmos">COSMOS</option><option value="uds">UDS</option><option value="egs">EGS</option>
+      </sc-raw-select>
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Outlier |Δz|/(1+z) &gt;
+      <input class="input" type="number" step="0.01" min="0.02" max="1" style="width:74px;min-height:30px;padding:3px 8px;font-feature-settings:'tnum'" value="{{ thresh }}" sc-camel-on-change="{{ onThresh }}">
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Inspector
+      <input class="input" placeholder="initials" style="width:66px;min-height:30px;padding:3px 8px" value="{{ initials }}" sc-camel-on-change="{{ onBy }}">
+    </label>
+    <div style="font-size:12.5px;font-feature-settings:'tnum'" class="text-muted"><span style="color:var(--color-accent-700)">{{ nDone }}</span> / {{ nAll }} reviewed</div>
+    <button class="btn btn-primary" style="padding:6px 14px" sc-camel-on-click="{{ onExport }}">Export decisions</button>
+  </header>
+  <div style="flex:1;display:grid;grid-template-columns:372px 1fr;overflow:hidden;min-height:0">
+
+    <aside style="display:flex;flex-direction:column;border-right:1px solid var(--color-divider);overflow:hidden;min-height:0">
+      <div style="padding:var(--space-3) var(--space-3) var(--space-2);flex:none">
+        <h6 style="margin:0 0 6px;color:var(--color-neutral-600)">z<sub>spec</sub> vs z<sub>phot</sub> · COSMOS</h6>
+        <svg sc-camel-view-box="0 0 340 292" style="width:100%;display:block;background:{{ pc.bg }};border:1px solid var(--color-divider);border-radius:var(--radius-sm)">
+          <clipPath id="scclip"><rect x="34" y="8" width="298" height="252"></rect></clipPath>
+          <g clip-path="url(#scclip)">
+            <path d="{{ scWedge }}" fill="var(--color-accent-200)" opacity="0.45"></path>
+            <path d="{{ scDiag }}" stroke="{{ pc.grid2 }}" stroke-width="1" fill="none"></path>
+            <path d="{{ scBound }}" stroke="var(--color-accent-400)" stroke-width="0.8" stroke-dasharray="3 3" fill="none"></path>
+          </g>
+          <sc-for list="{{ scTicks }}" as="tk" hint-placeholder-count="0">
+            <g><text x="{{ tk.tx }}" y="{{ tk.tyy }}" font-size="9" fill="{{ pc.tick }}" text-anchor="{{ tk.anch }}" font-feature-settings="'tnum'">{{ tk.label }}</text><line x1="{{ tk.lx1 }}" y1="{{ tk.ly1 }}" x2="{{ tk.lx2 }}" y2="{{ tk.ly2 }}" stroke="{{ pc.grid }}"></line></g>
+          </sc-for>
+          <g clip-path="url(#scclip)">
+            <sc-for list="{{ scPts }}" as="pt" hint-placeholder-count="0">
+              <circle cx="{{ pt.x }}" cy="{{ pt.y }}" r="{{ pt.r }}" fill="{{ pt.fill }}" stroke="{{ pt.stroke }}" stroke-width="{{ pt.sw }}" opacity="{{ pt.op }}" sc-camel-on-click="{{ pt.onSel }}" style="cursor:pointer"></circle>
+            </sc-for>
+          </g>
+          <text x="183" y="288" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z phot (MINERVA eazy)</text>
+          <text x="10" y="134" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 10 134)">z spec (DJA)</text>
+        </svg>
+      </div>
+      <div style="padding:0 var(--space-3) var(--space-2);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;flex:none;font-size:12px">
+        <label class="radio" style="font-size:12px"><input type="checkbox" checked="{{ onlyOut }}" sc-camel-on-change="{{ tgOut }}"><span class="dot" style="border-radius:3px"></span>outliers only</label>
+        <span class="text-muted" style="font-size:11px">grade</span>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG3 }}" sc-camel-on-change="{{ tgG3 }}"><span class="dot" style="border-radius:3px"></span>3</label>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG2 }}" sc-camel-on-change="{{ tgG2 }}"><span class="dot" style="border-radius:3px"></span>2</label>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG1 }}" sc-camel-on-change="{{ tgG1 }}"><span class="dot" style="border-radius:3px"></span>1</label>
+        <sc-raw-select class="input" style="width:110px;min-height:28px;padding:2px 6px;font-size:12px;margin-left:auto" value="{{ sortBy }}" sc-camel-on-change="{{ onSort }}">
+          <option value="dz">sort: |Δz|</option><option value="zs">sort: z spec</option><option value="mag">sort: mag</option><option value="sn">sort: S/N</option><option value="sep">sort: sep</option>
+        </sc-raw-select>
+      </div>
+      <input class="input" placeholder="Search DJA / MINERVA id…" style="margin:0 var(--space-3) var(--space-2);width:auto;min-height:30px;font-size:12.5px;flex:none" value="{{ q }}" sc-camel-on-change="{{ onQ }}">
+      <div style="display:grid;grid-template-columns:1fr 54px 54px 58px 40px;gap:0 4px;padding:4px var(--space-3);border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-600);flex:none">
+        <span>object</span><span style="text-align:right">z spec</span><span style="text-align:right">z phot</span><span style="text-align:right">Δz/1+z</span><span style="text-align:center">✓</span>
+      </div>
+      <div style="flex:1;overflow-y:auto;min-height:0">
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="8">
+          <div sc-camel-on-click="{{ row.onSel }}" style="display:grid;grid-template-columns:1fr 54px 54px 58px 40px;gap:0 4px;align-items:center;padding:5px var(--space-3);border-bottom:1px solid var(--color-divider);cursor:pointer;font-size:12.5px;font-feature-settings:'tnum';background:{{ row.bg }}" style-hover="background:color-mix(in srgb, var(--color-text) 5%, transparent)">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;flex:none;background:{{ row.gdot }}"></span>{{ row.name }}</span>
+            <span style="text-align:right">{{ row.zs }}</span>
+            <span style="text-align:right;color:var(--color-neutral-600)">{{ row.zp }}</span>
+            <span style="text-align:right;color:{{ row.dzc }}">{{ row.dz }}</span>
+            <span style="text-align:center;color:{{ row.stc }};font-size:12px">{{ row.st }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><p class="text-muted" style="padding:var(--space-3);font-size:13px;font-style:italic">No objects match the current filters.</p></sc-if>
+      </div>
+    </aside>
+
+    <main style="display:flex;flex-direction:column;overflow-y:auto;min-height:0;position:relative">
+      <sc-if value="{{ noteOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;gap:var(--space-3);align-items:baseline;padding:var(--space-2) var(--space-4);border-bottom:1px solid var(--color-divider);font-size:12px" class="text-muted">
+          <span class="card-kicker" style="flex:none">Prototype</span>
+          <span style="flex:1">All data here is <em>mock</em> (100 synthetic COSMOS objects). The production app fetches DJA spectra from the public AWS endpoints and MINERVA eazy-py HDF5 photo-z, cross-matching on RA/Dec itself — separation is surfaced per object so bad matches are caught.</span>
+          <button class="btn btn-ghost" style="padding:2px 8px;font-size:12px" sc-camel-on-click="{{ onNoteClose }}">dismiss</button>
+        </div>
+      </sc-if>
+
+      <div style="flex:none;display:flex;align-items:baseline;gap:var(--space-3);padding:var(--space-3) var(--space-4) var(--space-2);flex-wrap:wrap">
+        <h3 style="margin:0;font-size:23px">{{ cur.dja }}</h3>
+        <span class="tag {{ cur.gradeCls }}" style="gap:4px"><span>grade</span><span>{{ cur.grade }}</span></span>
+        <span class="tag tag-outline" style="border-color:{{ cur.outBc }};color:{{ cur.outBc }}">{{ cur.outLbl }}</span>
+        <span style="margin-left:auto;font-size:12.5px;font-feature-settings:'tnum'" class="text-muted">MINERVA {{ cur.mid }} · α {{ cur.ra }} δ {{ cur.dec }} · sep <span style="color:{{ cur.sepCol }}">{{ cur.sep }}″</span> · F277W {{ cur.mag }} · S/N {{ cur.sn }}</span>
+      </div>
+      <div style="flex:none;display:flex;gap:var(--space-6);padding:0 var(--space-4) var(--space-2);font-feature-settings:'tnum'">
+        <div><span class="text-muted" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">z spec</span><div style="font-family:var(--font-heading);font-size:27px;line-height:1.05;color:var(--color-accent-700)">{{ cur.zs }}</div></div>
+        <div><span class="text-muted" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">z phot</span><div style="font-family:var(--font-heading);font-size:27px;line-height:1.05;color:var(--color-neutral-600)">{{ cur.zp }}</div></div>
+        <div><span class="text-muted" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">Δz/(1+z)</span><div style="font-family:var(--font-heading);font-size:27px;line-height:1.05;color:{{ cur.dzc }}">{{ cur.dz }}</div></div>
+      </div>
+
+      <section style="flex:none;margin:0 var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
+        <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--color-divider);flex-wrap:wrap">
+          <span class="card-kicker">Prism spectrum</span>
+          <div class="seg">
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmSpec }}" sc-camel-on-change="{{ setMmSpec }}">z spec</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmPhot }}" sc-camel-on-change="{{ setMmPhot }}">z phot</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmBoth }}" sc-camel-on-change="{{ setMmBoth }}">both</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmSlide }}" sc-camel-on-change="{{ setMmSlide }}">explore z</label>
+          </div>
+          <sc-if value="{{ mmSlide }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:220px">
+              <input type="range" min="0" max="12" step="0.002" style="flex:1;accent-color:var(--color-accent)" value="{{ zSlideV }}" sc-camel-on-change="{{ onZSlide }}">
+              <input class="input" type="number" step="0.002" style="width:88px;min-height:28px;padding:2px 6px;font-size:12.5px;font-feature-settings:'tnum'" value="{{ zSlideV }}" sc-camel-on-change="{{ onZSlide }}">
+            </div>
+          </sc-if>
+          <div class="seg" style="margin-left:auto">
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="sm" checked="{{ sm1 }}" sc-camel-on-change="{{ setSm1 }}">raw</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="sm" checked="{{ sm3 }}" sc-camel-on-change="{{ setSm3 }}">×3</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="sm" checked="{{ sm5 }}" sc-camel-on-change="{{ setSm5 }}">×5</label>
+          </div>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" sc-camel-on-click="{{ onResetZoom }}">reset zoom</button>
+          <span class="text-muted" style="font-size:11px;font-style:italic">scroll = zoom · drag = pan · dbl-click = reset</span>
+        </div>
+        <canvas ref="{{ c2Ref }}" width="1000" height="86" style="width:100%;display:block;background:{{ pc.bg }};border-bottom:1px solid var(--color-divider)"></canvas>
+        <svg ref="{{ svgRef }}" sc-camel-view-box="0 0 1000 380" sc-camel-on-mouse-down="{{ onSpecDown }}" sc-camel-on-double-click="{{ onResetZoom }}" style="width:100%;display:block;background:{{ pc.bg }};cursor:grab;touch-action:none">
+          <clipPath id="spclip"><rect x="48" y="8" width="944" height="338"></rect></clipPath>
+          <sc-for list="{{ yTicks }}" as="tk" hint-placeholder-count="0">
+            <g><line x1="48" x2="992" y1="{{ tk.y }}" y2="{{ tk.y }}" stroke="{{ pc.grid }}"></line><text x="44" y="{{ tk.ty }}" font-size="11" fill="{{ pc.tick }}" text-anchor="end" font-feature-settings="'tnum'">{{ tk.label }}</text></g>
+          </sc-for>
+          <sc-for list="{{ xTicks }}" as="tk" hint-placeholder-count="0">
+            <g><line y1="346" y2="341" x1="{{ tk.x }}" x2="{{ tk.x }}" stroke="{{ pc.tick }}"></line><text y="362" x="{{ tk.x }}" font-size="11" fill="{{ pc.tick }}" text-anchor="middle" font-feature-settings="'tnum'">{{ tk.label }}</text></g>
+          </sc-for>
+          <line x1="48" x2="992" y1="346" y2="346" stroke="{{ pc.axis }}"></line>
+          <g clip-path="url(#spclip)">
+            <path d="{{ errPath }}" fill="{{ pc.err }}" stroke="none"></path>
+            <path d="{{ specPath }}" fill="none" stroke="{{ pc.line }}" stroke-width="1.15"></path>
+            <sc-for list="{{ markers }}" as="m" hint-placeholder-count="0">
+              <g><line x1="{{ m.x }}" x2="{{ m.x }}" y1="{{ m.y1 }}" y2="346" stroke="{{ m.color }}" stroke-width="0.9" stroke-dasharray="{{ m.dash }}" opacity="0.85"></line>
+              <text x="{{ m.x }}" y="{{ m.ty }}" font-size="11.5" fill="{{ m.color }}" text-anchor="middle" font-style="italic">{{ m.label }}</text></g>
+            </sc-for>
+          </g>
+          <text x="520" y="377" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">observed wavelength (μm)</text>
+          <text x="14" y="180" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 14 180)">fν (μJy)</text>
+          <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="0">
+            <g><line x1="{{ lg.x1 }}" x2="{{ lg.x2 }}" y1="20" y2="20" stroke="{{ lg.color }}" stroke-dasharray="{{ lg.dash }}" stroke-width="1.4"></line><text x="{{ lg.tx }}" y="24" font-size="11" fill="{{ lg.color }}" font-style="italic">{{ lg.label }}</text></g>
+          </sc-for>
+        </svg>
+      </section>
+
+      <section style="flex:none;display:grid;grid-template-columns:1.15fr 1fr 236px;gap:var(--space-3);padding:var(--space-3) var(--space-4)">
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3)">
+          <span class="card-kicker">Photometry + eazy template</span>
+          <svg sc-camel-view-box="0 0 420 250" style="width:100%;display:block;background:{{ pc.bg }};margin-top:6px">
+            <path d="{{ sedTemplPath }}" fill="none" stroke="var(--color-accent-500)" stroke-width="1.1" opacity="0.9"></path>
+            <sc-for list="{{ sedPts }}" as="pt" hint-placeholder-count="0">
+              <g><line x1="{{ pt.x }}" x2="{{ pt.x }}" y1="{{ pt.e1 }}" y2="{{ pt.e2 }}" stroke="{{ pc.line }}" stroke-width="1"></line>
+              <circle cx="{{ pt.x }}" cy="{{ pt.y }}" r="3.4" fill="{{ pc.bg }}" stroke="{{ pc.line }}" stroke-width="1.3"></circle>
+              <text x="{{ pt.x }}" y="242" font-size="8.5" fill="{{ pc.tick }}" text-anchor="middle">{{ pt.band }}</text></g>
+            </sc-for>
+            <text x="404" y="18" font-size="10.5" fill="var(--color-accent-600)" text-anchor="end" font-style="italic">template @ z phot</text>
+          </svg>
+        </div>
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3)">
+          <span class="card-kicker">p(z) · χ²(z) — eazy</span>
+          <svg sc-camel-view-box="0 0 420 250" style="width:100%;display:block;background:{{ pc.bg }};margin-top:6px">
+            <path d="{{ pzPath }}" fill="var(--color-accent-200)" stroke="var(--color-accent-600)" stroke-width="1" opacity="0.85"></path>
+            <path d="{{ chi2Path }}" fill="none" stroke="{{ pc.tick }}" stroke-width="1" stroke-dasharray="4 3"></path>
+            <line x1="{{ pzZs }}" x2="{{ pzZs }}" y1="14" y2="228" stroke="var(--color-accent-700)" stroke-width="1.1"></line>
+            <text x="{{ pzZsT }}" y="12" font-size="10.5" fill="var(--color-accent-700)" text-anchor="middle" font-style="italic">z spec</text>
+            <line x1="{{ pzZp }}" x2="{{ pzZp }}" y1="26" y2="228" stroke="{{ pc.tick }}" stroke-width="1" stroke-dasharray="3 3"></line>
+            <text x="{{ pzZpT }}" y="24" font-size="10.5" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z phot</text>
+            <line x1="16" x2="410" y1="228" y2="228" stroke="{{ pc.axis }}"></line>
+            <sc-for list="{{ pzTicks }}" as="tk" hint-placeholder-count="0">
+              <text x="{{ tk.x }}" y="243" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-feature-settings="'tnum'">{{ tk.label }}</text>
+            </sc-for>
+          </svg>
+        </div>
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);display:flex;flex-direction:column">
+          <span class="card-kicker">Cutout · F277W</span>
+          <canvas ref="{{ cutRef }}" width="180" height="180" class="plate" style="width:100%;margin-top:6px;border-width:4px"></canvas>
+          <span class="text-muted" style="font-size:10.5px;margin-top:5px;font-style:italic">3″ × 3″ · cross = MSA source · circle = MINERVA match ({{ cur.sep }}″)</span>
+        </div>
+      </section>
+
+      <div style="position:sticky;bottom:0;margin-top:auto;background:var(--color-bg);border-top:1px solid var(--color-divider);padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;z-index:5">
+        <button class="btn btn-icon btn-secondary" sc-camel-on-click="{{ onPrev }}" title="previous (p)">‹</button>
+        <button class="btn btn-icon btn-secondary" sc-camel-on-click="{{ onNext }}" title="next (n)">›</button>
+        <span style="width:1px;height:24px;background:var(--color-divider)"></span>
+        <button class="btn btn-primary" style="padding:6px 12px" sc-camel-on-click="{{ onGood }}">✓ z spec good<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">3</kbd></button>
+        <button class="btn btn-secondary" style="padding:6px 12px" sc-camel-on-click="{{ onUnsure }}">? unsure<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">2</kbd></button>
+        <button class="btn btn-secondary" style="padding:6px 12px;color:var(--color-accent-800)" sc-camel-on-click="{{ onBad }}">✗ z spec bad<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">1</kbd></button>
+        <button class="btn btn-ghost" style="padding:6px 10px" sc-camel-on-click="{{ onFlag }}">⚑ flag<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">f</kbd></button>
+        <span class="tag {{ decCls }}">{{ decLbl }}</span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px" class="text-muted">z corr.
+          <input class="input" type="number" step="0.001" placeholder="—" style="width:92px;min-height:30px;padding:3px 8px;font-feature-settings:'tnum'" value="{{ curZNew }}" sc-camel-on-change="{{ onZNew }}">
+        </label>
+        <input class="input" placeholder="comment — e.g. line is [OIII] not Hα; z ≈ 2.31" style="flex:1;min-width:180px;min-height:30px;padding:3px 10px;font-size:13px" value="{{ curComment }}" sc-camel-on-change="{{ onComment }}">
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;plotDark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Plots&quot;},&quot;showHints&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Workflow&quot;},&quot;autoAdvance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Workflow&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.LINES=[['Lyα',0.12157,0.7],['[OII]',0.37274,0.55],['Hγ',0.43405,0.16],['Hβ',0.48613,0.34],['[OIII]',0.50082,1.0],['Hα',0.65628,1.0],['[SII]',0.67164,0.14],['[SIII]',0.95311,0.12],['HeI',1.0830,0.18],['Paβ',1.2822,0.10],['Paα',1.8756,0.16]];
+    this.BANDS=[['F606W',0.606],['F814W',0.814],['F115W',1.154],['F150W',1.501],['F200W',1.990],['F277W',2.786],['F356W',3.563],['F444W',4.421]];
+    this.objs=this.makeObjects();
+    let dec={}; try{dec=JSON.parse(localStorage.getItem('djaqc-decisions')||'{}')}catch(e){}
+    this.state={selId:this.objs[0].dja,wmin:0.6,wmax:5.3,mm:'both',zSlide:null,smooth:1,thresh:0.15,
+      fG3:true,fG2:true,fG1:true,onlyOut:true,sortBy:'dz',q:'',field:'cosmos',
+      initials:localStorage.getItem('djaqc-by')||'',decisions:dec,noteOpen:true};
+    this.specCache={};
+    const first=this.filtered()[0];if(first)this.state.selId=first.dja;
+  }
+  rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  gauss(r){return Math.sqrt(-2*Math.log(1-r()))*Math.cos(6.28318*r())}
+  makeObjects(){
+    const r=this.rng(20260718),masks=['capers-cosmos-v2','cosmos-transients-v3','cosmos-curti-v1','minerva-cosmos-p2'];
+    const conf=(z,a,b)=>((1+z)*a/b)-1; // line-confusion redshift
+    const objs=[];
+    for(let i=0;i<100;i++){
+      const zs=+(0.3+9*Math.pow(r(),1.7)).toFixed(4);
+      const g=r(),grade=g<0.78?3:(g<0.92?2:1);
+      let kind='fine',zp,sep=+(0.03+0.35*r()*r()).toFixed(2),ztrue=zs;
+      const o=r();
+      if(o<0.72){zp=zs+this.gauss(r)*0.025*(1+zs)}
+      else if(o<0.845){kind='phot'; const c=r(); zp=c<0.4?conf(zs,0.65628,0.50082):(c<0.7?conf(zs,0.50082,0.65628):0.2+8*r()); } // photo-z wrong
+      else if(o<0.95){kind='spec'; ztrue=+(0.3+8*Math.pow(r(),1.5)).toFixed(4); zp=ztrue+this.gauss(r)*0.03*(1+ztrue);} // spec-z (DJA) wrong
+      else {kind='match'; sep=+(0.55+0.75*r()).toFixed(2); zp=0.2+8*r();}
+      zp=+Math.max(0.02,zp).toFixed(4);
+      objs.push({i,dja:masks[Math.floor(r()*4)]+'_'+String(10000+Math.floor(r()*89999)),
+        mid:200000+Math.floor(r()*700000),ra:+(149.95+0.45*r()).toFixed(5),dec:+(2.15+0.45*r()).toFixed(5),
+        sep,zs,zp,grade,ztrue,kind,mag:+(22.5+5.4*r()).toFixed(1),sn:+(kind==='match'?2+4*r():4+42*r()*r()).toFixed(1),
+        slope:-0.9+1.8*r(),lstr:kind==='match'?0.05:0.25+2.6*r()*r(),f0:0.4+8*r()});
+    }
+    return objs;
+  }
+  spec(o){
+    if(this.specCache[o.dja])return this.specCache[o.dja];
+    const n=380,w0=0.6,w1=5.3,r=this.rng(o.i*977+11),w=new Array(n),f=new Array(n),e=new Array(n);
+    const zt=o.ztrue,brk=0.3645*(1+zt),lyb=0.1216*(1+zt);
+    for(let k=0;k<n;k++){
+      const x=w0+(w1-w0)*k/(n-1);w[k]=x;
+      let c=o.f0*Math.pow(x/2,o.slope);
+      if(x<brk)c*=0.42; if(x<lyb)c*=0.02;
+      let L=0;
+      for(const[,lam,amp]of this.LINES){const lc=lam*(1+zt);if(lc<w0-0.1||lc>w1+0.1)continue;const s=lc/230;L+=amp*o.lstr*o.f0*Math.exp(-0.5*((x-lc)/s)**2)*2.2}
+      const err=o.f0*(0.25+0.5*Math.pow(x/1.2,-1.4)+0.12*Math.pow(x/4,6))*(8/Math.max(o.sn,2));
+      e[k]=err; f[k]=c+L+this.gauss(r)*err*0.55;
+    }
+    this.specCache[o.dja]={w,f,e}; return this.specCache[o.dja];
+  }
+  smoothArr(f,k){if(k<=1)return f;const n=f.length,out=new Array(n),h=Math.floor(k/2);for(let i=0;i<n;i++){let s=0,c=0;for(let j=Math.max(0,i-h);j<=Math.min(n-1,i+h);j++){s+=f[j];c++}out[i]=s/c}return out}
+  nice(x){const p=Math.pow(10,Math.floor(Math.log10(x)));const m=x/p;return(m<1.5?1:m<3.5?2:m<7.5?5:10)*p}
+  cur(){const{selId}=this.state;return this.objs.find(o=>o.dja===selId)||this.objs[0]}
+  filtered(){
+    const{thresh,fG3,fG2,fG1,onlyOut,sortBy,q}=this.state;
+    let L=this.objs.filter(o=>{
+      const dz=Math.abs(o.zs-o.zp)/(1+o.zs);
+      if(onlyOut&&dz<=thresh)return false;
+      if(!( (o.grade===3&&fG3)||(o.grade===2&&fG2)||(o.grade===1&&fG1) ))return false;
+      if(q&&!(o.dja.includes(q)||String(o.mid).includes(q)))return false;
+      return true});
+    const key={dz:o=>-Math.abs(o.zs-o.zp)/(1+o.zs),zs:o=>o.zs,mag:o=>o.mag,sn:o=>-o.sn,sep:o=>-o.sep}[sortBy];
+    return L.sort((a,b)=>key(a)-key(b));
+  }
+  select(dja){this.setState({selId:dja,wmin:0.6,wmax:5.3,zSlide:null})}
+  step(d){const L=this.filtered();if(!L.length)return;const i=L.findIndex(o=>o.dja===this.state.selId);this.select(L[Math.min(L.length-1,Math.max(0,(i<0?0:i+d)))].dja)}
+  saveDec(dec){this.setState({decisions:dec});try{localStorage.setItem('djaqc-decisions',JSON.stringify(dec))}catch(e){}}
+  setDec(patch,advance){const o=this.cur();const dec={...this.state.decisions};dec[o.dja]={...(dec[o.dja]||{}),...patch,by:this.state.initials,t:Date.now()};this.saveDec(dec);
+    if(advance&&(this.props.autoAdvance??true))setTimeout(()=>this.step(1),120)}
+  onKey(e){
+    const t=e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||e.metaKey||e.ctrlKey)return;
+    const k=e.key;
+    if(k==='n'||k==='j'||k==='ArrowDown'){e.preventDefault();this.step(1)}
+    else if(k==='p'||k==='k'||k==='ArrowUp'){e.preventDefault();this.step(-1)}
+    else if(k==='3')this.setDec({v:'ok'},true);
+    else if(k==='2')this.setDec({v:'unsure'},true);
+    else if(k==='1')this.setDec({v:'bad'},true);
+    else if(k==='f')this.setDec({flag:!(this.state.decisions[this.cur().dja]||{}).flag},false);
+    else if(k==='0'){const dec={...this.state.decisions};delete dec[this.cur().dja];this.saveDec(dec)}
+    else if(k==='r')this.setState({wmin:0.6,wmax:5.3});
+    else if(k==='m'){const seq=['zspec','zphot','both','slide'];this.setState({mm:seq[(seq.indexOf(this.state.mm)+1)%4]})}
+  }
+  componentDidMount(){
+    this._key=e=>this.onKey(e);window.addEventListener('keydown',this._key);
+    this._wheel=e=>{e.preventDefault();const el=this._svg;if(!el)return;const rc=el.getBoundingClientRect();
+      const fx=(e.clientX-rc.left)/rc.width*1000;const fr=Math.min(1,Math.max(0,(fx-48)/944));
+      const{wmin,wmax}=this.state;const span=wmax-wmin,c=wmin+fr*span;
+      const k=e.deltaY>0?1.22:1/1.22;let ns=Math.min(4.75,Math.max(0.035,span*k));
+      let nmin=Math.max(0.55,Math.min(c-fr*ns,5.35-ns));this.setState({wmin:nmin,wmax:nmin+ns})};
+    this.drawAll();
+  }
+  componentWillUnmount(){window.removeEventListener('keydown',this._key)}
+  componentDidUpdate(){this.drawAll()}
+  drawAll(){
+    const o=this.cur(),pd=this.props.plotDark??false,{wmin,wmax}=this.state;
+    const c2=this._c2;
+    if(c2){const ctx=c2.getContext('2d'),{w,f}=this.spec(o);const W=1000,H=86;
+      ctx.fillStyle=pd?'#26241f':'#faf9f7';ctx.fillRect(0,0,W,H);
+      const img=ctx.createImageData(944,H);let fmax=0.001;
+      for(let k=0;k<w.length;k++)if(w[k]>=wmin&&w[k]<=wmax)fmax=Math.max(fmax,f[k]);
+      const hash=(x,y)=>{const s=Math.sin(x*12.9898+y*78.233)*43758.5453;return s-Math.floor(s)};
+      for(let px=0;px<944;px++){
+        const lam=wmin+(px/943)*(wmax-wmin);const t=(lam-w[0])/(w[w.length-1]-w[0])*(w.length-1);
+        const i0=Math.min(w.length-2,Math.max(0,Math.floor(t)));const fv=f[i0]+(f[i0+1]-f[i0])*(t-i0);
+        for(let y=0;y<H;y++){const prof=Math.exp(-((y-43)**2)/(2*6.5**2));
+          let v=(fv/fmax)*prof*1.35+(hash(px,y)-0.5)*0.22;
+          let g=pd?Math.min(235,25+v*260):Math.max(20,246-v*260);
+          const idx=(y*944+px)*4;img.data[idx]=g;img.data[idx+1]=g;img.data[idx+2]=Math.min(255,g*(pd?0.95:1));img.data[idx+3]=255}}
+      ctx.putImageData(img,48,0);
+      ctx.fillStyle=pd?'#9b9797':'#7d7979';ctx.font='italic 12px Lora';ctx.fillText('2D',14,48)}
+    const cc=this._cut;
+    if(cc){const ctx=cc.getContext('2d'),r=this.rng(o.i*31+7),S=180;
+      ctx.fillStyle='#0c0c10';ctx.fillRect(0,0,S,S);
+      const id=ctx.getImageData(0,0,S,S);
+      const blobs=[{x:90+(o.kind==='match'?o.sep*30:o.sep*8),y:90-(o.kind==='match'?o.sep*22:o.sep*6),a:26,q:0.55,th:r()*3.14,amp:1}];
+      if(r()<0.5)blobs.push({x:20+r()*140,y:20+r()*140,a:9+r()*10,q:0.4+0.5*r(),th:r()*3.14,amp:0.3+0.4*r()});
+      for(let y=0;y<S;y++)for(let x=0;x<S;x++){
+        let v=(r()-0.5)*14;
+        for(const b of blobs){const dx=x-b.x,dy=y-b.y,ct=Math.cos(b.th),st=Math.sin(b.th);
+          const u=(dx*ct+dy*st),w2=(-dx*st+dy*ct)/b.q;const rr=Math.sqrt(u*u+w2*w2);
+          v+=b.amp*225*Math.exp(-Math.pow(rr/b.a,0.62))}
+        const idx=(y*S+x)*4,g=Math.min(255,Math.max(0,18+v));
+        id.data[idx]=g*0.92;id.data[idx+1]=g*0.95;id.data[idx+2]=g;id.data[idx+3]=255}
+      ctx.putImageData(id,0,0);
+      ctx.strokeStyle='#e1ad66';ctx.lineWidth=1.4;
+      ctx.beginPath();ctx.moveTo(90,68);ctx.lineTo(90,80);ctx.moveTo(90,100);ctx.lineTo(90,112);ctx.moveTo(68,90);ctx.lineTo(80,90);ctx.moveTo(100,90);ctx.lineTo(112,90);ctx.stroke();
+      ctx.strokeStyle='#8ecae6';ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(blobs[0].x,blobs[0].y,14,0,6.284);ctx.stroke();ctx.setLineDash([])}
+  }
+  renderVals(){
+    const S=this.state,o=this.cur(),pd=this.props.plotDark??false;
+    const pc=pd?{bg:'#26241f',line:'#e6e1d8',err:'rgba(255,255,255,0.10)',grid:'rgba(255,255,255,0.07)',grid2:'rgba(255,255,255,0.28)',tick:'#9b9797',axis:'#605d5d'}
+               :{bg:'#faf9f7',line:'#3a3733',err:'rgba(32,31,29,0.09)',grid:'rgba(32,31,29,0.06)',grid2:'rgba(32,31,29,0.30)',tick:'#7d7979',axis:'#bab6b6'};
+    const dzOf=x=>Math.abs(x.zs-x.zp)/(1+x.zs);
+    const list=this.filtered(),dec=S.decisions,d=dec[o.dja]||{};
+    // ---- sidebar list
+    const stMap={ok:['✓','var(--color-accent-700)'],unsure:['?','var(--color-neutral-600)'],bad:['✗','var(--color-neutral-800)']};
+    const rows=list.map(x=>{const dd=dec[x.dja]||{};const dz=dzOf(x);
+      return {name:x.dja,zs:x.zs.toFixed(3),zp:x.zp.toFixed(3),dz:dz.toFixed(3),
+        dzc:dz>S.thresh?'var(--color-accent-700)':'inherit',
+        gdot:x.grade===3?'var(--color-accent-500)':x.grade===2?'var(--color-neutral-400)':'var(--color-neutral-300)',
+        st:(dd.flag?'⚑':'')+(stMap[dd.v]?stMap[dd.v][0]:''),stc:dd.flag?'var(--color-accent-600)':(stMap[dd.v]?stMap[dd.v][1]:'inherit'),
+        bg:x.dja===o.dja?'var(--color-accent-100)':'transparent',onSel:()=>this.select(x.dja)}});
+    // ---- scatter
+    const zmax=Math.max(9.3,...this.objs.map(x=>Math.max(x.zs,x.zp)))+0.4;
+    const sx=z=>34+z/zmax*298,sy=z=>260-z/zmax*252,t=S.thresh;
+    let up='M'+sx(0)+','+sy(t/(1-t)),lo2='M'+sx(t)+','+sy(0),bd='M'+sx(0)+','+sy(t/(1-t)),bd2='M'+sx(t)+','+sy(0);
+    for(let zp=0;zp<=zmax;zp+=zmax/40){const a=(zp+t)/(1-t),b=(zp-t)/(1+t);
+      up+=' L'+sx(zp).toFixed(1)+','+sy(a).toFixed(1);bd+=' L'+sx(zp).toFixed(1)+','+sy(a).toFixed(1);
+      if(b>=0){lo2+=' L'+sx(zp).toFixed(1)+','+sy(b).toFixed(1);bd2+=' L'+sx(zp).toFixed(1)+','+sy(b).toFixed(1)}}
+    const scWedge=up+' L'+sx(0)+','+sy(zmax)+' Z '+lo2+' L'+sx(zmax)+','+sy(0)+' Z';
+    const scTicks=[];for(let z=0;z<=zmax-0.5;z+=2){scTicks.push({tx:sx(z),tyy:272,anch:'middle',label:String(z),lx1:sx(z),lx2:sx(z),ly1:260,ly2:256});
+      if(z>0)scTicks.push({tx:30,tyy:sy(z)+3,anch:'end',label:String(z),lx1:34,lx2:332,ly1:sy(z),ly2:sy(z)})}
+    const scPts=this.objs.map(x=>{const out=dzOf(x)>t,sel=x.dja===o.dja;
+      return {x:+sx(x.zp).toFixed(1),y:+sy(x.zs).toFixed(1),r:sel?5.5:(out?3.6:2.6),
+        fill:x.grade===3?(out?'var(--color-accent-500)':'var(--color-neutral-400)'):'none',
+        stroke:sel?'var(--color-accent-800)':(out?'var(--color-accent-600)':'var(--color-neutral-500)'),
+        sw:sel?1.8:1,op:out||sel?1:0.55,onSel:()=>this.select(x.dja)}});
+    // ---- 1D spectrum
+    const{w,f,e}=this.spec(o);const fs=this.smoothArr(f,S.smooth);
+    const{wmin,wmax}=S,span=wmax-wmin;
+    const px=x=>48+(x-wmin)/span*944;
+    let lo=1e9,hi=-1e9;for(let k=0;k<w.length;k++)if(w[k]>=wmin&&w[k]<=wmax){lo=Math.min(lo,fs[k]-e[k]);hi=Math.max(hi,fs[k]+e[k]*0.5)}
+    if(hi<=lo){lo=0;hi=1}const pad=(hi-lo)*0.08;lo-=pad;hi+=pad;
+    const py=v=>346-(v-lo)/(hi-lo)*336;
+    let sp='',eu='',el='';
+    for(let k=0;k<w.length;k++){if(w[k]<wmin-span*0.02||w[k]>wmax+span*0.02)continue;
+      const X=px(w[k]).toFixed(1);sp+=(sp?' L':'M')+X+','+py(fs[k]).toFixed(1);
+      eu+=(eu?' L':'M')+X+','+py(fs[k]+e[k]).toFixed(1);el=' L'+X+','+py(fs[k]-e[k]).toFixed(1)+el}
+    const errPath=eu+el+' Z';
+    const xTicks=[];{const st=this.nice(span/6);for(let x=Math.ceil(wmin/st)*st;x<=wmax;x+=st)xTicks.push({x:+px(x).toFixed(1),label:x.toFixed(st<0.1?2:1)})}
+    const yTicks=[];{const st=this.nice((hi-lo)/4);for(let v=Math.ceil(lo/st)*st;v<=hi;v+=st)yTicks.push({y:+py(v).toFixed(1),ty:+py(v).toFixed(1)+4,label:v.toFixed(st<1?1:0)})}
+    const zSlideV=S.zSlide??o.zs;
+    const sets=[];
+    if(S.mm==='zspec'||S.mm==='both')sets.push({z:o.zs,color:'var(--color-accent-600)',dash:'',lab:0});
+    if(S.mm==='zphot'||S.mm==='both')sets.push({z:o.zp,color:pd?'#9b9797':'#7d7979',dash:'5 4',lab:1});
+    if(S.mm==='slide')sets.push({z:zSlideV,color:'var(--color-accent-700)',dash:'2 3',lab:0});
+    const markers=[];
+    for(const st of sets)for(const[nm,lam]of this.LINES){const lc=lam*(1+st.z);if(lc<wmin||lc>wmax)continue;
+      markers.push({x:+px(lc).toFixed(1),color:st.color,dash:st.dash,label:nm,ty:st.lab?52:38,y1:st.lab?56:42})}
+    const legend=[];let lx=60;
+    for(const st of sets){const lab=st===sets[0]&&S.mm!=='zphot'?(S.mm==='slide'?'z = '+(+zSlideV).toFixed(3):'z spec '+o.zs.toFixed(3)):'z phot '+o.zp.toFixed(3);
+      legend.push({x1:lx,x2:lx+22,tx:lx+27,color:st.color,dash:st.dash,label:lab});lx+=140}
+    // ---- SED
+    const lg=x=>Math.log10(x),sxx=x=>26+(lg(x)-lg(0.45))/(lg(5.6)-lg(0.45))*384;
+    const zf=o.zp,brk=0.3645*(1+zf);
+    const tmpl=x=>{let c=o.f0*Math.pow(x/2,o.slope);if(x<brk)c*=0.42;if(x<0.1216*(1+zf))c*=0.02;return c};
+    let smax=0.001;const sw=[];for(let k=0;k<=120;k++){const x=0.45*Math.pow(5.6/0.45,k/120);sw.push([x,tmpl(x)]);smax=Math.max(smax,tmpl(x))}
+    for(const[bn,bw]of this.BANDS)smax=Math.max(smax,tmpl(bw));
+    const syy=v=>224-v/smax*190;
+    const sedTemplPath=sw.map(([x,v],i)=>(i?'L':'M')+sxx(x).toFixed(1)+','+syy(v).toFixed(1)).join(' ');
+    const rr=this.rng(o.i*13+5);
+    const sedPts=this.BANDS.map(([bn,bw])=>{const base=this.spec(o); // photometry from true spectrum
+      const t2=(bw-base.w[0])/(base.w[base.w.length-1]-base.w[0])*(base.w.length-1);const i0=Math.min(base.w.length-2,Math.max(0,Math.floor(t2)));
+      let fv=base.f[i0];fv=Math.max(0.02*smax,fv*(1+this.gauss(rr)*0.06));
+      const ee=smax*0.03+fv*0.07;
+      return {x:+sxx(bw).toFixed(1),y:+syy(Math.min(fv,smax*1.15)).toFixed(1),e1:+syy(Math.min(fv+ee,smax*1.18)).toFixed(1),e2:+syy(Math.max(fv-ee,0)).toFixed(1),band:bn}});
+    // ---- p(z) / chi2
+    const zM=zmax,pzx=z=>16+z/zM*394;const sig=0.045*(1+o.zp);
+    const P=z=>Math.exp(-0.5*((z-o.zp)/sig)**2)+(o.kind!=='fine'?0.14*Math.exp(-0.5*((z-o.zs)/(sig*1.4))**2):0);
+    let pz='M16,228',c2p='';
+    for(let k=0;k<=260;k++){const z=zM*k/260,p=P(z);pz+=' L'+pzx(z).toFixed(1)+','+(228-p*196).toFixed(1);
+      const chi=Math.min(1,-2*Math.log(Math.max(p,1e-4))/18.4);c2p+=(k?' L':'M')+pzx(z).toFixed(1)+','+(32+chi*196).toFixed(1)}
+    pz+=' L410,228 Z';
+    const pzTicks=[];for(let z=0;z<=zM-0.4;z+=2)pzTicks.push({x:+pzx(z).toFixed(1),label:'z='+z});
+    const clampT=(x)=>Math.min(392,Math.max(28,x));
+    // ---- decision bar
+    const decMap={ok:['✓ marked good','tag-accent'],unsure:['? marked unsure','tag-neutral'],bad:['✗ marked bad','tag-neutral']};
+    const dz=dzOf(o);
+    const nDone=Object.values(S.decisions).filter(x=>x.v).length;
+    const set=p=>this.setState(p);
+    return {
+      pc,field:S.field,onField:e2=>set({field:e2.target.value}),
+      thresh:S.thresh,onThresh:e2=>set({thresh:Math.max(0.02,+e2.target.value||0.15)}),
+      initials:S.initials,onBy:e2=>{set({initials:e2.target.value});try{localStorage.setItem('djaqc-by',e2.target.value)}catch(x){}},
+      nDone,nAll:this.objs.length,
+      onExport:()=>{const H='dja_id,minerva_id,ra,dec,z_spec,z_phot,grade_dja,dz_1pz,sep_arcsec,decision,flag,z_corrected,comment,inspector\n';
+        const body=this.objs.map(x=>{const dd=S.decisions[x.dja]||{};
+          return [x.dja,x.mid,x.ra,x.dec,x.zs,x.zp,x.grade,dzOf(x).toFixed(4),x.sep,dd.v||'',dd.flag?1:'',dd.zNew||'',JSON.stringify(dd.comment||''),dd.by||''].join(',')}).join('\n');
+        const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([H+body],{type:'text/csv'}));a.download='dja_minerva_qc_cosmos.csv';a.click()},
+      scWedge,scDiag:'M'+sx(0)+','+sy(0)+' L'+sx(zmax)+','+sy(zmax),scBound:bd+' '+bd2,scTicks,scPts,
+      onlyOut:S.onlyOut,tgOut:()=>set({onlyOut:!S.onlyOut}),
+      fG3:S.fG3,fG2:S.fG2,fG1:S.fG1,tgG3:()=>set({fG3:!S.fG3}),tgG2:()=>set({fG2:!S.fG2}),tgG1:()=>set({fG1:!S.fG1}),
+      sortBy:S.sortBy,onSort:e2=>set({sortBy:e2.target.value}),q:S.q,onQ:e2=>set({q:e2.target.value}),
+      rows,noRows:rows.length===0,
+      noteOpen:S.noteOpen,onNoteClose:()=>set({noteOpen:false}),
+      cur:{dja:o.dja,mid:o.mid,ra:o.ra.toFixed(5),dec:o.dec.toFixed(5),sep:o.sep.toFixed(2),
+        sepCol:o.sep>0.5?'var(--color-accent-700)':'inherit',mag:o.mag,sn:o.sn,grade:o.grade,
+        gradeCls:o.grade===3?'tag-accent':'tag-neutral',zs:o.zs.toFixed(4),zp:o.zp.toFixed(4),dz:dz.toFixed(3),
+        dzc:dz>S.thresh?'var(--color-accent-700)':'var(--color-neutral-700)',
+        outLbl:dz>S.thresh?'outlier':'consistent',outBc:dz>S.thresh?'var(--color-accent-600)':'var(--color-neutral-400)'},
+      mmSpec:S.mm==='zspec',mmPhot:S.mm==='zphot',mmBoth:S.mm==='both',mmSlide:S.mm==='slide',
+      setMmSpec:()=>set({mm:'zspec'}),setMmPhot:()=>set({mm:'zphot'}),setMmBoth:()=>set({mm:'both'}),setMmSlide:()=>set({mm:'slide',zSlide:S.zSlide??o.zs}),
+      zSlideV:+(+zSlideV).toFixed(3),onZSlide:e2=>set({zSlide:+e2.target.value}),
+      sm1:S.smooth===1,sm3:S.smooth===3,sm5:S.smooth===5,setSm1:()=>set({smooth:1}),setSm3:()=>set({smooth:3}),setSm5:()=>set({smooth:5}),
+      onResetZoom:()=>set({wmin:0.6,wmax:5.3}),
+      svgRef:el=>{if(el&&el!==this._svg){if(this._svg)this._svg.removeEventListener('wheel',this._wheel);this._svg=el;el.addEventListener('wheel',this._wheel,{passive:false})}},
+      c2Ref:el=>{this._c2=el},cutRef:el=>{this._cut=el},
+      onSpecDown:e2=>{const el=this._svg;if(!el)return;const rc=el.getBoundingClientRect();const x0=e2.clientX,w0=S.wmin,spn=S.wmax-S.wmin;
+        const mv=ev=>{const dw=-(ev.clientX-x0)/rc.width*1000/944*spn;let nm=Math.max(0.55,Math.min(w0+dw,5.35-spn));this.setState({wmin:nm,wmax:nm+spn})};
+        const up2=()=>{window.removeEventListener('mousemove',mv);window.removeEventListener('mouseup',up2)};
+        window.addEventListener('mousemove',mv);window.addEventListener('mouseup',up2)},
+      specPath:sp,errPath,xTicks,yTicks,markers,legend,
+      sedTemplPath,sedPts,
+      pzPath:pz,chi2Path:c2p,pzZs:+pzx(o.zs).toFixed(1),pzZp:+pzx(o.zp).toFixed(1),
+      pzZsT:+clampT(pzx(o.zs)).toFixed(1),pzZpT:+clampT(pzx(o.zp)).toFixed(1),pzTicks,
+      onPrev:()=>this.step(-1),onNext:()=>this.step(1),
+      onGood:()=>this.setDec({v:'ok'},true),onUnsure:()=>this.setDec({v:'unsure'},true),onBad:()=>this.setDec({v:'bad'},true),
+      onFlag:()=>this.setDec({flag:!d.flag},false),
+      decLbl:(d.flag?'⚑ ':'')+(decMap[d.v]?decMap[d.v][0]:'unreviewed'),decCls:d.v?decMap[d.v][1]:'tag-outline',
+      curZNew:d.zNew??'',onZNew:e2=>this.setDec({zNew:e2.target.value===''?null:+e2.target.value},false),
+      curComment:d.comment||'',onComment:e2=>this.setDec({comment:e2.target.value},false),
+      kbdDisp:(this.props.showHints??true)?'inline-flex':'none',
+    };
+  }
+}
+</script>
+
+
+</body></html>

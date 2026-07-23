@@ -1,0 +1,254 @@
+<!-- Redshift Inspector markup (dc-runtime {{ }} bindings).
+     Maintained source — assembled into index.html by scripts/debundle.py.
+     The <script data-dc-script> logic lives in app.js. -->
+<div style="height:100vh;display:flex;flex-direction:column;overflow:hidden;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+  <header class="nav" style="gap:var(--space-3);padding:var(--space-2) var(--space-4);flex:none">
+    <a class="btn btn-secondary" href="{{ explorerHref }}" style="padding:6px 12px;flex:none" title="Catalog Explorer">← Catalog Explorer</a>
+    <div class="nav-brand" style="display:flex;align-items:baseline;gap:10px">DJA Redshift Inspector<span class="text-muted" style="font-family:var(--font-body);font-size:11.5px;font-style:italic">spec-z × photo-z verification · MINERVA</span></div>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Field
+      <sc-raw-select class="input" style="width:118px;min-height:30px;padding:3px 8px" value="{{ field }}" sc-camel-on-change="{{ onField }}">
+        <sc-for list="{{ fieldOpts }}" as="f" hint-placeholder-count="1"><option value="{{ f.name }}">{{ f.title }}</option></sc-for>
+      </sc-raw-select>
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Outlier |Δz|/(1+z) &gt;
+      <input class="input" type="number" step="0.01" min="0.02" max="1" style="width:74px;min-height:30px;padding:3px 8px;font-feature-settings:'tnum'" value="{{ thresh }}" sc-camel-on-change="{{ onThresh }}">
+    </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Inspector
+      <input class="input" placeholder="initials" style="width:66px;min-height:30px;padding:3px 8px" value="{{ initials }}" sc-camel-on-change="{{ onBy }}">
+    </label>
+    <div style="font-size:12.5px;font-feature-settings:'tnum'" class="text-muted"><span style="color:var(--color-accent-700)">{{ nDone }}</span> / {{ nAll }} reviewed</div>
+    <button class="btn btn-primary" style="padding:6px 14px" sc-camel-on-click="{{ onExport }}">Export decisions</button>
+    <button class="btn btn-secondary btn-icon" sc-camel-on-click="{{ onHelp }}" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+  </header>
+  <div style="flex:1;display:grid;grid-template-columns:372px 1fr;overflow:hidden;min-height:0">
+
+    <aside style="display:flex;flex-direction:column;border-right:1px solid var(--color-divider);overflow:hidden;min-height:0">
+      <div style="padding:var(--space-3) var(--space-3) var(--space-2);flex:none">
+        <h6 style="margin:0 0 6px;color:var(--color-neutral-600)">z<sub>spec</sub> vs z<sub>phot</sub> · {{ fieldTitle }}</h6>
+        <svg role="img" aria-label="{{ ariaScatter }}" sc-camel-view-box="0 0 340 292" style="width:100%;display:block;background:{{ pc.bg }};border:1px solid var(--color-divider);border-radius:var(--radius-sm)">
+          <clipPath id="scclip"><rect x="34" y="8" width="298" height="252"></rect></clipPath>
+          <g clip-path="url(#scclip)">
+            <path d="{{ scWedge }}" fill="var(--color-accent-200)" opacity="0.45"></path>
+            <path d="{{ scDiag }}" stroke="{{ pc.grid2 }}" stroke-width="1" fill="none"></path>
+            <path d="{{ scBound }}" stroke="var(--color-accent-400)" stroke-width="0.8" stroke-dasharray="3 3" fill="none"></path>
+          </g>
+          <sc-for list="{{ scTicks }}" as="tk" hint-placeholder-count="0">
+            <g><text x="{{ tk.tx }}" y="{{ tk.tyy }}" font-size="9" fill="{{ pc.tick }}" text-anchor="{{ tk.anch }}" font-feature-settings="'tnum'">{{ tk.label }}</text><line x1="{{ tk.lx1 }}" y1="{{ tk.ly1 }}" x2="{{ tk.lx2 }}" y2="{{ tk.ly2 }}" stroke="{{ pc.grid }}"></line></g>
+          </sc-for>
+          <g clip-path="url(#scclip)">
+            <sc-for list="{{ scPts }}" as="pt" hint-placeholder-count="0">
+              <circle role="button" sc-camel-tab-index="0" aria-label="{{ pt.aria }}" cx="{{ pt.x }}" cy="{{ pt.y }}" r="{{ pt.r }}" fill="{{ pt.fill }}" stroke="{{ pt.stroke }}" stroke-width="{{ pt.sw }}" opacity="{{ pt.op }}" sc-camel-on-click="{{ pt.onSel }}" sc-camel-on-key-down="{{ pt.onKey }}" style="cursor:pointer"></circle>
+            </sc-for>
+          </g>
+          <text x="183" y="288" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z phot (MINERVA eazy)</text>
+          <text x="10" y="134" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 10 134)">z spec (DJA)</text>
+        </svg>
+      </div>
+      <div style="padding:0 var(--space-3) var(--space-2);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;flex:none;font-size:12px">
+        <label class="radio" style="font-size:12px"><input type="checkbox" checked="{{ onlyOut }}" sc-camel-on-change="{{ tgOut }}"><span class="dot" style="border-radius:3px"></span>outliers only</label>
+        <span class="text-muted" style="font-size:11px">grade</span>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG3 }}" sc-camel-on-change="{{ tgG3 }}"><span class="dot" style="border-radius:3px"></span>3</label>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG2 }}" sc-camel-on-change="{{ tgG2 }}"><span class="dot" style="border-radius:3px"></span>2</label>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG1 }}" sc-camel-on-change="{{ tgG1 }}"><span class="dot" style="border-radius:3px"></span>1</label>
+        <label class="radio" style="font-size:12px;gap:5px"><input type="checkbox" checked="{{ fG0 }}" sc-camel-on-change="{{ tgG0 }}"><span class="dot" style="border-radius:3px"></span>0</label>
+        <sc-raw-select class="input" style="width:110px;min-height:28px;padding:2px 6px;font-size:12px;margin-left:auto" value="{{ sortBy }}" sc-camel-on-change="{{ onSort }}">
+          <option value="dz">sort: |Δz|</option><option value="zs">sort: z spec</option><option value="mag">sort: mag</option><option value="sn">sort: S/N</option><option value="sep">sort: sep</option>
+        </sc-raw-select>
+      </div>
+      <input class="input" placeholder="Search DJA / MINERVA id…" style="margin:0 var(--space-3) var(--space-2);width:auto;min-height:30px;font-size:12.5px;flex:none" value="{{ q }}" sc-camel-on-change="{{ onQ }}">
+      <div style="display:grid;grid-template-columns:1fr 54px 54px 58px 40px;gap:0 4px;padding:4px var(--space-3);border-top:1px solid var(--color-divider);border-bottom:1px solid var(--color-divider);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-600);flex:none">
+        <span>object</span><span style="text-align:right">z spec</span><span style="text-align:right">z phot</span><span style="text-align:right">Δz/1+z</span><span style="text-align:center">✓</span>
+      </div>
+      <div role="listbox" aria-label="matched spectra" style="flex:1;overflow-y:auto;min-height:0">
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="8">
+          <div role="option" sc-camel-tab-index="0" aria-selected="{{ row.sel }}" aria-label="{{ row.aria }}" sc-camel-on-click="{{ row.onSel }}" sc-camel-on-key-down="{{ row.onKey }}" style="display:grid;grid-template-columns:1fr 54px 54px 58px 40px;gap:0 4px;align-items:center;padding:5px var(--space-3);border-bottom:1px solid var(--color-divider);cursor:pointer;font-size:12.5px;font-feature-settings:'tnum';background:{{ row.bg }}" style-hover="background:color-mix(in srgb, var(--color-text) 5%, transparent)">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;flex:none;background:{{ row.gdot }};border:{{ row.gring }}"></span>{{ row.name }}</span>
+            <span style="text-align:right">{{ row.zs }}</span>
+            <span style="text-align:right;color:var(--color-neutral-600)">{{ row.zp }}</span>
+            <span style="text-align:right;color:{{ row.dzc }}">{{ row.dz }}</span>
+            <span style="text-align:center;color:{{ row.stc }};font-size:12px">{{ row.st }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><p class="text-muted" style="padding:var(--space-3);font-size:13px;font-style:italic">No objects match the current filters.</p></sc-if>
+      </div>
+    </aside>
+
+    <main style="display:flex;flex-direction:column;overflow-y:auto;min-height:0;position:relative">
+      <sc-if value="{{ overlay }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--color-bg)">
+          <span style="font-family:var(--font-heading);font-size:20px;color:var(--color-neutral-600)">{{ overlayMsg }}</span>
+          <sc-if value="{{ overlayRetry }}" hint-placeholder-val="{{ false }}"><button class="btn btn-secondary" style="padding:6px 14px" sc-camel-on-click="{{ onListRetry }}">retry</button></sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noteOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;gap:var(--space-3);align-items:baseline;padding:var(--space-2) var(--space-4);border-bottom:1px solid var(--color-divider);font-size:12px" class="text-muted">
+          <span class="card-kicker" style="flex:none">Live</span>
+          <span style="flex:1">DJA NIRSpec spectra (S3), MINERVA eazy-py photo-z, and grizli cutouts are fetched on demand and cross-matched on RA/Dec within 0.5″ — separation is surfaced per object so bad matches are caught. Decisions persist locally and sync to the server.</span>
+          <button class="btn btn-ghost" style="padding:2px 8px;font-size:12px" sc-camel-on-click="{{ onNoteClose }}">dismiss</button>
+        </div>
+      </sc-if>
+
+      <div style="flex:none;display:flex;align-items:baseline;gap:var(--space-3);padding:var(--space-3) var(--space-4) var(--space-2);flex-wrap:wrap">
+        <h3 style="margin:0;font-size:23px">{{ cur.dja }}</h3>
+        <span class="tag {{ cur.gradeCls }}" style="gap:4px"><span>grade</span><span>{{ cur.grade }}</span></span>
+        <span class="tag tag-outline" style="border-color:{{ cur.outBc }};color:{{ cur.outBc }}">{{ cur.outLbl }}</span>
+        <sc-if value="{{ starWarn }}" hint-placeholder-val="{{ false }}"><span class="tag tag-outline" style="border-color:var(--color-accent-800);color:var(--color-accent-800)">{{ starWarnLbl }}</span></sc-if>
+        <sc-if value="{{ hasLogM }}" hint-placeholder-val="{{ false }}"><span class="tag tag-neutral">{{ logM }}</span></sc-if>
+        <span style="margin-left:auto;font-size:12.5px;font-feature-settings:'tnum'" class="text-muted">MINERVA {{ cur.mid }} · α {{ cur.ra }} δ {{ cur.dec }} · sep <span style="color:{{ cur.sepCol }}">{{ cur.sep }}″</span> · F444W {{ cur.mag }} · S/N {{ cur.sn }} · {{ cur.grating }}{{ cur.exptimeLbl }}</span>
+      </div>
+      <sc-if value="{{ hasReview }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;align-items:baseline;gap:var(--space-3);padding:0 var(--space-4) var(--space-2);flex-wrap:wrap;font-size:12px" class="text-muted">
+          <span class="card-kicker" style="flex:none">DJA review</span>
+          <sc-if value="{{ hasReviewer }}" hint-placeholder-val="{{ false }}"><span style="font-feature-settings:'tnum'">reviewer <b style="font-weight:600;color:var(--color-neutral-700)">{{ cur.reviewer }}</b></span></sc-if>
+          <sc-if value="{{ hasZgrade }}" hint-placeholder-val="{{ false }}"><span style="font-feature-settings:'tnum'">z<sub>grade</sub> <b style="font-weight:600;color:var(--color-neutral-700)">{{ cur.zgrade }}</b></span></sc-if>
+          <sc-if value="{{ hasZprism }}" hint-placeholder-val="{{ false }}"><span style="font-feature-settings:'tnum'">z<sub>prism</sub> {{ cur.zPrism }}</span></sc-if>
+          <sc-if value="{{ hasZgrating }}" hint-placeholder-val="{{ false }}"><span style="font-feature-settings:'tnum'">z<sub>grating</sub> {{ cur.zGrating }}</span></sc-if>
+          <sc-if value="{{ hasSnLine }}" hint-placeholder-val="{{ false }}"><span style="font-feature-settings:'tnum'">S/N<sub>line</sub> {{ cur.snLine }}</span></sc-if>
+          <sc-if value="{{ hasComment }}" hint-placeholder-val="{{ false }}"><span style="flex:1;min-width:160px;font-style:italic">“{{ cur.comment }}”</span></sc-if>
+        </div>
+      </sc-if>
+      <div style="flex:none;display:flex;gap:var(--space-6);padding:0 var(--space-4) var(--space-2);font-feature-settings:'tnum'">
+        <div><span class="text-muted" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">z spec</span><div style="font-family:var(--font-heading);font-size:27px;line-height:1.05;color:var(--color-accent-700)">{{ cur.zs }}</div></div>
+        <div><span class="text-muted" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">z phot</span><div style="font-family:var(--font-heading);font-size:27px;line-height:1.05;color:var(--color-neutral-600)">{{ cur.zp }}</div></div>
+        <div><span class="text-muted" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">Δz/(1+z)</span><div style="font-family:var(--font-heading);font-size:27px;line-height:1.05;color:{{ cur.dzc }}">{{ cur.dz }}</div></div>
+      </div>
+
+      <section style="flex:none;margin:0 var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
+        <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--color-divider);flex-wrap:wrap">
+          <span class="card-kicker">Spectrum</span>
+          <sc-if value="{{ hasSiblings }}" hint-placeholder-val="{{ false }}">
+            <sc-raw-select class="input" style="width:210px;min-height:28px;padding:2px 6px;font-size:12px" value="{{ curDja }}" sc-camel-on-change="{{ onSibling }}">
+              <sc-for list="{{ siblings }}" as="s" hint-placeholder-count="0"><option value="{{ s.dja }}">{{ s.label }}</option></sc-for>
+            </sc-raw-select>
+          </sc-if>
+          <sc-if value="{{ specLoading }}" hint-placeholder-val="{{ false }}"><span class="text-muted" style="font-size:11px;font-style:italic">loading spectrum…</span></sc-if>
+          <sc-if value="{{ specErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--color-accent-800)">spectrum failed <button class="btn btn-ghost" style="padding:1px 6px;font-size:11px" sc-camel-on-click="{{ onSpecRetry }}">retry</button></span></sc-if>
+          <div class="seg">
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmSpec }}" sc-camel-on-change="{{ setMmSpec }}">z spec</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmPhot }}" sc-camel-on-change="{{ setMmPhot }}">z phot</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmBoth }}" sc-camel-on-change="{{ setMmBoth }}">both</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="mm" checked="{{ mmSlide }}" sc-camel-on-change="{{ setMmSlide }}">explore z</label>
+          </div>
+          <sc-if value="{{ mmSlide }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:220px">
+              <input type="range" min="0" max="12" step="0.002" style="flex:1;accent-color:var(--color-accent)" value="{{ zSlideV }}" sc-camel-on-change="{{ onZSlide }}">
+              <input class="input" type="number" step="0.002" style="width:88px;min-height:28px;padding:2px 6px;font-size:12.5px;font-feature-settings:'tnum'" value="{{ zSlideV }}" sc-camel-on-change="{{ onZSlide }}">
+            </div>
+          </sc-if>
+          <div class="seg" style="margin-left:auto">
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="su" checked="{{ suF }}" sc-camel-on-change="{{ setSuF }}">fλ</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="su" checked="{{ suN }}" sc-camel-on-change="{{ setSuN }}">fν</label>
+          </div>
+          <div class="seg">
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="sm" checked="{{ sm1 }}" sc-camel-on-change="{{ setSm1 }}">raw</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="sm" checked="{{ sm3 }}" sc-camel-on-change="{{ setSm3 }}">×3</label>
+            <label class="seg-opt" style="padding:4px 10px;font-size:12px"><input type="radio" name="sm" checked="{{ sm5 }}" sc-camel-on-change="{{ setSm5 }}">×5</label>
+          </div>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px;color:{{ skyCol }}" sc-camel-on-click="{{ onToggleSky }}" title="overlay sky spectrum (residual reference)">{{ skyLbl }}</button>
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:12px" sc-camel-on-click="{{ onResetZoom }}">reset zoom</button>
+          <span class="text-muted" style="font-size:11px;font-style:italic">scroll = zoom · drag = pan · dbl-click = reset</span>
+        </div>
+        <canvas role="img" aria-label="{{ aria2D }}" ref="{{ c2Ref }}" width="1000" height="86" style="width:100%;display:block;background:{{ pc.bg }};border-bottom:1px solid var(--color-divider)"></canvas>
+        <svg role="img" aria-label="{{ ariaSpec }}" ref="{{ svgRef }}" sc-camel-view-box="0 0 1000 380" sc-camel-on-mouse-down="{{ onSpecDown }}" sc-camel-on-double-click="{{ onResetSpec }}" style="width:100%;display:block;background:{{ pc.bg }};cursor:grab;touch-action:none">
+          <clipPath id="spclip"><rect x="48" y="8" width="944" height="338"></rect></clipPath>
+          <sc-for list="{{ yTicks }}" as="tk" hint-placeholder-count="0">
+            <g><line x1="48" x2="992" y1="{{ tk.y }}" y2="{{ tk.y }}" stroke="{{ pc.grid }}"></line><text x="44" y="{{ tk.ty }}" font-size="11" fill="{{ pc.tick }}" text-anchor="end" font-feature-settings="'tnum'">{{ tk.label }}</text></g>
+          </sc-for>
+          <sc-for list="{{ xTicks }}" as="tk" hint-placeholder-count="0">
+            <g><line y1="346" y2="341" x1="{{ tk.x }}" x2="{{ tk.x }}" stroke="{{ pc.tick }}"></line><text y="362" x="{{ tk.x }}" font-size="11" fill="{{ pc.tick }}" text-anchor="middle" font-feature-settings="'tnum'">{{ tk.label }}</text></g>
+          </sc-for>
+          <line x1="48" x2="992" y1="346" y2="346" stroke="{{ pc.axis }}"></line>
+          <g clip-path="url(#spclip)">
+            <path d="{{ errPath }}" fill="{{ pc.err }}" stroke="none"></path>
+            <path d="{{ skyPath }}" fill="none" stroke="var(--color-neutral-500)" stroke-width="0.8" opacity="0.5"></path>
+            <path d="{{ specPath }}" fill="none" stroke="{{ pc.line }}" stroke-width="1.15"></path>
+            <sc-for list="{{ markers }}" as="m" hint-placeholder-count="0">
+              <g><line x1="{{ m.x }}" x2="{{ m.x }}" y1="{{ m.y1 }}" y2="346" stroke="{{ m.color }}" stroke-width="0.9" stroke-dasharray="{{ m.dash }}" opacity="0.85"></line>
+              <text x="{{ m.x }}" y="{{ m.ty }}" font-size="11.5" fill="{{ m.color }}" text-anchor="middle" font-style="italic">{{ m.label }}</text></g>
+            </sc-for>
+          </g>
+          <text x="520" y="377" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">observed wavelength (μm)</text>
+          <text x="14" y="180" font-size="12" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 14 180)">{{ yAxisLab }}</text>
+          <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="0">
+            <g><line x1="{{ lg.x1 }}" x2="{{ lg.x2 }}" y1="20" y2="20" stroke="{{ lg.color }}" stroke-dasharray="{{ lg.dash }}" stroke-width="1.4"></line><text x="{{ lg.tx }}" y="24" font-size="11" fill="{{ lg.color }}" font-style="italic">{{ lg.label }}</text></g>
+          </sc-for>
+        </svg>
+      </section>
+
+      <section style="flex:none;display:grid;grid-template-columns:1.15fr 1fr 236px;gap:var(--space-3);padding:var(--space-3) var(--space-4)">
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3)">
+          <span class="card-kicker">Photometry + eazy template</span>
+          <sc-if value="{{ eazyLoading }}" hint-placeholder-val="{{ false }}"><span class="text-muted" style="font-size:10px;font-style:italic;margin-left:6px">loading…</span></sc-if>
+          <sc-if value="{{ eazyErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;color:var(--color-accent-800);margin-left:6px">eazy unavailable</span></sc-if>
+          <svg role="img" aria-label="{{ ariaSED }}" sc-camel-view-box="0 0 420 250" style="width:100%;display:block;background:{{ pc.bg }};margin-top:6px">
+            <path d="{{ sedTemplPath }}" fill="none" stroke="var(--color-accent-500)" stroke-width="1.1" opacity="0.9"></path>
+            <sc-for list="{{ sedPts }}" as="pt" hint-placeholder-count="0">
+              <g><line x1="{{ pt.x }}" x2="{{ pt.x }}" y1="{{ pt.e1 }}" y2="{{ pt.e2 }}" stroke="{{ pc.line }}" stroke-width="1"></line>
+              <circle cx="{{ pt.x }}" cy="{{ pt.y }}" r="3.4" fill="{{ pc.bg }}" stroke="{{ pc.line }}" stroke-width="1.3"></circle>
+              <text x="{{ pt.x }}" y="242" font-size="8.5" fill="{{ pc.tick }}" text-anchor="middle">{{ pt.band }}</text></g>
+            </sc-for>
+            <text x="404" y="18" font-size="10.5" fill="var(--color-accent-600)" text-anchor="end" font-style="italic">template @ z phot</text>
+          </svg>
+        </div>
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3)">
+          <span class="card-kicker">p(z) · χ²(z) — eazy</span>
+          <sc-if value="{{ eazyLoading }}" hint-placeholder-val="{{ false }}"><span class="text-muted" style="font-size:10px;font-style:italic;margin-left:6px">loading…</span></sc-if>
+          <sc-if value="{{ eazyErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;color:var(--color-accent-800);margin-left:6px">eazy unavailable</span></sc-if>
+          <sc-if value="{{ showAlt }}" hint-placeholder-val="{{ false }}"><span class="text-muted" style="font-size:10px;font-style:italic;margin-left:6px" title="other template set's photo-z solution">alt: {{ altLbl }}</span></sc-if>
+          <svg role="img" aria-label="{{ ariaPz }}" ref="{{ pzRef }}" sc-camel-view-box="0 0 420 250" sc-camel-on-mouse-down="{{ onPzDown }}" sc-camel-on-double-click="{{ onResetPz }}" style="width:100%;display:block;background:{{ pc.bg }};margin-top:6px;cursor:grab;touch-action:none">
+            <path d="{{ pzPath }}" fill="var(--color-accent-200)" stroke="var(--color-accent-600)" stroke-width="1" opacity="0.85"></path>
+            <path d="{{ chi2Path }}" fill="none" stroke="{{ pc.tick }}" stroke-width="1" stroke-dasharray="4 3"></path>
+            <line x1="{{ pzZs }}" x2="{{ pzZs }}" y1="14" y2="228" stroke="var(--color-accent-700)" stroke-width="1.1"></line>
+            <text x="{{ pzZsT }}" y="12" font-size="10.5" fill="var(--color-accent-700)" text-anchor="middle" font-style="italic">z spec</text>
+            <line x1="{{ pzZp }}" x2="{{ pzZp }}" y1="26" y2="228" stroke="{{ pc.tick }}" stroke-width="1" stroke-dasharray="3 3"></line>
+            <text x="{{ pzZpT }}" y="24" font-size="10.5" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z phot</text>
+            <line x1="16" x2="410" y1="228" y2="228" stroke="{{ pc.axis }}"></line>
+            <sc-for list="{{ pzTicks }}" as="tk" hint-placeholder-count="0">
+              <text x="{{ tk.x }}" y="243" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-feature-settings="'tnum'">{{ tk.label }}</text>
+            </sc-for>
+          </svg>
+        </div>
+        <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;gap:var(--space-2)"><span class="card-kicker">Cutout · {{ cutBandLbl }}</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:11px;margin-left:auto" sc-camel-on-click="{{ onToggleSlit }}" disabled="{{ slitDisabled }}">{{ slitLabel }}</button></div>
+          <canvas role="img" aria-label="{{ ariaCut }}" ref="{{ cutRef }}" width="180" height="180" class="plate" sc-camel-on-mouse-down="{{ onCutDown }}" sc-camel-on-double-click="{{ onResetStretch }}" style="width:100%;margin-top:6px;border-width:4px;cursor:crosshair;touch-action:none"></canvas>
+          <span class="text-muted" style="font-size:10.5px;margin-top:5px;font-style:italic">{{ cutFov }}″ × {{ cutFov }}″ · cross = MSA source · circle = MINERVA match ({{ cur.sep }}″)<br>drag = stretch · scroll = resize · dbl-click = reset</span>
+        </div>
+      </section>
+
+      <div style="position:sticky;bottom:0;margin-top:auto;background:var(--color-bg);border-top:1px solid var(--color-divider);padding:var(--space-2) var(--space-4);display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;z-index:5">
+        <button class="btn btn-icon btn-secondary" sc-camel-on-click="{{ onPrev }}" title="previous (p)">‹</button>
+        <button class="btn btn-icon btn-secondary" sc-camel-on-click="{{ onNext }}" title="next (n)">›</button>
+        <span style="width:1px;height:24px;background:var(--color-divider)"></span>
+        <button class="btn btn-primary" style="padding:6px 12px" sc-camel-on-click="{{ onGood }}">✓ z spec good<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">3</kbd></button>
+        <button class="btn btn-secondary" style="padding:6px 12px" sc-camel-on-click="{{ onUnsure }}">? unsure<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">2</kbd></button>
+        <button class="btn btn-secondary" style="padding:6px 12px;color:var(--color-accent-800)" sc-camel-on-click="{{ onBad }}">✗ z spec bad<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">1</kbd></button>
+        <button class="btn btn-ghost" style="padding:6px 10px" sc-camel-on-click="{{ onFlag }}">⚑ flag<kbd style="display:{{ kbdDisp }};font-size:10px;border:1px solid var(--color-divider);border-radius:3px;padding:0 4px;margin-left:2px">f</kbd></button>
+        <span class="tag {{ decCls }}">{{ decLbl }}</span>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px" class="text-muted">z corr.
+          <input class="input" type="number" step="0.001" placeholder="—" style="width:92px;min-height:30px;padding:3px 8px;font-feature-settings:'tnum'" value="{{ curZNew }}" sc-camel-on-change="{{ onZNew }}">
+        </label>
+        <input class="input" placeholder="comment — e.g. line is [OIII] not Hα; z ≈ 2.31" style="flex:1;min-width:180px;min-height:30px;padding:3px 10px;font-size:13px" value="{{ curComment }}" sc-camel-on-change="{{ onComment }}">
+      </div>
+    </main>
+  </div>
+  <sc-if value="{{ helpOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" sc-camel-on-click="{{ onHelpClose }}" style="z-index:50">
+      <div class="dialog" role="dialog" aria-label="Keyboard shortcuts" sc-camel-on-click="{{ onHelpStop }}">
+        <div class="dialog-title">Keyboard shortcuts</div>
+        <div class="dialog-body" style="display:grid;grid-template-columns:auto 1fr;gap:7px 16px;align-items:center;font-feature-settings:'tnum'">
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">n</kbd> <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">j</kbd> <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">↓</kbd></span><span>next object</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">p</kbd> <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">k</kbd> <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">↑</kbd></span><span>previous object</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">3</kbd></span><span>mark z spec good</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">2</kbd></span><span>mark unsure</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">1</kbd></span><span>mark z spec bad</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">f</kbd></span><span>toggle flag</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">0</kbd></span><span>clear decision for this object</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">r</kbd></span><span>reset spectrum + p(z) zoom</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">m</kbd></span><span>cycle redshift markers (z spec / z phot / both / explore)</span>
+          <span><kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">?</kbd></span><span>toggle this help · <kbd style="font-size:11px;border:1px solid var(--color-divider);border-radius:3px;padding:0 5px">Esc</kbd> closes</span>
+        </div>
+        <div class="dialog-actions"><button class="btn btn-secondary" sc-camel-on-click="{{ onHelpClose }}">close</button></div>
+      </div>
+    </div>
+  </sc-if>
+</div>

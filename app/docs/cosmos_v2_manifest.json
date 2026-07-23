@@ -1,0 +1,994 @@
+[
+  {
+    "band": "F090W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f090w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 1228866226,
+    "last_modified": "Fri, 09 Jan 2026 13:18:22 GMT"
+  },
+  {
+    "band": "F115W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f115w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2877229514,
+    "last_modified": "Fri, 09 Jan 2026 13:18:46 GMT"
+  },
+  {
+    "band": "F070W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f070w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 208408210,
+    "last_modified": "Fri, 09 Jan 2026 13:18:01 GMT"
+  },
+  {
+    "band": "F090W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f090w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 1297641402,
+    "last_modified": "Fri, 09 Jan 2026 13:18:03 GMT"
+  },
+  {
+    "band": "F070W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f070w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 224603856,
+    "last_modified": "Fri, 09 Jan 2026 13:18:01 GMT"
+  },
+  {
+    "band": "F090W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f090w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 1161384,
+    "last_modified": "Fri, 09 Jan 2026 13:18:25 GMT"
+  },
+  {
+    "band": "F090W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f090w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 1703091,
+    "last_modified": "Fri, 09 Jan 2026 13:18:03 GMT"
+  },
+  {
+    "band": "F090W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f090w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 1231639662,
+    "last_modified": "Fri, 09 Jan 2026 13:18:18 GMT"
+  },
+  {
+    "band": "F070W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f070w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 207002456,
+    "last_modified": "Fri, 09 Jan 2026 13:18:02 GMT"
+  },
+  {
+    "band": "F115W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f115w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 3073337491,
+    "last_modified": "Fri, 09 Jan 2026 13:18:41 GMT"
+  },
+  {
+    "band": "F070W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f070w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 148507,
+    "last_modified": "Fri, 09 Jan 2026 13:18:03 GMT"
+  },
+  {
+    "band": "F070W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f070w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 328046,
+    "last_modified": "Fri, 09 Jan 2026 13:18:01 GMT"
+  },
+  {
+    "band": "F140M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f140m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 796599660,
+    "last_modified": "Fri, 09 Jan 2026 13:20:16 GMT"
+  },
+  {
+    "band": "F115W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f115w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 5646303,
+    "last_modified": "Fri, 09 Jan 2026 13:18:40 GMT"
+  },
+  {
+    "band": "F115W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f115w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 2891599118,
+    "last_modified": "Fri, 09 Jan 2026 13:18:42 GMT"
+  },
+  {
+    "band": "F150W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f150w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 2919510602,
+    "last_modified": "Fri, 09 Jan 2026 13:20:54 GMT"
+  },
+  {
+    "band": "F150W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f150w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2901244817,
+    "last_modified": "Fri, 09 Jan 2026 13:20:56 GMT"
+  },
+  {
+    "band": "F140M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f140m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 902581,
+    "last_modified": "Fri, 09 Jan 2026 13:20:17 GMT"
+  },
+  {
+    "band": "F115W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f115w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 4388386,
+    "last_modified": "Fri, 09 Jan 2026 13:19:41 GMT"
+  },
+  {
+    "band": "F150W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f150w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 3633217,
+    "last_modified": "Fri, 09 Jan 2026 13:20:33 GMT"
+  },
+  {
+    "band": "F140M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f140m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 1232722,
+    "last_modified": "Fri, 09 Jan 2026 13:19:45 GMT"
+  },
+  {
+    "band": "F140M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f140m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 801306273,
+    "last_modified": "Fri, 09 Jan 2026 13:20:14 GMT"
+  },
+  {
+    "band": "F150W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f150w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 3073598058,
+    "last_modified": "Fri, 09 Jan 2026 13:20:33 GMT"
+  },
+  {
+    "band": "F140M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f140m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 844142068,
+    "last_modified": "Fri, 09 Jan 2026 13:19:45 GMT"
+  },
+  {
+    "band": "F150W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f150w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 2758316,
+    "last_modified": "Fri, 09 Jan 2026 13:21:35 GMT"
+  },
+  {
+    "band": "F162M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f162m-clear_drc_sci.fits.gz",
+    "status": 403,
+    "bytes": null,
+    "last_modified": null
+  },
+  {
+    "band": "F162M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f162m-clear_drc_var.fits.gz",
+    "status": 403,
+    "bytes": null,
+    "last_modified": null
+  },
+  {
+    "band": "F162M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f162m-clear_drc_wht.fits.gz",
+    "status": 403,
+    "bytes": null,
+    "last_modified": null
+  },
+  {
+    "band": "F182M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f182m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 1282831,
+    "last_modified": "Fri, 09 Jan 2026 13:22:09 GMT"
+  },
+  {
+    "band": "F182M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f182m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 932176672,
+    "last_modified": "Fri, 09 Jan 2026 13:22:09 GMT"
+  },
+  {
+    "band": "F162M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f162m-clear_drc_exp.fits.gz",
+    "status": 403,
+    "bytes": null,
+    "last_modified": null
+  },
+  {
+    "band": "F162M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f162m-clear_wcs.csv",
+    "status": 403,
+    "bytes": null,
+    "last_modified": null
+  },
+  {
+    "band": "F182M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f182m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 872926080,
+    "last_modified": "Fri, 09 Jan 2026 13:22:58 GMT"
+  },
+  {
+    "band": "F182M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f182m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 877273242,
+    "last_modified": "Fri, 09 Jan 2026 13:22:54 GMT"
+  },
+  {
+    "band": "F200W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f200w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 2881298342,
+    "last_modified": "Fri, 09 Jan 2026 13:23:07 GMT"
+  },
+  {
+    "band": "F182M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f182m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 963271,
+    "last_modified": "Fri, 09 Jan 2026 13:23:07 GMT"
+  },
+  {
+    "band": "F200W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f200w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2712592808,
+    "last_modified": "Fri, 09 Jan 2026 13:23:16 GMT"
+  },
+  {
+    "band": "F200W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f200w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 5505108,
+    "last_modified": "Fri, 09 Jan 2026 13:23:07 GMT"
+  },
+  {
+    "band": "F200W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f200w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 2719472305,
+    "last_modified": "Fri, 09 Jan 2026 13:23:12 GMT"
+  },
+  {
+    "band": "F210M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f210m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 796061665,
+    "last_modified": "Fri, 09 Jan 2026 13:24:13 GMT"
+  },
+  {
+    "band": "F210M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f210m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 800389893,
+    "last_modified": "Fri, 09 Jan 2026 13:24:12 GMT"
+  },
+  {
+    "band": "F210M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f210m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 897438,
+    "last_modified": "Fri, 09 Jan 2026 13:24:24 GMT"
+  },
+  {
+    "band": "F200W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f200w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 4923328,
+    "last_modified": "Fri, 09 Jan 2026 13:24:06 GMT"
+  },
+  {
+    "band": "F210M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f210m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 1233774,
+    "last_modified": "Fri, 09 Jan 2026 13:24:06 GMT"
+  },
+  {
+    "band": "F250M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f250m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 886195257,
+    "last_modified": "Fri, 09 Jan 2026 13:24:31 GMT"
+  },
+  {
+    "band": "F250M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f250m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 848033,
+    "last_modified": "Fri, 09 Jan 2026 13:24:24 GMT"
+  },
+  {
+    "band": "F250M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f250m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 934116399,
+    "last_modified": "Fri, 09 Jan 2026 13:24:24 GMT"
+  },
+  {
+    "band": "F210M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f210m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 844432675,
+    "last_modified": "Fri, 09 Jan 2026 13:24:06 GMT"
+  },
+  {
+    "band": "F250M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f250m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 889078732,
+    "last_modified": "Fri, 09 Jan 2026 13:24:27 GMT"
+  },
+  {
+    "band": "F250M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f250m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 264765,
+    "last_modified": "Fri, 09 Jan 2026 13:24:44 GMT"
+  },
+  {
+    "band": "F277W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f277w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 3078409881,
+    "last_modified": "Fri, 09 Jan 2026 13:24:44 GMT"
+  },
+  {
+    "band": "F277W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f277w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 730605,
+    "last_modified": "Fri, 09 Jan 2026 13:25:46 GMT"
+  },
+  {
+    "band": "F277W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f277w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 1978461,
+    "last_modified": "Fri, 09 Jan 2026 13:24:44 GMT"
+  },
+  {
+    "band": "F300M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f300m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 765688839,
+    "last_modified": "Fri, 09 Jan 2026 13:25:52 GMT"
+  },
+  {
+    "band": "F277W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f277w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2918287555,
+    "last_modified": "Fri, 09 Jan 2026 13:24:49 GMT"
+  },
+  {
+    "band": "F300M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f300m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 811980885,
+    "last_modified": "Fri, 09 Jan 2026 13:25:46 GMT"
+  },
+  {
+    "band": "F277W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f277w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 2925142919,
+    "last_modified": "Fri, 09 Jan 2026 13:24:47 GMT"
+  },
+  {
+    "band": "F300M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f300m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 763372175,
+    "last_modified": "Fri, 09 Jan 2026 13:25:52 GMT"
+  },
+  {
+    "band": "F300M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f300m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 686134,
+    "last_modified": "Fri, 09 Jan 2026 13:25:46 GMT"
+  },
+  {
+    "band": "F300M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f300m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 180006,
+    "last_modified": "Fri, 09 Jan 2026 13:26:05 GMT"
+  },
+  {
+    "band": "F335M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f335m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 433235962,
+    "last_modified": "Fri, 09 Jan 2026 13:26:06 GMT"
+  },
+  {
+    "band": "F335M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f335m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 405103959,
+    "last_modified": "Fri, 09 Jan 2026 13:26:10 GMT"
+  },
+  {
+    "band": "F335M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f335m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 326237,
+    "last_modified": "Fri, 09 Jan 2026 13:26:06 GMT"
+  },
+  {
+    "band": "F356W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f356w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 785953,
+    "last_modified": "Fri, 09 Jan 2026 13:27:16 GMT"
+  },
+  {
+    "band": "F356W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f356w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 2877605227,
+    "last_modified": "Fri, 09 Jan 2026 13:26:19 GMT"
+  },
+  {
+    "band": "F335M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f335m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 406529916,
+    "last_modified": "Fri, 09 Jan 2026 13:26:10 GMT"
+  },
+  {
+    "band": "F360M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f360m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 762670615,
+    "last_modified": "Fri, 09 Jan 2026 13:27:21 GMT"
+  },
+  {
+    "band": "F356W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f356w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2706946206,
+    "last_modified": "Fri, 09 Jan 2026 13:26:21 GMT"
+  },
+  {
+    "band": "F335M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f335m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 89746,
+    "last_modified": "Fri, 09 Jan 2026 13:26:15 GMT"
+  },
+  {
+    "band": "F356W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f356w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 2276427,
+    "last_modified": "Fri, 09 Jan 2026 13:26:18 GMT"
+  },
+  {
+    "band": "F360M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f360m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 811960302,
+    "last_modified": "Fri, 09 Jan 2026 13:27:17 GMT"
+  },
+  {
+    "band": "F356W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f356w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 2715978364,
+    "last_modified": "Fri, 09 Jan 2026 13:26:21 GMT"
+  },
+  {
+    "band": "F360M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f360m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 690337,
+    "last_modified": "Fri, 09 Jan 2026 13:27:17 GMT"
+  },
+  {
+    "band": "F360M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f360m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 179924,
+    "last_modified": "Fri, 09 Jan 2026 13:27:33 GMT"
+  },
+  {
+    "band": "F360M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f360m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 764716207,
+    "last_modified": "Fri, 09 Jan 2026 13:27:19 GMT"
+  },
+  {
+    "band": "F410M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f410m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 1314740749,
+    "last_modified": "Fri, 09 Jan 2026 13:27:34 GMT"
+  },
+  {
+    "band": "F410M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f410m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 1250851337,
+    "last_modified": "Fri, 09 Jan 2026 13:27:38 GMT"
+  },
+  {
+    "band": "F410M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f410m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 1038535,
+    "last_modified": "Fri, 09 Jan 2026 13:27:34 GMT"
+  },
+  {
+    "band": "F430M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f430m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 64626177,
+    "last_modified": "Fri, 09 Jan 2026 13:28:04 GMT"
+  },
+  {
+    "band": "F410M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f410m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 1252708953,
+    "last_modified": "Fri, 09 Jan 2026 13:27:37 GMT"
+  },
+  {
+    "band": "F430M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f430m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 68231584,
+    "last_modified": "Fri, 09 Jan 2026 13:28:00 GMT"
+  },
+  {
+    "band": "F430M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f430m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 223928,
+    "last_modified": "Fri, 09 Jan 2026 13:28:00 GMT"
+  },
+  {
+    "band": "F410M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f410m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 286219,
+    "last_modified": "Fri, 09 Jan 2026 13:28:00 GMT"
+  },
+  {
+    "band": "F430M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f430m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 64925895,
+    "last_modified": "Fri, 09 Jan 2026 13:28:04 GMT"
+  },
+  {
+    "band": "F430M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f430m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 10498,
+    "last_modified": "Fri, 09 Jan 2026 13:28:05 GMT"
+  },
+  {
+    "band": "F444W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f444w-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 3069440419,
+    "last_modified": "Fri, 09 Jan 2026 13:28:06 GMT"
+  },
+  {
+    "band": "F444W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f444w-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2898879108,
+    "last_modified": "Fri, 09 Jan 2026 13:28:31 GMT"
+  },
+  {
+    "band": "F444W",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f444w-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 2053248,
+    "last_modified": "Fri, 09 Jan 2026 13:28:06 GMT"
+  },
+  {
+    "band": "F444W",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f444w-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 2898727762,
+    "last_modified": "Fri, 09 Jan 2026 13:28:31 GMT"
+  },
+  {
+    "band": "F460M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f460m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 848952578,
+    "last_modified": "Fri, 09 Jan 2026 13:29:12 GMT"
+  },
+  {
+    "band": "F444W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f444w-clear_wcs.csv",
+    "status": 200,
+    "bytes": 730670,
+    "last_modified": "Fri, 09 Jan 2026 13:29:12 GMT"
+  },
+  {
+    "band": "F460M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f460m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 803458214,
+    "last_modified": "Fri, 09 Jan 2026 13:29:33 GMT"
+  },
+  {
+    "band": "F460M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f460m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 189736,
+    "last_modified": "Fri, 09 Jan 2026 13:29:36 GMT"
+  },
+  {
+    "band": "F460M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f460m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 710739,
+    "last_modified": "Fri, 09 Jan 2026 13:29:12 GMT"
+  },
+  {
+    "band": "F480M",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f480m-clear_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 357472730,
+    "last_modified": "Fri, 09 Jan 2026 13:29:53 GMT"
+  },
+  {
+    "band": "F460M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f460m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 804997128,
+    "last_modified": "Fri, 09 Jan 2026 13:29:33 GMT"
+  },
+  {
+    "band": "F480M",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f480m-clear_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 330561074,
+    "last_modified": "Fri, 09 Jan 2026 13:30:05 GMT"
+  },
+  {
+    "band": "F480M",
+    "suffix": "_drc_var.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f480m-clear_drc_var.fits.gz",
+    "status": 200,
+    "bytes": 331627314,
+    "last_modified": "Fri, 09 Jan 2026 13:30:01 GMT"
+  },
+  {
+    "band": "F480M",
+    "suffix": "_drc_exp.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f480m-clear_drc_exp.fits.gz",
+    "status": 200,
+    "bytes": 301231,
+    "last_modified": "Fri, 09 Jan 2026 13:29:52 GMT"
+  },
+  {
+    "band": "F480M",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f480m-clear_wcs.csv",
+    "status": 200,
+    "bytes": 75335,
+    "last_modified": "Fri, 09 Jan 2026 13:30:06 GMT"
+  },
+  {
+    "band": "F336WU",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f336wu_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 141139793,
+    "last_modified": "Fri, 09 Jan 2026 13:26:15 GMT"
+  },
+  {
+    "band": "F336WU",
+    "suffix": "_drc_sci_bkgsub.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f336wu_drc_sci_bkgsub.fits.gz",
+    "status": 200,
+    "bytes": 140945066,
+    "last_modified": "Fri, 09 Jan 2026 13:26:18 GMT"
+  },
+  {
+    "band": "F336WU",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f336wu_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 131462498,
+    "last_modified": "Fri, 09 Jan 2026 13:26:18 GMT"
+  },
+  {
+    "band": "F435W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f435w_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 1160888401,
+    "last_modified": "Fri, 09 Jan 2026 13:28:05 GMT"
+  },
+  {
+    "band": "F336WU",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f336wu_wcs.csv",
+    "status": 200,
+    "bytes": 46474,
+    "last_modified": "Fri, 09 Jan 2026 13:26:18 GMT"
+  },
+  {
+    "band": "F435W",
+    "suffix": "_drc_sci_bkgsub.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f435w_drc_sci_bkgsub.fits.gz",
+    "status": 200,
+    "bytes": 1161457253,
+    "last_modified": "Fri, 09 Jan 2026 13:28:06 GMT"
+  },
+  {
+    "band": "F435W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f435w_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 1088380288,
+    "last_modified": "Fri, 09 Jan 2026 13:28:06 GMT"
+  },
+  {
+    "band": "F435W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f435w_wcs.csv",
+    "status": 200,
+    "bytes": 313626,
+    "last_modified": "Fri, 09 Jan 2026 13:28:06 GMT"
+  },
+  {
+    "band": "F475W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f475w_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 791009169,
+    "last_modified": "Fri, 09 Jan 2026 13:29:37 GMT"
+  },
+  {
+    "band": "F475W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f475w_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 724223642,
+    "last_modified": "Fri, 09 Jan 2026 13:29:52 GMT"
+  },
+  {
+    "band": "F475W",
+    "suffix": "_drc_sci_bkgsub.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f475w_drc_sci_bkgsub.fits.gz",
+    "status": 200,
+    "bytes": 791368270,
+    "last_modified": "Fri, 09 Jan 2026 13:29:51 GMT"
+  },
+  {
+    "band": "F475W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f475w_wcs.csv",
+    "status": 200,
+    "bytes": 74156,
+    "last_modified": "Fri, 09 Jan 2026 13:29:52 GMT"
+  },
+  {
+    "band": "F606W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f606w_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2007797869,
+    "last_modified": "Fri, 09 Jan 2026 13:30:10 GMT"
+  },
+  {
+    "band": "F606W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f606w_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 2139416807,
+    "last_modified": "Fri, 09 Jan 2026 13:30:07 GMT"
+  },
+  {
+    "band": "F606W",
+    "suffix": "_drc_sci_bkgsub.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f606w_drc_sci_bkgsub.fits.gz",
+    "status": 200,
+    "bytes": 2139916675,
+    "last_modified": "Fri, 09 Jan 2026 13:30:09 GMT"
+  },
+  {
+    "band": "F606W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f606w_wcs.csv",
+    "status": 200,
+    "bytes": 501245,
+    "last_modified": "Fri, 09 Jan 2026 13:30:11 GMT"
+  },
+  {
+    "band": "F814W",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f814w_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 3068195001,
+    "last_modified": "Fri, 09 Jan 2026 13:30:12 GMT"
+  },
+  {
+    "band": "F814W",
+    "suffix": "_drc_sci_bkgsub.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f814w_drc_sci_bkgsub.fits.gz",
+    "status": 200,
+    "bytes": 3069559856,
+    "last_modified": "Fri, 09 Jan 2026 13:30:52 GMT"
+  },
+  {
+    "band": "F814W",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f814w_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 2855970962,
+    "last_modified": "Fri, 09 Jan 2026 13:30:54 GMT"
+  },
+  {
+    "band": "F814W",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f814w_wcs.csv",
+    "status": 200,
+    "bytes": 1218211,
+    "last_modified": "Fri, 09 Jan 2026 13:30:56 GMT"
+  },
+  {
+    "band": "F850LP",
+    "suffix": "_drc_sci.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f850lp_drc_sci.fits.gz",
+    "status": 200,
+    "bytes": 99635026,
+    "last_modified": "Fri, 09 Jan 2026 13:30:56 GMT"
+  },
+  {
+    "band": "F850LP",
+    "suffix": "_drc_sci_bkgsub.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f850lp_drc_sci_bkgsub.fits.gz",
+    "status": 200,
+    "bytes": 99542921,
+    "last_modified": "Fri, 09 Jan 2026 13:31:01 GMT"
+  },
+  {
+    "band": "F850LP",
+    "suffix": "_drc_wht.fits.gz",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f850lp_drc_wht.fits.gz",
+    "status": 200,
+    "bytes": 89859245,
+    "last_modified": "Fri, 09 Jan 2026 13:31:04 GMT"
+  },
+  {
+    "band": "F850LP",
+    "suffix": "_wcs.csv",
+    "url": "https://s3.amazonaws.com/grizli-v2/MINERVA/mosaics/cosmos/40mas-v2.0/cosmos-grizli-v8.0-minerva-v2.0-40mas-f850lp_wcs.csv",
+    "status": 200,
+    "bytes": 8919,
+    "last_modified": "Fri, 09 Jan 2026 13:31:06 GMT"
+  }
+]

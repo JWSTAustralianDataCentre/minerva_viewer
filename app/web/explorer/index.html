@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MINERVA · Catalog Explorer</title>
+  <link rel="stylesheet" href="/shared/fonts.css?v=c5bd949b">
+  <link rel="stylesheet" href="/shared/tokens.css?v=6edecc1b">
+  <link rel="stylesheet" href="explorer.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ── Header ──────────────────────────────────────────────────── -->
+    <header class="nav" id="topnav">
+      <div class="nav-brand">MINERVA<span class="brand-sub">· COSMOS Catalog Explorer</span></div>
+      <label class="hdr-sel field">
+        <span>Field</span>
+        <select id="sel-field" class="input"></select>
+      </label>
+      <label class="hdr-sel field">
+        <span>Template</span>
+        <select id="sel-template" class="input"></select>
+      </label>
+      <span class="hdr-spacer"></span>
+      <button type="button" id="btn-help" class="btn btn-secondary btn-help-toggle"
+        aria-label="Keyboard shortcuts" title="Keyboard shortcuts (press ?)">?</button>
+      <a id="nav-inspector" class="btn btn-secondary" href="/inspector">Redshift Inspector →</a>
+    </header>
+
+    <!-- ── Body: query | results | detail ─────────────────────────── -->
+    <div id="body">
+      <!-- Left: query form -->
+      <aside id="query-panel" aria-label="Query form">
+        <form id="query-form" autocomplete="off">
+          <div class="field">
+            <label for="q-ids">MINERVA IDs <span class="text-muted">(comma / whitespace sep)</span></label>
+            <textarea id="q-ids" class="input" rows="3" placeholder="e.g. 123456, 200011 …"></textarea>
+          </div>
+
+          <fieldset class="qgroup">
+            <legend>Cone search</legend>
+            <div class="row3">
+              <div class="field"><label for="q-ra">RA°</label><input id="q-ra" class="input" inputmode="decimal"></div>
+              <div class="field"><label for="q-dec">Dec°</label><input id="q-dec" class="input" inputmode="decimal"></div>
+              <div class="field"><label for="q-radius">r″</label><input id="q-radius" class="input" inputmode="decimal" placeholder="3"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="qgroup">
+            <legend>z<sub>phot</sub></legend>
+            <div class="row2">
+              <div class="field"><label for="q-zmin">min</label><input id="q-zmin" class="input" inputmode="decimal"></div>
+              <div class="field"><label for="q-zmax">max</label><input id="q-zmax" class="input" inputmode="decimal"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="qgroup">
+            <legend>log M<sub>★</sub></legend>
+            <div class="row2">
+              <div class="field"><label for="q-lmassmin">min</label><input id="q-lmassmin" class="input" inputmode="decimal"></div>
+              <div class="field"><label for="q-lmassmax">max</label><input id="q-lmassmax" class="input" inputmode="decimal"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="qgroup">
+            <legend>Magnitude (AB)</legend>
+            <div class="field"><label for="q-magband">band</label><select id="q-magband" class="input"></select></div>
+            <div class="row2">
+              <div class="field"><label for="q-magmin">bright</label><input id="q-magmin" class="input" inputmode="decimal"></div>
+              <div class="field"><label for="q-magmax">faint</label><input id="q-magmax" class="input" inputmode="decimal"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="qgroup">
+            <legend>Spectra &amp; flags</legend>
+            <label class="chk"><input type="checkbox" id="q-hasspec"> has DJA spectrum</label>
+            <div class="field"><label for="q-grademin">min grade</label>
+              <select id="q-grademin" class="input">
+                <option value="">any</option>
+                <option value="1">≥ 1 (bad+)</option>
+                <option value="2">≥ 2 (maybe+)</option>
+                <option value="3">3 (robust)</option>
+              </select>
+            </div>
+            <div class="field"><label for="q-uvj">UVJ class</label>
+              <select id="q-uvj" class="input">
+                <option value="">any</option>
+                <option value="q">quiescent</option>
+                <option value="sf">star-forming</option>
+              </select>
+            </div>
+            <label class="chk"><input type="checkbox" id="q-usephot" checked> use_phot only</label>
+            <label class="chk"><input type="checkbox" id="q-nostar" checked> exclude stars</label>
+          </fieldset>
+
+          <button type="submit" id="btn-search" class="btn btn-primary btn-block">Search</button>
+          <div id="result-summary" class="result-summary text-muted">—</div>
+          <button type="button" id="btn-csv" class="btn btn-secondary btn-block" disabled>Download CSV</button>
+        </form>
+      </aside>
+
+      <!-- Center: results table -->
+      <main id="results-panel" aria-label="Results">
+        <div id="results-scroll">
+          <table class="table" id="results-table">
+            <thead>
+              <tr id="results-head">
+                <th data-sort="id">id</th>
+                <th data-sort="ra">ra</th>
+                <th data-sort="dec">dec</th>
+                <th data-sort="z_phot">z_phot</th>
+                <th data-sort="lmass">lmass</th>
+                <th data-sort="mag">mag</th>
+                <th data-sort="sep">sep</th>
+                <th>spec</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+          <div id="results-empty" class="empty hidden">No objects match this query.</div>
+          <div id="results-skeleton" class="skeleton-list hidden"></div>
+        </div>
+        <div id="pager">
+          <button id="pg-prev" class="btn btn-secondary" disabled>‹ Prev</button>
+          <span id="pg-info" class="text-muted">—</span>
+          <button id="pg-next" class="btn btn-secondary" disabled>Next ›</button>
+        </div>
+      </main>
+
+      <!-- Right: detail pane -->
+      <section id="detail-panel" aria-label="Object detail">
+        <div id="detail-empty" class="detail-empty text-muted">Select an object to inspect.</div>
+        <div id="detail-content" class="hidden"></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="toast-stack" aria-live="polite"></div>
+
+  <!-- ── Keyboard cheat-sheet overlay ─────────────────────────────── -->
+  <div id="help-backdrop" class="dialog-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="dialog">
+      <div class="dialog-title" id="help-title">Keyboard shortcuts</div>
+      <div class="dialog-body">
+        <dl class="help-keys">
+          <dt><kbd>j</kbd> <kbd>↓</kbd></dt><dd>Next object</dd>
+          <dt><kbd>k</kbd> <kbd>↑</kbd></dt><dd>Previous object</dd>
+          <dt><kbd>Enter</kbd></dt><dd>Open focused row · sort focused column</dd>
+          <dt><kbd>?</kbd></dt><dd>Show / hide this help</dd>
+          <dt><kbd>Esc</kbd></dt><dd>Close this help</dd>
+        </dl>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" id="help-close" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="explorer.js"></script>
+</body>
+</html>

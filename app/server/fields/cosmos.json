@@ -1,0 +1,13 @@
+{
+  "name": "cosmos",
+  "title": "COSMOS",
+  "catalog_path": "/otdata2/themiya/minerva/data/catalogs/cosmos/ACS+WEBB_chi-mean/MINERVA-COSMOS_n3.0_v1.0_ACS+WEBB_Kf444w_SUPER_CATALOG.fits",
+  "eazy": {
+    "sfhz_blue_agn": "/otdata2/themiya/minerva/data/catalogs/cosmos/ACS+WEBB_chi-mean/EAzY/SFHZ_BLUE_AGN/SUPER/ZPiter",
+    "larson": "/otdata2/themiya/minerva/data/catalogs/cosmos/ACS+WEBB_chi-mean/EAzY/LARSON/SUPER/ZPiter"
+  },
+  "default_template": "sfhz_blue_agn",
+  "dja_catalog_path": "/otdata2/themiya/minerva/data/catalogs/dja/dja_msaexp_emission_lines_v4.5.csv.gz",
+  "cutout_filters": "f090w-clear,f115w-clear,f140m-clear,f150w-clear,f182m-clear,f200w-clear,f210m-clear,f250w-clear,f277w-clear,f300m-clear,f356w-clear,f360m-clear,f410m-clear,f444w-clear,f460m-clear",
+  "map_link": "/map/cosmos/?ra={ra}&dec={dec}&zoom=7"
+}

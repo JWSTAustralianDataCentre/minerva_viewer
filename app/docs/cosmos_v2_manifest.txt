@@ -1,0 +1,54 @@
+Total objects probed: 124
+Found (200): 119   Missing/403: 5
+
+Per-band _drc_sci.fits.gz sizes (bytes):
+  F070W          224,603,856  cosmos-grizli-v8.0-minerva-v2.0-40mas-f070w-clear_drc_sci.fits.gz
+  F090W        1,297,641,402  cosmos-grizli-v8.0-minerva-v2.0-40mas-f090w-clear_drc_sci.fits.gz
+  F115W        3,073,337,491  cosmos-grizli-v8.0-minerva-v2.0-40mas-f115w-clear_drc_sci.fits.gz
+  F140M          844,142,068  cosmos-grizli-v8.0-minerva-v2.0-40mas-f140m-clear_drc_sci.fits.gz
+  F150W        3,073,598,058  cosmos-grizli-v8.0-minerva-v2.0-40mas-f150w-clear_drc_sci.fits.gz
+  F182M          932,176,672  cosmos-grizli-v8.0-minerva-v2.0-40mas-f182m-clear_drc_sci.fits.gz
+  F200W        2,881,298,342  cosmos-grizli-v8.0-minerva-v2.0-40mas-f200w-clear_drc_sci.fits.gz
+  F210M          844,432,675  cosmos-grizli-v8.0-minerva-v2.0-40mas-f210m-clear_drc_sci.fits.gz
+  F250M          934,116,399  cosmos-grizli-v8.0-minerva-v2.0-40mas-f250m-clear_drc_sci.fits.gz
+  F277W        3,078,409,881  cosmos-grizli-v8.0-minerva-v2.0-40mas-f277w-clear_drc_sci.fits.gz
+  F300M          811,980,885  cosmos-grizli-v8.0-minerva-v2.0-40mas-f300m-clear_drc_sci.fits.gz
+  F335M          433,235,962  cosmos-grizli-v8.0-minerva-v2.0-40mas-f335m-clear_drc_sci.fits.gz
+  F336WU         141,139,793  cosmos-grizli-v8.0-minerva-v2.0-40mas-f336wu_drc_sci.fits.gz
+  F356W        2,877,605,227  cosmos-grizli-v8.0-minerva-v2.0-40mas-f356w-clear_drc_sci.fits.gz
+  F360M          811,960,302  cosmos-grizli-v8.0-minerva-v2.0-40mas-f360m-clear_drc_sci.fits.gz
+  F410M        1,314,740,749  cosmos-grizli-v8.0-minerva-v2.0-40mas-f410m-clear_drc_sci.fits.gz
+  F430M           68,231,584  cosmos-grizli-v8.0-minerva-v2.0-40mas-f430m-clear_drc_sci.fits.gz
+  F435W        1,160,888,401  cosmos-grizli-v8.0-minerva-v2.0-40mas-f435w_drc_sci.fits.gz
+  F444W        3,069,440,419  cosmos-grizli-v8.0-minerva-v2.0-40mas-f444w-clear_drc_sci.fits.gz
+  F460M          848,952,578  cosmos-grizli-v8.0-minerva-v2.0-40mas-f460m-clear_drc_sci.fits.gz
+  F475W          791,009,169  cosmos-grizli-v8.0-minerva-v2.0-40mas-f475w_drc_sci.fits.gz
+  F480M          357,472,730  cosmos-grizli-v8.0-minerva-v2.0-40mas-f480m-clear_drc_sci.fits.gz
+  F606W        2,139,416,807  cosmos-grizli-v8.0-minerva-v2.0-40mas-f606w_drc_sci.fits.gz
+  F814W        3,068,195,001  cosmos-grizli-v8.0-minerva-v2.0-40mas-f814w_drc_sci.fits.gz
+  F850LP          99,635,026  cosmos-grizli-v8.0-minerva-v2.0-40mas-f850lp_drc_sci.fits.gz
+
+Per-band _drc_sci_bkgsub.fits.gz sizes (HST bands, bytes):
+  F336WU         140,945,066  cosmos-grizli-v8.0-minerva-v2.0-40mas-f336wu_drc_sci_bkgsub.fits.gz
+  F435W        1,161,457,253  cosmos-grizli-v8.0-minerva-v2.0-40mas-f435w_drc_sci_bkgsub.fits.gz
+  F475W          791,368,270  cosmos-grizli-v8.0-minerva-v2.0-40mas-f475w_drc_sci_bkgsub.fits.gz
+  F606W        2,139,916,675  cosmos-grizli-v8.0-minerva-v2.0-40mas-f606w_drc_sci_bkgsub.fits.gz
+  F814W        3,069,559,856  cosmos-grizli-v8.0-minerva-v2.0-40mas-f814w_drc_sci_bkgsub.fits.gz
+  F850LP          99,542,921  cosmos-grizli-v8.0-minerva-v2.0-40mas-f850lp_drc_sci_bkgsub.fits.gz
+
+SUM sci (plain, 25 files):            35,177,661,477 bytes  (35.18 GB)
+SUM sci_bkgsub (6 files):               7,402,790,041 bytes  (7.40 GB)
+SUM wht (25 files):                     33,081,169,407 bytes  (33.08 GB)
+SUM exp (19 files):                         31,698,402 bytes  (0.03 GB)
+SUM var (19 files):                     26,269,721,334 bytes  (26.27 GB)
+SUM wcs.csv (25 files):                      21,829,299 bytes  (21.83 MB)
+
+GRAND TOTAL sci-type files (sci + sci_bkgsub) = 42,580,451,518 bytes (42.58 GB)
+GRAND TOTAL everything probed (sci+bkgsub+wht+exp+var+wcs) = 101,984,869,960 bytes (101.98 GB)
+
+Missing/403 objects (not found via guessing):
+  F162M      _drc_sci.fits.gz          -> 403
+  F162M      _drc_var.fits.gz          -> 403
+  F162M      _drc_wht.fits.gz          -> 403
+  F162M      _drc_exp.fits.gz          -> 403
+  F162M      _wcs.csv                  -> 403
