@@ -1,0 +1,21 @@
+{
+  "name": "uds",
+  "title": "UDS",
+  "catalog_path": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/MINERVA-UDS_n3.0_v1.2_ACS+WEBB_Kf444w_SUPER_CATALOG.fits",
+  "eazy": {
+    "sfhz_blue_agn": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/EAzY/SFHZ_BLUE_AGN/SUPER/ZPiter",
+    "larson": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/EAzY/LARSON/SUPER/ZPiter"
+  },
+  "h5": {
+    "sfhz_blue_agn": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/EAzY/SFHZ_BLUE_AGN/SUPER/ZPiter/MINERVA-UDS_n3.0_v1.2_ACS+WEBB_Kf444w_SUPER_zpiter_CATALOG.sfhz_blue_agn.eazypy.h5",
+    "larson": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/EAzY/LARSON/SUPER/ZPiter/MINERVA-UDS_n3.0_v1.2_ACS+WEBB_Kf444w_SUPER_zpiter_CATALOG.larson.eazypy.h5"
+  },
+  "zout": {
+    "sfhz_blue_agn": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/EAzY/SFHZ_BLUE_AGN/SUPER/ZPiter/MINERVA-UDS_n3.0_v1.2_ACS+WEBB_Kf444w_SUPER_zpiter_CATALOG_sfhz_blue_agn.zout.fits",
+    "larson": "/otdata2/themiya/minerva/data/catalogs/uds/ACS+WEBB_chi-mean/EAzY/LARSON/SUPER/ZPiter/MINERVA-UDS_n3.0_v1.2_ACS+WEBB_Kf444w_SUPER_zpiter_CATALOG_larson.zout.fits"
+  },
+  "default_template": "sfhz_blue_agn",
+  "dja_catalog_path": "/otdata2/themiya/minerva/data/catalogs/dja/dja_msaexp_emission_lines_v4.5.csv.gz",
+  "cutout_filters": "f090w-clear,f115w-clear,f140m-clear,f150w-clear,f182m-clear,f200w-clear,f210m-clear,f250w-clear,f277w-clear,f300m-clear,f356w-clear,f360m-clear,f410m-clear,f444w-clear,f460m-clear",
+  "map_link": "https://minerva.colorado.edu/uds/DR0/?ra={ra}&dec={dec}&zoom=8"
+}

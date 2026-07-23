@@ -231,11 +231,20 @@ def build_spectra(
     idx = idx[keep]
     sep_arcsec = sep_arcsec[keep]
 
-    # parse file basename -> dja key, pid, grating token
+    # parse file basename -> dja key, pid, grating token.
+    # Well-formed DJA names are '{root}_{grating}_{pid}_{srcid}' (>=4 tokens,
+    # pid an integer). A few UDS RUBIES background slits ship a 3-token
+    # '{root}_{grating}_{srcid}' with no pid (e.g.
+    # 'rubies-uds2-v4_prism-clear_b28'), so toks[-2] is the grating, not an int.
+    # Parse pid defensively (sentinel -1 when non-integer) and take the grating
+    # from toks[-2] in that case so the surfaced grating string stays correct.
+    # Well-formed rows (all of COSMOS/EGS) are unchanged.
     basename = dja["file"].str.replace(".spec.fits", "", regex=False)
     toks = basename.str.split("_")
-    pid = toks.str[-2].astype(np.int64)
-    grating_tok = toks.str[-3]
+    pid_raw = pd.to_numeric(toks.str[-2], errors="coerce")
+    no_pid = pid_raw.isna()
+    pid = pid_raw.fillna(-1).astype(np.int64)
+    grating_tok = toks.str[-3].where(~no_pid, toks.str[-2])
 
     metafile = dja["msamet"].astype("string")
     metafile = metafile.str.split("_").str[0].fillna("")
