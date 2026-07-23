@@ -84,3 +84,10 @@ Thumbs.db
 # *.h5
 # *.csv
 # *.gz
+
+# MINERVA viewer v2: local-only artifacts (never commit)
+# .secrets = public-mode auth credentials; .tools = portable node + ngrok (~225MB)
+app/.secrets/
+app/.tools/
+nohup.out
+*.log
