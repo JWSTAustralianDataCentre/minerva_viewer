@@ -619,6 +619,12 @@ class Component extends DCLogic {
       : [{name:S.field,title:(S.field||'').toUpperCase()}];
     // ---- current field's display title (uppercased) for the scatter panel header (F1)
     const fieldTitle=(((fieldOpts.find(f=>f.name===S.field)||{}).title)||S.field||'').toUpperCase();
+    // ---- template <select>: which eazy template set supplies z_phot/SED/p(z).
+    // Displayed in the header so the active photo-z provenance is never ambiguous.
+    const curField=(this.fields||[]).find(f=>f.name===S.field);
+    const templateOpts=(curField&&curField.templates&&curField.templates.length)
+      ? curField.templates.map(tname=>({name:tname}))
+      : [{name:S.template}];
     const explorerHref='/?field='+encodeURIComponent(S.field)+'&template='+encodeURIComponent(S.template)+(o?'&sel='+o.mid:'');
     // ---- accessible names for each chart/canvas (populated with the current object)
     const mid=o?o.mid:'', djaN=o?o.dja:'—';
@@ -635,8 +641,14 @@ class Component extends DCLogic {
 
     return {
       fieldOpts,fieldTitle,explorerHref,ariaScatter,ariaSpec,aria2D,ariaSED,ariaPz,ariaCut,
+      templateOpts,template:S.template,templateName:S.template,
+      onTemplate:e2=>{const tpl=e2.target.value;set({template:tpl});this.loadList(S.field,tpl,S.selId)},
       helpOpen:S.helpOpen,onHelp:()=>set({helpOpen:!S.helpOpen}),onHelpClose:()=>set({helpOpen:false}),onHelpStop:e2=>{e2.stopPropagation()},
-      pc,field:S.field,onField:e2=>{const f=e2.target.value;set({field:f});this.loadList(f,S.template,null);this.loadServerDecisions(f)},
+      pc,field:S.field,onField:e2=>{const f=e2.target.value;
+        // switching field: keep the template if the new field offers it, else its default
+        const nf=(this.fields||[]).find(x=>x.name===f)||{};
+        const tpl=(nf.templates||[]).includes(S.template)?S.template:(nf.default_template||S.template);
+        set({field:f,template:tpl});this.loadList(f,tpl,null);this.loadServerDecisions(f)},
       thresh:S.thresh,onThresh:e2=>set({thresh:Math.max(0.02,+e2.target.value||0.15)}),
       initials:S.initials,onBy:e2=>{set({initials:e2.target.value});try{localStorage.setItem('djaqc-by',e2.target.value)}catch(x){}},
       nDone,nAll:this.objs.length,

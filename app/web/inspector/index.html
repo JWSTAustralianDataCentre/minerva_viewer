@@ -25,6 +25,11 @@
         <sc-for list="{{ fieldOpts }}" as="f" hint-placeholder-count="1"><option value="{{ f.name }}">{{ f.title }}</option></sc-for>
       </sc-raw-select>
     </label>
+    <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted" title="EAzY template set supplying z_phot, SED and p(z)">Template
+      <sc-raw-select class="input" style="width:142px;min-height:30px;padding:3px 8px" value="{{ template }}" sc-camel-on-change="{{ onTemplate }}">
+        <sc-for list="{{ templateOpts }}" as="tp" hint-placeholder-count="1"><option value="{{ tp.name }}">{{ tp.name }}</option></sc-for>
+      </sc-raw-select>
+    </label>
     <label style="display:flex;align-items:center;gap:7px;font-size:12px" class="text-muted">Outlier |Δz|/(1+z) &gt;
       <input class="input" type="number" step="0.01" min="0.02" max="1" style="width:74px;min-height:30px;padding:3px 8px;font-feature-settings:'tnum'" value="{{ thresh }}" sc-camel-on-change="{{ onThresh }}">
     </label>
@@ -192,7 +197,7 @@
 
       <section style="flex:none;display:grid;grid-template-columns:1.15fr 1fr 236px;gap:var(--space-3);padding:var(--space-3) var(--space-4)">
         <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3)">
-          <span class="card-kicker">Photometry + eazy template</span>
+          <span class="card-kicker">Photometry + eazy template · {{ templateName }}</span>
           <sc-if value="{{ eazyLoading }}" hint-placeholder-val="{{ false }}"><span class="text-muted" style="font-size:10px;font-style:italic;margin-left:6px">loading…</span></sc-if>
           <sc-if value="{{ eazyErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;color:var(--color-accent-800);margin-left:6px">eazy unavailable</span></sc-if>
           <svg role="img" aria-label="{{ ariaSED }}" sc-camel-view-box="0 0 420 250" style="width:100%;display:block;background:{{ pc.bg }};margin-top:6px">
@@ -890,6 +895,12 @@ class Component extends DCLogic {
       : [{name:S.field,title:(S.field||'').toUpperCase()}];
     // ---- current field's display title (uppercased) for the scatter panel header (F1)
     const fieldTitle=(((fieldOpts.find(f=>f.name===S.field)||{}).title)||S.field||'').toUpperCase();
+    // ---- template <select>: which eazy template set supplies z_phot/SED/p(z).
+    // Displayed in the header so the active photo-z provenance is never ambiguous.
+    const curField=(this.fields||[]).find(f=>f.name===S.field);
+    const templateOpts=(curField&&curField.templates&&curField.templates.length)
+      ? curField.templates.map(tname=>({name:tname}))
+      : [{name:S.template}];
     const explorerHref='/?field='+encodeURIComponent(S.field)+'&template='+encodeURIComponent(S.template)+(o?'&sel='+o.mid:'');
     // ---- accessible names for each chart/canvas (populated with the current object)
     const mid=o?o.mid:'', djaN=o?o.dja:'—';
@@ -906,8 +917,14 @@ class Component extends DCLogic {
 
     return {
       fieldOpts,fieldTitle,explorerHref,ariaScatter,ariaSpec,aria2D,ariaSED,ariaPz,ariaCut,
+      templateOpts,template:S.template,templateName:S.template,
+      onTemplate:e2=>{const tpl=e2.target.value;set({template:tpl});this.loadList(S.field,tpl,S.selId)},
       helpOpen:S.helpOpen,onHelp:()=>set({helpOpen:!S.helpOpen}),onHelpClose:()=>set({helpOpen:false}),onHelpStop:e2=>{e2.stopPropagation()},
-      pc,field:S.field,onField:e2=>{const f=e2.target.value;set({field:f});this.loadList(f,S.template,null);this.loadServerDecisions(f)},
+      pc,field:S.field,onField:e2=>{const f=e2.target.value;
+        // switching field: keep the template if the new field offers it, else its default
+        const nf=(this.fields||[]).find(x=>x.name===f)||{};
+        const tpl=(nf.templates||[]).includes(S.template)?S.template:(nf.default_template||S.template);
+        set({field:f,template:tpl});this.loadList(f,tpl,null);this.loadServerDecisions(f)},
       thresh:S.thresh,onThresh:e2=>set({thresh:Math.max(0.02,+e2.target.value||0.15)}),
       initials:S.initials,onBy:e2=>{set({initials:e2.target.value});try{localStorage.setItem('djaqc-by',e2.target.value)}catch(x){}},
       nDone,nAll:this.objs.length,
