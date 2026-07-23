@@ -39,7 +39,7 @@
 
     <aside style="display:flex;flex-direction:column;border-right:1px solid var(--color-divider);overflow:hidden;min-height:0">
       <div style="padding:var(--space-3) var(--space-3) var(--space-2);flex:none">
-        <h6 style="margin:0 0 6px;color:var(--color-neutral-600)">z<sub>spec</sub> vs z<sub>phot</sub> · {{ fieldTitle }}</h6>
+        <h6 style="margin:0 0 6px;color:var(--color-neutral-600)">z<sub>phot</sub> vs z<sub>spec</sub> · {{ fieldTitle }}</h6>
         <svg role="img" aria-label="{{ ariaScatter }}" sc-camel-view-box="0 0 340 292" style="width:100%;display:block;background:{{ pc.bg }};border:1px solid var(--color-divider);border-radius:var(--radius-sm)">
           <clipPath id="scclip"><rect x="34" y="8" width="298" height="252"></rect></clipPath>
           <g clip-path="url(#scclip)">
@@ -55,8 +55,8 @@
               <circle role="button" sc-camel-tab-index="0" aria-label="{{ pt.aria }}" cx="{{ pt.x }}" cy="{{ pt.y }}" r="{{ pt.r }}" fill="{{ pt.fill }}" stroke="{{ pt.stroke }}" stroke-width="{{ pt.sw }}" opacity="{{ pt.op }}" sc-camel-on-click="{{ pt.onSel }}" sc-camel-on-key-down="{{ pt.onKey }}" style="cursor:pointer"></circle>
             </sc-for>
           </g>
-          <text x="183" y="288" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z phot (MINERVA eazy)</text>
-          <text x="10" y="134" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 10 134)">z spec (DJA)</text>
+          <text x="183" y="288" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z spec (DJA)</text>
+          <text x="10" y="134" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 10 134)">z phot (MINERVA eazy)</text>
         </svg>
       </div>
       <div style="padding:0 var(--space-3) var(--space-2);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;flex:none;font-size:12px">
@@ -280,7 +280,19 @@ class Component extends DCLogic {
     super(props);
     // Rest wavelengths (um) in the VACUUM frame — NIRSpec wavelengths are vacuum,
     // so all lines must share the vacuum frame for a common z reference.
-    this.LINES=[['Lyα',0.12157,0.7],['[OII]',0.37275,0.55],['Hγ',0.43417,0.16],['Hβ',0.48627,0.34],['[OIII]',0.50082,1.0],['Hα',0.65646,1.0],['[SII]',0.67183,0.14],['[SIII]',0.95332,0.12],['HeI',1.0830,0.18],['Paβ',1.2822,0.10],['Paα',1.8756,0.16]];
+    // Doublets/blends marked at their (unresolved-at-prism) mean: CIV 1548.2/1550.8,
+    // CIII] 1906.7/1908.7, CII] 2324–2329, MgII 2796.4/2803.5, Ca H+K 3934.8/3969.6,
+    // NaD 5891.6/5897.6. Third element = rough relative strength (unused by markers).
+    this.LINES=[
+      ['Lyα',0.12157,0.7],['NV',0.12408,0.15],['CIV',0.15495,0.35],['HeII',0.16404,0.2],
+      ['OIII]',0.16662,0.15],['CIII]',0.19077,0.3],['CII]',0.23264,0.12],['MgII',0.27999,0.25],
+      ['[NeV]',0.34269,0.1],['[OII]',0.37275,0.55],['[NeIII]',0.38699,0.25],['CaHK',0.39522,0.1],
+      ['Hδ',0.41029,0.1],['Hγ',0.43417,0.16],['[OIII]4363',0.43644,0.08],['HeII4686',0.46870,0.08],
+      ['Hβ',0.48627,0.34],['[OIII]4959',0.49603,0.35],['[OIII]',0.50082,1.0],
+      ['HeI5876',0.58772,0.08],['NaD',0.58946,0.08],['[OI]',0.63020,0.08],
+      ['Hα',0.65646,1.0],['[NII]',0.65853,0.2],['[SII]',0.67183,0.14],
+      ['[SIII]9069',0.90711,0.06],['[SIII]',0.95332,0.12],['HeI',1.08330,0.18],['Paγ',1.09411,0.06],
+      ['Paβ',1.2822,0.10],['Paα',1.8756,0.16],['Brγ',2.16612,0.05]];
     const usp=new URLSearchParams(location.search);
     const field=usp.get('field')||'cosmos';
     const template=usp.get('template')||'sfhz_blue_agn';
@@ -676,12 +688,16 @@ class Component extends DCLogic {
     let zmax=zvals.length?zvals[Math.floor(zvals.length*0.99)]*1.15:1;
     if(o){if(this.isN(o.zs))zmax=Math.max(zmax,o.zs*1.06);if(this.isN(o.zp))zmax=Math.max(zmax,o.zp*1.06)}
     zmax=Math.min(20,Math.max(1,zmax));
+    // Standard convention: x = z_spec (DJA), y = z_phot (MINERVA eazy).
+    // Outlier boundaries |zp−zs| = t·(1+zs) are linear in zs: zp = zs ± t(1+zs).
     const sx=z=>34+Math.min(z,zmax)/zmax*298,sy=z=>260-Math.min(z,zmax)/zmax*252,t=S.thresh;
-    let up='M'+sx(0)+','+sy(t/(1-t)),lo2='M'+sx(t)+','+sy(0),bd='M'+sx(0)+','+sy(t/(1-t)),bd2='M'+sx(t)+','+sy(0);
-    for(let zp=0;zp<=zmax;zp+=zmax/40){const a=(zp+t)/(1-t),b=(zp-t)/(1+t);
-      up+=' L'+sx(zp).toFixed(1)+','+sy(a).toFixed(1);bd+=' L'+sx(zp).toFixed(1)+','+sy(a).toFixed(1);
-      if(b>=0){lo2+=' L'+sx(zp).toFixed(1)+','+sy(b).toFixed(1);bd2+=' L'+sx(zp).toFixed(1)+','+sy(b).toFixed(1)}}
-    const scWedge=up+' L'+sx(0)+','+sy(zmax)+' Z '+lo2+' L'+sx(zmax)+','+sy(0)+' Z';
+    let up='M'+sx(0)+','+sy(t),lo2='',bd='M'+sx(0)+','+sy(t),bd2='';
+    const zs0=t/(1-t);// where the lower boundary crosses zp=0
+    for(let zs=0;zs<=zmax;zs+=zmax/40){const a=zs+t*(1+zs),b=zs-t*(1+zs);
+      up+=' L'+sx(zs).toFixed(1)+','+sy(a).toFixed(1);bd+=' L'+sx(zs).toFixed(1)+','+sy(a).toFixed(1);
+      if(b>=0){const seg=' L'+sx(zs).toFixed(1)+','+sy(b).toFixed(1);
+        if(!lo2){lo2='M'+sx(zs0)+','+sy(0)+seg;bd2='M'+sx(zs0)+','+sy(0)+seg}else{lo2+=seg;bd2+=seg}}}
+    const scWedge=up+' L'+sx(0)+','+sy(zmax)+' Z '+(lo2?lo2+' L'+sx(zmax)+','+sy(0)+' Z':'');
     const scTicks=[];const zstep=zmax<=2?0.5:zmax<=4?1:zmax<=8?2:zmax<=14?3:5;
     for(let z=0;z<=zmax-0.4;z+=zstep){scTicks.push({tx:sx(z),tyy:272,anch:'middle',label:String(+z.toFixed(1)),lx1:sx(z),lx2:sx(z),ly1:260,ly2:256});
       if(z>0)scTicks.push({tx:30,tyy:sy(z)+3,anch:'end',label:String(+z.toFixed(1)),lx1:34,lx2:332,ly1:sy(z),ly2:sy(z)})}
@@ -689,7 +705,7 @@ class Component extends DCLogic {
     // they stay in the table/list but are skipped in the scatter.
     const scPts=sampleObjs.filter(x=>this.isN(x.zs)&&this.isN(x.zp)).map(x=>{
       const dzx=dzOf(x);const out=dzx!=null&&dzx>t,sel=o&&x.dja===o.dja;const g=x.grade|0;
-      return {x:+sx(x.zp).toFixed(1),y:+sy(x.zs).toFixed(1),r:sel?5.5:(out?3.6:2.6),
+      return {x:+sx(x.zs).toFixed(1),y:+sy(x.zp).toFixed(1),r:sel?5.5:(out?3.6:2.6),
         fill:g===3?(out?'var(--color-accent-500)':'var(--color-neutral-400)'):'none',
         stroke:sel?'var(--color-accent-800)':(out?'var(--color-accent-600)':'var(--color-neutral-500)'),
         sw:sel?1.8:1,op:out||sel?1:0.55,onSel:()=>this.select(x.dja),
@@ -768,8 +784,16 @@ class Component extends DCLogic {
       if((S.mm==='zphot'||S.mm==='both')&&this.isN(o.zp))
         sets.push({z:o.zp,color:pd?'#9b9797':'#7d7979',dash:'5 4',lab:1,text:'z phot '+o.zp.toFixed(3)});
       if(S.mm==='slide')sets.push({z:zSlideV,color:'var(--color-accent-700)',dash:'2 3',lab:0,text:'z = '+(+zSlideV).toFixed(3)});
+      // Label thinning: with 32 lines, adjacent labels collide (esp. prism + close
+      // doublet regions like Hα/[NII] or HeI/NaD). Every marker keeps its tick
+      // line; a label is dropped when it would sit <20px from the previous label
+      // in the same row. Zooming in restores the dropped labels.
+      const lastLab={};
       for(const st of sets)for(const[nm,lam]of this.LINES){const lc=lam*(1+st.z);if(lc<wmin||lc>wmax)continue;
-        markers.push({x:+px(lc).toFixed(1),color:st.color,dash:st.dash,label:nm,ty:st.lab?52:38,y1:st.lab?56:42})}
+        const X=+px(lc).toFixed(1),row=st.lab?1:0;
+        const lab=(lastLab[row]==null||X-lastLab[row]>=20)?nm:'';
+        if(lab)lastLab[row]=X;
+        markers.push({x:X,color:st.color,dash:st.dash,label:lab,ty:st.lab?52:38,y1:st.lab?56:42})}
       let lx=60;for(const st of sets){
         legend.push({x1:lx,x2:lx+22,tx:lx+27,color:st.color,dash:st.dash,label:st.text});lx+=140}
     }

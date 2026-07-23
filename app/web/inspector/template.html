@@ -24,7 +24,7 @@
 
     <aside style="display:flex;flex-direction:column;border-right:1px solid var(--color-divider);overflow:hidden;min-height:0">
       <div style="padding:var(--space-3) var(--space-3) var(--space-2);flex:none">
-        <h6 style="margin:0 0 6px;color:var(--color-neutral-600)">z<sub>spec</sub> vs z<sub>phot</sub> · {{ fieldTitle }}</h6>
+        <h6 style="margin:0 0 6px;color:var(--color-neutral-600)">z<sub>phot</sub> vs z<sub>spec</sub> · {{ fieldTitle }}</h6>
         <svg role="img" aria-label="{{ ariaScatter }}" sc-camel-view-box="0 0 340 292" style="width:100%;display:block;background:{{ pc.bg }};border:1px solid var(--color-divider);border-radius:var(--radius-sm)">
           <clipPath id="scclip"><rect x="34" y="8" width="298" height="252"></rect></clipPath>
           <g clip-path="url(#scclip)">
@@ -40,8 +40,8 @@
               <circle role="button" sc-camel-tab-index="0" aria-label="{{ pt.aria }}" cx="{{ pt.x }}" cy="{{ pt.y }}" r="{{ pt.r }}" fill="{{ pt.fill }}" stroke="{{ pt.stroke }}" stroke-width="{{ pt.sw }}" opacity="{{ pt.op }}" sc-camel-on-click="{{ pt.onSel }}" sc-camel-on-key-down="{{ pt.onKey }}" style="cursor:pointer"></circle>
             </sc-for>
           </g>
-          <text x="183" y="288" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z phot (MINERVA eazy)</text>
-          <text x="10" y="134" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 10 134)">z spec (DJA)</text>
+          <text x="183" y="288" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic">z spec (DJA)</text>
+          <text x="10" y="134" font-size="10" fill="{{ pc.tick }}" text-anchor="middle" font-style="italic" transform="rotate(-90 10 134)">z phot (MINERVA eazy)</text>
         </svg>
       </div>
       <div style="padding:0 var(--space-3) var(--space-2);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;flex:none;font-size:12px">
