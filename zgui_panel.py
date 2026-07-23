@@ -362,7 +362,10 @@ class MinervaGalaxyBrowser(pn.viewable.Viewer):
             info['z_spec'] = float(self.df_matched.loc[gal_id, 'spec_z'])
             info['spec_file'] = str(self.df_matched.loc[gal_id, 'spec_file'])
             info['spec_root'] = str(self.df_matched.loc[gal_id, 'spec_root'])
-            info['delta_z'] = abs(info['z_phot'] - info['z_spec']) / (1 + info['z_spec'])
+            if info['z_spec']>0:
+                info['delta_z'] = abs(info['z_phot'] - info['z_spec']) / (1 + info['z_spec'])
+            else:
+                info['delta_z'] = np.nan
         
         return info
     
