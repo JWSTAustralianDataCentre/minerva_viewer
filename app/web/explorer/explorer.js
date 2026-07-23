@@ -4,8 +4,10 @@
 // /api/eazy/{field}/{template}/{id}, /api/cutout, /api/dja/preview/{root}/{basename}.
 'use strict';
 
-const PAGE = 100;                 // rows per page (simple pagination = virtualization)
-const SORT_COLS = ['id', 'ra', 'dec', 'z_phot', 'lmass', 'mag', 'sep'];
+const PAGE = 100;                 // default rows per page (simple pagination = virtualization)
+const NEAR_PAGE = 11;             // nearest-neighbour flow: target + 10 neighbours
+const NEAR_RADIUS = 30;           // default cone radius (″) for the nearest flow
+const SORT_COLS = ['id', 'ra', 'dec', 'z_phot', 'lmass', 'mag', 'sep', 'dist'];
 
 // ── Query-string field wiring ─────────────────────────────────────
 // Maps a form control id -> the /api/catalog/query param name it feeds.
@@ -29,6 +31,8 @@ const state = {
   rows: [],            // current page rows
   selId: null,
   gridLoaded: false,
+  pageSize: PAGE,      // rows per page (NEAR_PAGE while in the nearest flow)
+  nearId: null,        // target id of an active nearest-neighbour query (URL near=)
 };
 
 const $ = (id) => document.getElementById(id);
@@ -135,6 +139,14 @@ function onFieldChange(url) {
 //  URL STATE
 // ══════════════════════════════════════════════════════════════════
 function restoreFromURL(url) {
+  // Nearest-neighbour deep link (e.g. the Inspector back-link
+  // /?field=..&template=..&near={mid}) takes precedence: it drives the cone
+  // form itself and runs its own query, so skip the generic form restore.
+  const near = url.get('near');
+  if (near != null && near !== '') {
+    const nid = parseInt(near, 10);
+    if (!Number.isNaN(nid)) { runNearest(nid); return; }
+  }
   let any = false;
   for (const [id, param] of Object.entries(FORM_MAP)) {
     const v = url.get(param);
@@ -164,6 +176,7 @@ function syncURL() {
   for (const [k, v] of Object.entries(state.params)) p.set(k, v);
   if (state.sort && state.sort !== 'id') p.set('sort', state.sort);
   if (state.offset) p.set('offset', String(state.offset));
+  if (state.nearId != null) p.set('near', String(state.nearId));
   if (state.selId != null) p.set('sel', String(state.selId));
   history.replaceState(null, '', location.pathname + '?' + p.toString());
 }
@@ -194,14 +207,18 @@ function buildQueryURL() {
   p.set('field', state.field);
   p.set('template', state.template);
   if (state.sort) p.set('sort', state.sort);
-  p.set('limit', String(PAGE));
+  p.set('limit', String(state.pageSize));
   p.set('offset', String(state.offset));
   return '/api/catalog/query?' + p.toString();
 }
 
-// fromForm=true -> re-read the form and reset to page 0.
+// fromForm=true -> re-read the form and reset to page 0. A manual form search
+// leaves the nearest-neighbour mode (restores full page size, clears near=).
 async function runSearch(fromForm) {
-  if (fromForm) { state.params = readForm(); state.offset = 0; }
+  if (fromForm) {
+    state.params = readForm(); state.offset = 0;
+    state.pageSize = PAGE; state.nearId = null;
+  }
   showSkeleton(true);
   $('btn-search').disabled = true;
   let data;
@@ -229,6 +246,47 @@ function renderSummary() {
   if (state.total === 0) { s.textContent = 'No matches.'; return; }
   const from = state.offset + 1, to = Math.min(state.offset + state.rows.length, state.total);
   s.textContent = `${state.total.toLocaleString()} match${state.total === 1 ? '' : 'es'} · showing ${from}–${to}`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  NEAREST-NEIGHBOUR CONTEXT (Inspector back-link ?near= / detail button)
+// ══════════════════════════════════════════════════════════════════
+// Overwrite the query form with a clean cone centred on (ra,dec). Restrictive
+// gates (use_phot / no_star / has_spec) are turned OFF and all non-cone criteria
+// cleared so the target and its true nearest neighbours are all returned.
+function setConeForm(ra, dec, radius) {
+  for (const id of Object.keys(FORM_MAP)) {
+    if (id === 'q-ra' || id === 'q-dec' || id === 'q-radius' || id === 'q-magband') continue;
+    $(id).value = '';
+  }
+  $('q-ra').value = ra;
+  $('q-dec').value = dec;
+  $('q-radius').value = String(radius);
+  $('q-hasspec').checked = false;
+  $('q-usephot').checked = false;
+  $('q-nostar').checked = false;
+}
+
+// Fetch object coords, seed a 30″ cone sorted by distance (limit 11), then
+// auto-select the target (dist 0.00) with its detail pane open.
+async function runNearest(id) {
+  if (id == null || Number.isNaN(id)) return;
+  let obj;
+  try {
+    obj = await fetchJSON(`/api/object/${encodeURIComponent(state.field)}/${id}`);
+  } catch (e) {
+    toast(`Could not load object ${id}: ${e.message}`, true);
+    return;
+  }
+  if (obj.ra == null || obj.dec == null) { toast(`Object ${id} has no coordinates`, true); return; }
+  setConeForm(obj.ra, obj.dec, NEAR_RADIUS);
+  state.params = readForm();
+  state.sort = 'dist';
+  state.offset = 0;
+  state.pageSize = NEAR_PAGE;
+  state.nearId = id;
+  await runSearch(false);
+  selectRow(id);            // target sorts first at dist 0.00; open its detail
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -260,6 +318,9 @@ function renderTable() {
   const empty = $('results-empty');
   empty.textContent = 'No objects match this query.';
   empty.classList.toggle('hidden', state.total !== 0);
+  // DIST″ column visible only when the current rows carry cone-center distance.
+  const hasDist = state.rows.some(r => r.dist_arcsec != null);
+  $('results-table').classList.toggle('has-dist', hasDist);
   updateSortArrows();
   const frag = document.createDocumentFragment();
   for (const r of state.rows) {
@@ -278,7 +339,9 @@ function renderTable() {
     tr.innerHTML =
       `<td>${r.id}</td><td>${num(r.ra, 6)}</td><td>${num(r.dec, 6)}</td>` +
       `<td>${num(r.z_phot, 3)}</td><td>${num(r.lmass, 2)}</td><td>${num(r.mag, 2)}</td>` +
-      `<td>${sep == null ? '—' : num(sep, 2)}</td><td>${specCell}</td>`;
+      `<td>${sep == null ? '—' : num(sep, 2)}</td>` +
+      `<td class="col-dist">${r.dist_arcsec == null ? '—' : num(r.dist_arcsec, 2)}</td>` +
+      `<td>${specCell}</td>`;
     tr.addEventListener('click', () => selectRow(r.id));
     tr.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectRow(r.id); }
@@ -314,15 +377,16 @@ function onSortClick(col) {
 }
 
 function renderPager() {
-  const totalPages = Math.max(1, Math.ceil(state.total / PAGE));
-  const page = Math.floor(state.offset / PAGE) + 1;
+  const sz = state.pageSize;
+  const totalPages = Math.max(1, Math.ceil(state.total / sz));
+  const page = Math.floor(state.offset / sz) + 1;
   $('pg-info').textContent = `Page ${page} / ${totalPages}`;
   $('pg-prev').disabled = state.offset <= 0;
-  $('pg-next').disabled = state.offset + PAGE >= state.total;
+  $('pg-next').disabled = state.offset + sz >= state.total;
 }
 
 function gotoPage(delta) {
-  const next = state.offset + delta * PAGE;
+  const next = state.offset + delta * state.pageSize;
   if (next < 0 || next >= state.total) return;
   state.offset = next;
   runSearch(false).then(() => { $('results-scroll').scrollTop = 0; });
@@ -334,7 +398,7 @@ function navRow(delta) {
   let idx = state.rows.findIndex(r => r.id === state.selId);
   idx = idx < 0 ? (delta > 0 ? 0 : state.rows.length - 1) : idx + delta;
   if (idx < 0) { if (state.offset > 0) return gotoPage(-1); idx = 0; }
-  if (idx >= state.rows.length) { if (state.offset + PAGE < state.total) return gotoPage(1); idx = state.rows.length - 1; }
+  if (idx >= state.rows.length) { if (state.offset + state.pageSize < state.total) return gotoPage(1); idx = state.rows.length - 1; }
   selectRow(state.rows[idx].id);
   const tr = document.querySelector(`#results-body tr[data-id="${state.rows[idx].id}"]`);
   if (tr) tr.scrollIntoView({ block: 'nearest' });
@@ -346,7 +410,10 @@ function navRow(delta) {
 async function exportCSV() {
   if (state.total === 0) return;
   $('btn-csv').disabled = true;
-  const cols = ['id', 'ra', 'dec', 'z_phot', 'z160', 'z840', 'chi2', 'lmass', 'lsfr', 'mag',
+  // Include dist_arcsec only when the active result set carries it (cone / nearest).
+  const hasDist = state.rows.some(r => r.dist_arcsec != null);
+  const cols = ['id', 'ra', 'dec', ...(hasDist ? ['dist_arcsec'] : []),
+    'z_phot', 'z160', 'z840', 'chi2', 'lmass', 'lsfr', 'mag',
     'flux_radius', 'n_bands', 'uvj', 'u_v', 'v_j', 'spec_dja', 'spec_zs', 'spec_grade', 'spec_sep', 'spec_grating'];
   const lines = [cols.join(',')];
   const cap = Math.min(state.total, 5000);
@@ -359,7 +426,8 @@ async function exportCSV() {
       const data = await fetchJSON('/api/catalog/query?' + p.toString());
       for (const r of (data.rows || [])) {
         const sp = r.spec || {};
-        const vals = [r.id, r.ra, r.dec, r.z_phot, r.z160, r.z840, r.chi2, r.lmass, r.lsfr, r.mag,
+        const vals = [r.id, r.ra, r.dec, ...(hasDist ? [r.dist_arcsec] : []),
+          r.z_phot, r.z160, r.z840, r.chi2, r.lmass, r.lsfr, r.mag,
           r.flux_radius, r.n_bands, r.uvj, r.u_v, r.v_j,
           sp.dja || '', sp.zs, sp.grade, sp.sep, sp.grating || ''];
         lines.push(vals.map(csvCell).join(','));
@@ -428,7 +496,9 @@ function renderDetail(obj) {
   const head = document.createElement('div');
   head.className = 'd-header';
   head.innerHTML =
-    `<div class="d-id">#${obj.id}</div>` +
+    `<div class="d-id">#${obj.id}` +
+      `<button type="button" id="btn-nearest" class="btn btn-secondary btn-mini" ` +
+        `title="List this object + its 10 nearest neighbours">Nearest 10</button></div>` +
     `<div class="d-coord">${ra}, ${dec} <button class="copy-btn" data-copy="${coordStr}">copy</button></div>` +
     `<div class="d-stats">` +
       `<span>z<sub>phot</sub> <b>${num(z.z_phot, 3)}</b> <span class="text-muted">[${num(z.z160, 2)}–${num(z.z840, 2)}]</span></span>` +
@@ -437,6 +507,8 @@ function renderDetail(obj) {
       `<span>UVJ <b>${uvjLabel(z.uvj)}</b></span>` +
     `</div>`;
   c.appendChild(head);
+  const nearBtn = $('btn-nearest');
+  if (nearBtn) nearBtn.addEventListener('click', () => runNearest(obj.id));
 
   // Cutout + size slider
   const cut = document.createElement('div');

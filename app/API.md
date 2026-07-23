@@ -19,17 +19,21 @@ Params (all optional): `field`, `template`, `ids` (comma-sep MINERVA ids),
 `ra`,`dec`,`radius_arcsec` (cone), `z_min`,`z_max` (on z_phot),
 `lmass_min`,`lmass_max` (log10 M*), `mag_min`,`mag_max` (AB, band `mag_band` default f444w),
 `has_spec` (0/1), `grade_min` (on matched spec grade), `use_phot` (default 1; 0=no filter),
-`no_star` (default 1), `uvj` (`q`|`sf`), `sort` (`id|ra|dec|z_phot|lmass|mag|sep`, prefix `-` desc),
+`no_star` (default 1), `uvj` (`q`|`sf`), `sort` (`id|ra|dec|z_phot|lmass|mag|sep|dist`, prefix `-` desc),
 `limit` (default 500, max 5000), `offset`.
 ```
 { "total": <int matching before limit>, "rows": [ {
   "id":int, "ra":float, "dec":float, "z_phot":float, "z160":float, "z840":float,
   "chi2":float, "lmass":float, "lsfr":float, "mag":float, "flux_radius":float,
   "n_bands":int, "uvj":int, "u_v":float, "v_j":float,
+  "dist_arcsec":float,   # cone queries ONLY: distance (2dp) from the cone center
   "spec": null | {"dja":str, "zs":float, "grade":int, "sep":float, "grating":str}
 } ] }
 ```
 `lmass`/`lsfr` are log10; `mag` is AB in `mag_band`; `uvj` = uvj_class as int.
+`dist_arcsec` is present on a row **only when the query supplied `ra`+`dec`+`radius_arcsec`**
+(the cos-dec-scaled angular distance from the cone center, ascending default); non-cone
+queries omit the field. `sort=dist` orders by it (ascending; falls back to `id` with no cone).
 `spec` = primary matched spectrum (best grade, then prism first, then highest exptime).
 
 ### GET /api/object/{field}/{id}

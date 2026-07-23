@@ -55,7 +55,7 @@ PIVOT_UM: dict[str, float] = {
     "f430m": 4.2813, "f444w": 4.4037, "f460m": 4.6302, "f480m": 4.8156,
 }
 
-SORT_WHITELIST = {"id", "ra", "dec", "z_phot", "lmass", "mag", "sep"}
+SORT_WHITELIST = {"id", "ra", "dec", "z_phot", "lmass", "mag", "sep", "dist"}
 _DEFAULT_MAG_BAND = "f444w"
 
 
@@ -343,13 +343,17 @@ class CatalogStore:
                 elif uvj == "sf":
                     mask &= uvv == 0
 
-        # cone search
+        # cone search. When active, keep the per-row angular distance (cos-dec
+        # scaled arcsec) so it can be surfaced as "dist_arcsec" and sorted on.
+        # Non-cone queries leave dist_by_row None -> field omitted downstream.
+        dist_by_row = None
         if ra is not None and dec is not None and radius_arcsec is not None:
             ra0, dec0, rad = float(ra), float(dec), float(radius_arcsec)
             cosd = math.cos(math.radians(dec0))
             dra = (self._numcol("ra") - ra0) * cosd
             ddec = self._numcol("dec") - dec0
             sep_by_row = np.sqrt(dra ** 2 + ddec ** 2) * 3600.0
+            dist_by_row = sep_by_row
             with np.errstate(invalid="ignore"):
                 mask &= sep_by_row <= rad
 
@@ -368,17 +372,20 @@ class CatalogStore:
 
         # sort (position-based; preserves the previous stable-argsort ordering)
         sort_key, desc = _parse_sort(sort)
-        pos = self._sort_positions(pos, sort_key, desc, template, mag_col)
+        pos = self._sort_positions(pos, sort_key, desc, template, mag_col,
+                                   dist_by_row)
 
         # pagination
         off = max(int(offset or 0), 0)
         lim = min(max(int(limit if limit is not None else 500), 0), 5000)
         page_pos = pos[off: off + lim]
 
-        rows = self._rows_from_positions(page_pos, template, mag_col)
+        rows = self._rows_from_positions(page_pos, template, mag_col,
+                                         dist_by_row)
         return total, rows
 
-    def _sort_positions(self, pos, sort_key, desc, template, mag_col):
+    def _sort_positions(self, pos, sort_key, desc, template, mag_col,
+                        dist_by_row=None):
         if pos.size == 0:
             return pos
         if sort_key == "ra":
@@ -395,6 +402,10 @@ class CatalogStore:
             key = self._numcol(mag_col)[pos]
         elif sort_key == "sep":
             key = self._min_sep_arr[pos]
+        elif sort_key == "dist":
+            # cone-center distance; only defined when a cone is active. With no
+            # cone, fall back to id order so sort=dist never hard-fails.
+            key = dist_by_row[pos] if dist_by_row is not None else self._id_arr[pos]
         else:  # "id" and any fallback
             key = self._id_arr[pos]
         order = np.argsort(key, kind="stable")
@@ -402,13 +413,20 @@ class CatalogStore:
             order = order[::-1]
         return pos[order]
 
-    def _rows_from_positions(self, page_pos, template, mag_col):
-        """Build the row dicts for a page of positional indices (no iterrows)."""
+    def _rows_from_positions(self, page_pos, template, mag_col,
+                             dist_by_row=None):
+        """Build the row dicts for a page of positional indices (no iterrows).
+
+        When a cone was active, `dist_by_row` carries the cos-dec-scaled angular
+        distance (arcsec) from the cone center; each row gets a "dist_arcsec"
+        (2dp) field. Non-cone pages omit the field entirely.
+        """
         if page_pos.size == 0:
             return []
         ids = self._id_arr[page_pos]
         ra = self._numcol("ra")[page_pos]
         dec = self._numcol("dec")[page_pos]
+        dist = dist_by_row[page_pos] if dist_by_row is not None else None
 
         def _slice(base):
             arr = self._numcol(self._tcol(base, template))
@@ -435,7 +453,7 @@ class CatalogStore:
         rows = []
         for i in range(page_pos.size):
             mid = int(ids[i])
-            rows.append({
+            row = {
                 "id": mid,
                 "ra": _rnd(ra[i], 6),
                 "dec": _rnd(dec[i], 6),
@@ -452,7 +470,10 @@ class CatalogStore:
                 "u_v": _rnd(_at(u_v, i), 4),
                 "v_j": _rnd(_at(v_j, i), 4),
                 "spec": self._primary.get(mid),
-            })
+            }
+            if dist is not None:
+                row["dist_arcsec"] = _rnd(dist[i], 2)
+            rows.append(row)
         return rows
 
     # -- single object -------------------------------------------------------

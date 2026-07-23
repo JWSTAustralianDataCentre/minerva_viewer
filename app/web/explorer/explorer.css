@@ -72,6 +72,9 @@ textarea.input { resize: vertical; line-height: 1.4; }
   padding: var(--space-2); border-bottom: 1px solid var(--color-divider); cursor: pointer; user-select: none; white-space: nowrap; }
 .table th[data-sort]:hover { color: var(--color-accent); }
 .table th .arrow { font-size: 9px; margin-left: 3px; }
+/* DIST″ (cone-center distance) column: shown only when the current result set
+   carries dist_arcsec (nearest-neighbour / cone queries). */
+#results-table:not(.has-dist) .col-dist { display: none; }
 .table td { padding: 6px var(--space-2); border-bottom: 1px solid var(--color-divider);
   white-space: nowrap; font-variant-numeric: tabular-nums; }
 .table tbody tr { cursor: pointer; }
